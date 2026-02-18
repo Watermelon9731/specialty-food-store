@@ -67,4 +67,12 @@
 
 ## 6. Current Status
 - **Status**: Review
-- **Next Step**: User Testing & Deployment
+- **Next Step**: Build Admin Dashboard
+
+### Phase 7: Admin Dashboard `[x]`
+- [x] Create Admin Layout (Sidebar, Protected Route placeholder)
+- [x] Build Dashboard Overview (Profit Summary, Recent Orders)
+- [x] Implement Order Management (List, Status Update)
+- [x] Implement Inventory/Reservation Management (Stock levels)
+- [x] Mock Data for Admin features (until DB connected)
+
