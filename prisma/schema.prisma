@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  sku           String   @unique
+  name          String
+  description   String?
+  pricePerUnit  Decimal  @db.Decimal(10, 2)
+  unitType      String   // e.g., "100g", "kg"
+  stockQuantity Int      @default(0)
+  origin        String
+  shelfLifeDays Int
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  categoryId    String
+  category      Category @relation(fields: [categoryId], references: [id])
+  
+  inventoryLogs InventoryLog[]
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  products  Product[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InventoryLog {
+  id             String    @id @default(cuid())
+  quantityChange Int
+  batchNumber    String?
+  expiryDate     DateTime?
+  reason         String?   // e.g. "Restock", "Order", "Spoilage"
+  
+  productId      String
+  product        Product   @relation(fields: [productId], references: [id])
+  
+  createdAt      DateTime  @default(now())
+}
