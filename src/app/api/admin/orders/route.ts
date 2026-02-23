@@ -32,8 +32,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, order });
     }
 
-    // Default: Return all orders from DB
+    // Default: Return all orders from DB with optional status filter
+    const statusFilter =
+      body.statuses && Array.isArray(body.statuses) && body.statuses.length > 0
+        ? { status: { in: body.statuses } }
+        : {};
+
     const dbOrders = await db.order.findMany({
+      where: statusFilter,
       orderBy: { createdAt: "desc" },
     });
 
@@ -45,7 +51,7 @@ export async function POST(request: Request) {
       customerPhone: o.customerPhone,
       customerAddress: o.customerAddress,
       status: o.status,
-      date: new Date(o.createdAt).toLocaleDateString("en-US", {
+      date: new Date(o.createdAt).toLocaleDateString("vi-VN", {
         month: "long",
         day: "numeric",
         year: "numeric",

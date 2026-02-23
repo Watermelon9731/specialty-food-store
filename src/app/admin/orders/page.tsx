@@ -50,16 +50,47 @@ type Order = {
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeFilters, setActiveFilters] = useState<string[]>([
+    "paid",
+    "processing",
+    "unfulfilled",
+  ]);
+  const [debouncedFilters, setDebouncedFilters] =
+    useState<string[]>(activeFilters);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedFilters(activeFilters);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [activeFilters]);
+
+  const toggleFilter = (status: string) => {
+    setActiveFilters((prev) => {
+      if (prev.includes(status)) {
+        // Don't allow deselecting the last filter (optional ux choice, but let's allow empty)
+        return prev.filter((item) => item !== status);
+      } else {
+        return [...prev, status];
+      }
+    });
+  };
 
   useEffect(() => {
     async function fetchOrders() {
+      setLoading(true);
       try {
         const res = await fetch("/api/admin/orders", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({}),
+          body: JSON.stringify({
+            statuses: debouncedFilters,
+          }),
         });
         const data = await res.json();
         if (data.success) {
@@ -72,12 +103,14 @@ export default function OrdersPage() {
       }
     }
     fetchOrders();
-  }, []);
+  }, [debouncedFilters]);
 
   return (
-    <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+    <div className="grid flex-1 items-start gap-4 p-2 sm:px-6 sm:py-0 md:gap-8">
       <div className="flex items-center">
-        <h1 className="text-2xl font-bold tracking-tight">Đơn hàng</h1>
+        <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+          Đơn hàng
+        </h1>
         <div className="ml-auto flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -91,11 +124,24 @@ export default function OrdersPage() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Lọc theo</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem checked>
+              <DropdownMenuCheckboxItem
+                checked={activeFilters.includes("paid")}
+                onCheckedChange={() => toggleFilter("paid")}
+              >
                 Đã thanh toán
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Đang xử lý</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem>Chưa giao</DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={activeFilters.includes("processing")}
+                onCheckedChange={() => toggleFilter("processing")}
+              >
+                Đang xử lý
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={activeFilters.includes("unfulfilled")}
+                onCheckedChange={() => toggleFilter("unfulfilled")}
+              >
+                Chưa giao
+              </DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <Button
@@ -121,13 +167,8 @@ export default function OrdersPage() {
           </Button>
         </AddOrderDialog>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Đơn hàng</CardTitle>
-          <CardDescription>
-            Quản lý đơn hàng và xem trạng thái của chúng.
-          </CardDescription>
-        </CardHeader>
+      {/* Desktop Table View */}
+      <Card className="hidden md:block">
         <CardContent>
           {loading ? (
             <div className="text-center py-10">Đang tải đơn hàng...</div>
@@ -135,8 +176,7 @@ export default function OrdersPage() {
             <div className="text-center py-10">Không tìm thấy đơn hàng.</div>
           ) : (
             <>
-              {/* Desktop Table View */}
-              <div className="hidden md:block">
+              <div>
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -196,107 +236,109 @@ export default function OrdersPage() {
                   </TableBody>
                 </Table>
               </div>
-
-              {/* Mobile Accordion View */}
-              <div className="md:hidden">
-                <Accordion type="single" collapsible className="w-full">
-                  {orders.map((order) => (
-                    <AccordionItem
-                      key={order.id}
-                      value={order.id}
-                      className="border-b-0 mb-3 bg-slate-50 dark:bg-slate-900 rounded-xl shadow-sm border px-4"
-                    >
-                      <AccordionTrigger className="hover:no-underline py-4">
-                        <div className="flex flex-col items-start gap-1 w-full text-left pr-2">
-                          <div className="flex justify-between items-center w-full">
-                            <span className="font-semibold text-base">
-                              {order.customerName}
-                            </span>
-                            <span className="text-xs text-muted-foreground mr-1">
-                              {order.date}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center w-full mt-1.5 ">
-                            <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
-                              {order.customerPhone || "N/A"}
-                            </span>
-                            <span className="mr-1">
-                              {order.status === "paid" && (
-                                <Badge className="bg-green-100 text-green-700 hover:bg-green-100/80 border-green-200 text-[10px] px-1.5 py-0 h-5 leading-none flex items-center">
-                                  Đã thanh toán
-                                </Badge>
-                              )}
-                              {order.status === "processing" && (
-                                <Badge
-                                  variant="secondary"
-                                  className="text-[10px] px-1.5 py-0 h-5 leading-none flex items-center"
-                                >
-                                  Đang xử lý
-                                </Badge>
-                              )}
-                              {order.status === "unfulfilled" && (
-                                <Badge
-                                  variant="outline"
-                                  className="text-[10px] px-1.5 py-0 h-5 leading-none flex items-center"
-                                >
-                                  Chưa giao
-                                </Badge>
-                              )}
-                            </span>
-                          </div>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="pb-4">
-                        <div className="flex flex-col gap-3 pt-3 mt-1 border-t text-sm">
-                          <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">
-                              Mã ĐH:
-                            </span>
-                            <span className="font-medium bg-slate-100 dark:bg-slate-800 px-2 flex items-center h-6 rounded border text-xs">
-                              {order.orderNumber}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">
-                              Tổng tiền:
-                            </span>
-                            <span className="font-bold text-blue-600 dark:text-blue-400 text-base">
-                              {order.amount}
-                            </span>
-                          </div>
-                          <div className="flex flex-col mt-0.5">
-                            <span className="text-muted-foreground mb-1.5">
-                              Địa chỉ:
-                            </span>
-                            <span className="font-medium bg-white dark:bg-slate-950 p-2.5 rounded-lg border text-xs leading-relaxed">
-                              {order.customerAddress || "Chưa cung cấp địa chỉ"}
-                            </span>
-                          </div>
-                          <div className="flex gap-2 justify-end mt-4">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-9 w-full shadow-xs"
-                            >
-                              Liên hệ
-                            </Button>
-                            <Button
-                              size="sm"
-                              className="h-9 w-full shadow-xs bg-blue-600 hover:bg-blue-700 text-white"
-                            >
-                              Chi tiết
-                            </Button>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </div>
             </>
           )}
         </CardContent>
       </Card>
+
+      {/* Mobile Accordion View */}
+      {loading ? (
+        <div className="text-center py-10">Đang tải đơn hàng...</div>
+      ) : orders.length === 0 ? (
+        <div className="text-center py-10">Không tìm thấy đơn hàng.</div>
+      ) : (
+        <div className="md:hidden">
+          <Accordion type="single" collapsible className="w-full">
+            {orders.map((order) => (
+              <AccordionItem
+                key={order.id}
+                value={order.id}
+                className="border-b-0 mb-3 bg-slate-50 dark:bg-slate-900 rounded-xl shadow-sm border px-4"
+              >
+                <AccordionTrigger className="hover:no-underline py-4">
+                  <div className="flex flex-col items-start gap-3 w-full text-left pr-2">
+                    <p className="font-semibold text-md">
+                      {order.customerName}
+                    </p>
+                    <span className="text-xs text-muted-foreground">
+                      {order.date}
+                    </span>
+                    <span className="text-xs font-semibold tracking-widest text-slate-600 dark:text-slate-400">
+                      {order.customerPhone || "N/A"}
+                    </span>
+                    <span className="mr-1">
+                      {order.status === "paid" && (
+                        <Badge className="bg-green-100 text-green-700 hover:bg-green-100/80 border-green-200 text-xs py-0 h-5 leading-none flex items-center">
+                          Đã thanh toán
+                        </Badge>
+                      )}
+                      {order.status === "processing" && (
+                        <Badge
+                          variant="secondary"
+                          className="text-xs py-0 h-5 leading-none flex items-center text-gray-100"
+                        >
+                          Đang xử lý
+                        </Badge>
+                      )}
+                      {order.status === "unfulfilled" && (
+                        <Badge
+                          variant="outline"
+                          className="text-xs py-0 h-5 leading-none flex items-center"
+                        >
+                          Chưa giao
+                        </Badge>
+                      )}
+                    </span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pb-4">
+                  <div className="flex flex-col gap-3 pt-3 mt-1 border-t text-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground text-xs">
+                        Mã ĐH:
+                      </span>
+                      <span className="font-medium bg-slate-100 dark:bg-slate-800 px-2 flex items-center h-6 rounded border text-xs">
+                        {order.orderNumber}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground text-xs">
+                        Tổng tiền:
+                      </span>
+                      <span className="font-bold text-blue-600 dark:text-blue-400 text-base">
+                        {order.amount}
+                      </span>
+                    </div>
+                    <div className="flex flex-col mt-0.5">
+                      <span className="text-muted-foreground mb-1.5 text-xs">
+                        Địa chỉ:
+                      </span>
+                      <span className="font-medium bg-white dark:bg-slate-950 p-2.5 rounded-lg border text-md leading-relaxed">
+                        {order.customerAddress || "Chưa cung cấp địa chỉ"}
+                      </span>
+                    </div>
+                    <div className="flex gap-2 justify-end mt-4">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-9 w-full shadow-xs"
+                      >
+                        Liên hệ
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="h-9 w-full shadow-xs bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        Chi tiết
+                      </Button>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      )}
     </div>
   );
 }
