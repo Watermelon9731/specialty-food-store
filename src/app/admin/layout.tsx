@@ -29,7 +29,7 @@ export default function AdminLayout({
         <AdminSidebar />
       </div>
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        <header className="flex h-16 items-center border-b px-6 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shrink-0 justify-between">
+        <header className="flex h-16 items-center border-b px-4 md:px-6 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shrink-0 justify-between">
           <div className="flex items-center gap-2 md:hidden">
             <span className="font-bold">Quản trị</span>
           </div>

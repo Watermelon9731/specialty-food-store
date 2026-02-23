@@ -31,28 +31,28 @@ export function Header() {
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <Scale className="h-6 w-6 text-primary" />
           <span className="font-bold text-lg hidden sm:inline-block">
-            Specialty Dried Store
+            Tiệm đồ khô
           </span>
-          <span className="font-bold text-lg sm:hidden">SDS</span>
+          <span className="font-bold text-lg sm:hidden">Tiệm đồ khô</span>
         </Link>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
           <Link
             href="/products"
             className="transition-colors hover:text-foreground/80 text-foreground/60"
           >
-            Products
+            Sản phẩm
           </Link>
           <Link
             href="/categories"
             className="transition-colors hover:text-foreground/80 text-foreground/60"
           >
-            Categories
+            Danh mục
           </Link>
           <Link
             href="/about"
             className="transition-colors hover:text-foreground/80 text-foreground/60"
           >
-            Our Story
+            Liên hệ
           </Link>
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-4">
@@ -81,17 +81,17 @@ export function Header() {
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <Link href="/" className="flex items-center space-x-2 mb-8">
                 <Scale className="h-6 w-6 text-primary" />
-                <span className="font-bold">Specialty Dried Store</span>
+                <span className="font-bold">Tiệm đồ khô</span>
               </Link>
               <nav className="flex flex-col space-y-4">
                 <Link href="/products" className="text-lg font-medium">
-                  Products
+                  Sản phẩm
                 </Link>
                 <Link href="/categories" className="text-lg font-medium">
-                  Categories
+                  Danh mục
                 </Link>
                 <Link href="/about" className="text-lg font-medium">
-                  Our Story
+                  Liên hệ
                 </Link>
               </nav>
             </SheetContent>

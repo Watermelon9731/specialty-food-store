@@ -76,10 +76,10 @@ export function AddOrderDialog({
       <DialogContent className="sm:max-w-[500px] p-6 rounded-2xl w-[95vw] mx-auto z-50">
         <DialogHeader className="mb-4">
           <DialogTitle className="text-2xl font-bold text-left">
-            Create New Order
+            Tạo đơn hàng
           </DialogTitle>
           <DialogDescription className="text-base text-left mt-1">
-            Enter the necessary details to manually create an order.
+            Nhập thông tin cần thiết để tạo đơn hàng.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -88,7 +88,7 @@ export function AddOrderDialog({
               htmlFor="customer-name"
               className="text-base font-semibold text-gray-800 dark:text-gray-200"
             >
-              Customer Name
+              Tên khách hàng
             </Label>
             <Input
               id="customer-name"
@@ -104,13 +104,13 @@ export function AddOrderDialog({
               htmlFor="product"
               className="text-base font-semibold text-gray-800 dark:text-gray-200"
             >
-              Product
+              Sản phẩm
             </Label>
             <Input
               id="product"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
-              placeholder="e.g. 500g Premium Dried Mango"
+              placeholder="e.g. 500g Xoài sấy dẻo"
               className="h-12 text-base px-4 rounded-xl border-gray-300 shadow-sm focus-visible:ring-blue-500"
               required
             />
@@ -120,7 +120,7 @@ export function AddOrderDialog({
               htmlFor="amount"
               className="text-base font-semibold text-gray-800 dark:text-gray-200"
             >
-              Total Amount (VNĐ)
+              Tổng số tiền (VNĐ)
             </Label>
             <Input
               id="amount"
@@ -138,7 +138,7 @@ export function AddOrderDialog({
               htmlFor="status"
               className="text-base font-semibold text-gray-800 dark:text-gray-200"
             >
-              Order Status
+              Trạng thái đơn hàng
             </Label>
             <div className="relative">
               <select
@@ -147,9 +147,9 @@ export function AddOrderDialog({
                 onChange={(e) => setStatus(e.target.value)}
                 className="h-12 w-full appearance-none rounded-xl border border-gray-300 bg-background px-4 py-2 text-base shadow-sm transition-colors focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <option value="processing">Processing</option>
-                <option value="paid">Paid</option>
-                <option value="unfulfilled">Unfulfilled</option>
+                <option value="processing">Đang xử lý</option>
+                <option value="paid">Đã thanh toán</option>
+                <option value="unfulfilled">Chưa thanh toán</option>
               </select>
               <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
                 <svg
@@ -178,14 +178,14 @@ export function AddOrderDialog({
               }}
               className="h-12 text-base w-full sm:w-auto rounded-xl"
             >
-              Cancel
+              Hủy
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
               className="h-12 text-base w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-md rounded-xl"
             >
-              {isSubmitting ? "Saving..." : "Save Order"}
+              {isSubmitting ? "Đang lưu..." : "Lưu đơn hàng"}
             </Button>
           </DialogFooter>
         </form>
