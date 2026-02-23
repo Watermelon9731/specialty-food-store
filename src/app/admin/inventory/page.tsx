@@ -86,7 +86,9 @@ export default function InventoryPage() {
                   <Badge variant="outline">Active</Badge>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">100</TableCell>
-                <TableCell className="hidden md:table-cell">$15.99</TableCell>
+                <TableCell className="hidden md:table-cell">
+                  380,000 VNĐ
+                </TableCell>
                 <TableCell className="text-right">25</TableCell>
                 <TableCell>
                   <DropdownMenu>
@@ -115,7 +117,9 @@ export default function InventoryPage() {
                   <Badge variant="secondary">Low Stock</Badge>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">50</TableCell>
-                <TableCell className="hidden md:table-cell">$22.50</TableCell>
+                <TableCell className="hidden md:table-cell">
+                  540,000 VNĐ
+                </TableCell>
                 <TableCell className="text-right">64</TableCell>
                 <TableCell>
                   <DropdownMenu>

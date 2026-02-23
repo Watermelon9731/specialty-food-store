@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     if (password !== ADMIN_PASSWORD) {
       return NextResponse.json(
-        { message: "Invalid password" },
+        { message: `Invalid password` },
         { status: 401 },
       );
     }

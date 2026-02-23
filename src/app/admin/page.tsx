@@ -14,27 +14,27 @@ import {
 const data = [
   {
     name: "Jan",
-    total: Math.floor(Math.random() * 5000) + 1000,
+    total: Math.floor(Math.random() * 50000000) + 10000000,
   },
   {
     name: "Feb",
-    total: Math.floor(Math.random() * 5000) + 1000,
+    total: Math.floor(Math.random() * 50000000) + 10000000,
   },
   {
     name: "Mar",
-    total: Math.floor(Math.random() * 5000) + 1000,
+    total: Math.floor(Math.random() * 50000000) + 10000000,
   },
   {
     name: "Apr",
-    total: Math.floor(Math.random() * 5000) + 1000,
+    total: Math.floor(Math.random() * 50000000) + 10000000,
   },
   {
     name: "May",
-    total: Math.floor(Math.random() * 5000) + 1000,
+    total: Math.floor(Math.random() * 50000000) + 10000000,
   },
   {
     name: "Jun",
-    total: Math.floor(Math.random() * 5000) + 1000,
+    total: Math.floor(Math.random() * 50000000) + 10000000,
   },
 ];
 
@@ -53,7 +53,7 @@ export default function AdminPage() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$45,231.89</div>
+            <div className="text-2xl font-bold">1,085,565,000 VNĐ</div>
             <p className="text-xs text-muted-foreground">
               +20.1% from last month
             </p>
@@ -116,7 +116,9 @@ export default function AdminPage() {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => `$${value}`}
+                  tickFormatter={(value) =>
+                    `${new Intl.NumberFormat("vi-VN").format(value)} ₫`
+                  }
                 />
                 <Tooltip
                   contentStyle={{
@@ -157,7 +159,7 @@ export default function AdminPage() {
                     olivia.martin@email.com
                   </p>
                 </div>
-                <div className="ml-auto font-medium">+$1,999.00</div>
+                <div className="ml-auto font-medium">+47,976,000 VNĐ</div>
               </div>
               <div className="flex items-center">
                 <div className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center font-bold text-xs text-secondary-foreground">
@@ -171,7 +173,7 @@ export default function AdminPage() {
                     jackson.lee@email.com
                   </p>
                 </div>
-                <div className="ml-auto font-medium">+$39.00</div>
+                <div className="ml-auto font-medium">+936,000 VNĐ</div>
               </div>
               <div className="flex items-center">
                 <div className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center font-bold text-xs text-secondary-foreground">
@@ -185,7 +187,7 @@ export default function AdminPage() {
                     isabella.nguyen@email.com
                   </p>
                 </div>
-                <div className="ml-auto font-medium">+$299.00</div>
+                <div className="ml-auto font-medium">+7,176,000 VNĐ</div>
               </div>
             </div>
           </CardContent>

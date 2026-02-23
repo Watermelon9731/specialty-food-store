@@ -29,6 +29,7 @@ model Product {
   category      Category @relation(fields: [categoryId], references: [id])
   
   inventoryLogs InventoryLog[]
+  orders        Order[]
 }
 
 model Category {
@@ -51,4 +52,20 @@ model InventoryLog {
   product        Product   @relation(fields: [productId], references: [id])
   
   createdAt      DateTime  @default(now())
+}
+
+model Order {
+  id           String   @id @default(cuid())
+  orderNumber  String   @unique
+  customerName String
+  customerPhone String  
+  customerAddress String?
+  productName  String?
+  productId    String?
+  product      Product? @relation(fields: [productId], references: [id])
+  amount       Decimal  @db.Decimal(10, 2)
+  status       String   @default("processing") // e.g. "processing", "paid", "unfulfilled"
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
