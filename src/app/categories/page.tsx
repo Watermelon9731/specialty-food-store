@@ -16,9 +16,9 @@ export default async function CategoriesPage() {
           <Link
             href={`/products?category=${category.name.toLowerCase()}`}
             key={category.id}
-            className="group relative block aspect-square md:aspect-[4/3] overflow-hidden rounded-xl bg-card border hover:shadow-xl transition-all hover:-translate-y-1"
+            className="group relative block aspect-square md:aspect-4/3 overflow-hidden rounded-xl bg-card border hover:shadow-xl transition-all hover:-translate-y-1"
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
             <div className="absolute inset-0 flex flex-col justify-end p-6">
               <h3 className="text-2xl font-bold text-white group-hover:scale-105 transition-transform origin-left drop-shadow-md">
                 {category.name}

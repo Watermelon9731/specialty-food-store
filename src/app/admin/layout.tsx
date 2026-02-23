@@ -13,7 +13,7 @@ export default function AdminLayout({
         <AdminSidebar />
       </div>
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        <header className="flex h-16 items-center border-b px-6 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
+        <header className="flex h-16 items-center border-b px-6 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shrink-0">
           <div className="flex items-center gap-2 md:hidden">
             {/* Mobile Toggle would go here */}
             <span className="font-bold">Admin Portal</span>
