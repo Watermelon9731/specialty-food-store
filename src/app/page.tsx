@@ -7,7 +7,7 @@ import {
   ShieldCheck,
   ArrowRight,
   Fish,
-  Beef,
+  MapPin,
   ChefHat,
   Home as HomeIcon,
 } from "lucide-react";
@@ -39,17 +39,18 @@ export default async function Home() {
         <div className="container mx-auto max-w-5xl relative z-10 text-center">
           <Badge className="bg-[#3a7851]/10 text-[#3a7851] hover:bg-[#3a7851]/20 border-none mb-6 px-4 py-1.5 text-sm gap-2">
             <HomeIcon className="h-4 w-4" />
-            <span className="font-semibold">Đặc công thức gia truyền</span>
+            <span className="font-semibold">Đặc sản Xứ Nẫu truyền thống</span>
           </Badge>
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-8 text-slate-900 dark:text-white leading-[1.1]">
             Hương Vị Quê Nhà <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-linear-to-r from-[#3a7851] to-emerald-600">
-              Đậm Đà Góc Bếp
+              Đậm Đà Bình Định
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Thưởng thức tinh hoa đặc sản thủ công với hải sản khô ngọt thịt từ
-            vùng biển vắng, cùng các loại thịt gác bếp chuẩn vị làm tại nhà.
+            Thưởng thức hương vị trứ danh từ quê hương Bình Định với mực ngào,
+            chả cá, tré rơm thắm đượm tình quê và các loại hải sản phơi sấy thủ
+            công tự nhiên nhất.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link href="/products">
@@ -91,26 +92,26 @@ export default async function Home() {
                 <Fish className="h-10 w-10" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
-                Hải Sản Đậm Đà
+                Hải Sản Biển Quy Nhơn
               </h3>
               <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                Mực khô, tôm khô, cá được ướp muối biển tự nhiên, phơi nắng gió
-                thủ công đảm bảo từng thớ thịt đều giữ nguyên độ mặn mòi, ngọt
-                thơm.
+                Mực khô, cá cơm, tôm biển được đánh bắt trực tiếp từ vùng biển
+                Quy Nhơn, tẩm ướp và phơi nắng gió tự nhiên giữ trọn độ mặn
+                ngọt.
               </p>
             </div>
 
             <div className="p-8 rounded-[2rem] bg-[#3a7851]/5 dark:bg-[#3a7851]/10 border border-[#3a7851]/20 text-center flex flex-col items-center hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
               <div className="h-20 w-20 bg-[#3a7851]/10 dark:bg-[#3a7851]/20 rounded-2xl flex items-center justify-center mb-6 text-[#3a7851] dark:text-[#52a672] -rotate-3 hover:rotate-3 transition-transform">
-                <Beef className="h-10 w-10" />
+                <MapPin className="h-10 w-10" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
-                Đặc Sản Bếp Nhà
+                Món Ngon Xứ Nẫu
               </h3>
               <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                Từng thớ thịt bò, heo, trâu được chính tay nhà ướp với gia vị
-                thuần nông, sấy củi chầm chậm để khói ngấm sâu vào từng thớ
-                thịt.
+                Nức lòng với Tré rơm Bình Định, nem chua chợ Huyện, bánh tráng
+                nước dừa. Từng thức quà là một câu chuyện văn hoá mộc mạc, đậm
+                tình.
               </p>
             </div>
 
