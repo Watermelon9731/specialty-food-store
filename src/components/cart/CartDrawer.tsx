@@ -14,7 +14,7 @@ import {
   Plus,
   Minus,
   ShoppingBag,
-  Fish,
+  Waves,
   ArrowRight,
   X,
   Tag,
@@ -78,7 +78,7 @@ export function CartDrawer() {
             /* Empty state */
             <div className="flex flex-col items-center justify-center py-24 gap-5 text-center">
               <div className="h-20 w-20 bg-white border border-slate-100 rounded-3xl flex items-center justify-center shadow-sm">
-                <Fish className="h-9 w-9 text-slate-300" />
+                <Waves className="h-9 w-9 text-slate-300" />
               </div>
               <div>
                 <p className="text-lg font-bold text-slate-700 mb-1">

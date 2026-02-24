@@ -70,7 +70,7 @@ const BLANK: CreateProductPayload = {
   name: "",
   description: "",
   pricePerUnit: 0,
-  unitType: "100g",
+  unitType: "g",
   stockQuantity: 0,
   origin: "Việt Nam",
   shelfLifeDays: 365,
@@ -249,14 +249,23 @@ export default function InventoryPage() {
                     />
                   </FormField>
                   <FormField label="Đơn vị" required>
-                    <Input
-                      id="unitType"
-                      value={form.unitType}
-                      onChange={handleField("unitType")}
-                      placeholder="100g"
-                      className="h-10 rounded-xl"
-                      required
-                    />
+                    <div className="flex gap-2">
+                      {["g", "chiếc", "cây"].map((unit) => (
+                        <button
+                          key={unit}
+                          type="button"
+                          data-selected={form.unitType === unit}
+                          onClick={() =>
+                            setForm((prev) => ({ ...prev, unitType: unit }))
+                          }
+                          className="flex-1 rounded-xl border px-3 py-2 text-sm font-medium transition-all cursor-pointer
+                            border-slate-300 bg-slate-50 text-slate-700
+                            data-[selected=true]:border-blue-600 data-[selected=true]:bg-blue-600 data-[selected=true]:text-white data-[selected=true]:ring-2 data-[selected=true]:ring-blue-300"
+                        >
+                          {unit}
+                        </button>
+                      ))}
+                    </div>
                   </FormField>
                 </div>
 

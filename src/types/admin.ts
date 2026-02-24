@@ -11,7 +11,18 @@ export type Order = {
   productName?: string;
   status: OrderStatus;
   date: string;
-  amount: string;
+  amount: string; // formatted string e.g. "85.000 VNĐ"
+  rawAmount?: number; // raw number for edit form
+};
+
+export type UpdateOrderPayload = {
+  id: string;
+  customerName?: string;
+  customerPhone?: string;
+  customerAddress?: string;
+  productName?: string;
+  amount?: number;
+  status?: OrderStatus;
 };
 
 export type CreateOrderPayload = {
@@ -31,6 +42,8 @@ export type GetOrdersParams = {
   dateFrom?: string;
   /** ISO date string, defaults to now */
   dateTo?: string;
+  /** Filter orders by a specific customer's phone number */
+  customerPhone?: string;
 };
 
 export type Pagination = {
@@ -104,5 +117,26 @@ export type GetProductsParams = {
 
 export type ProductsResponse = {
   products: Product[];
+  pagination: Pagination;
+};
+
+// ─── Customers ──────────────────────────────────────────────────────────────
+
+export type Customer = {
+  customerName: string;
+  customerPhone: string;
+  orderCount: number;
+  totalSpent: number;
+  totalSpentFormatted: string;
+};
+
+export type GetCustomersParams = {
+  search?: string;
+  page?: number;
+  pageSize?: number;
+};
+
+export type CustomersResponse = {
+  customers: Customer[];
   pagination: Pagination;
 };

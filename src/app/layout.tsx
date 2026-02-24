@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     "Xứ Nẫu",
   ],
   openGraph: {
-    title: "Tiệm Đồ Khô · Đặc Sản Bình Định",
+    title: "Vị Chờ · Tré & Chả Nem Bình Định",
     description: "Đặc sản thủ công gia truyền 3 thế hệ từ Bình Định.",
     locale: "vi_VN",
     type: "website",

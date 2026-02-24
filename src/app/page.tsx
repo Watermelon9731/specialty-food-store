@@ -420,6 +420,124 @@ export default async function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
+          5b. TRÉ SPOTLIGHT — full-width editorial CTA
+          ═══════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-[#1a1208] py-20 px-4 md:px-6">
+        {/* Warm amber ambient glow */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-[700px] h-[400px] bg-amber-600/20 rounded-full blur-[120px]" />
+        </div>
+        {/* Dot texture */}
+        <div className="absolute inset-0 bg-[radial-gradient(#6b4c1e33_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none" />
+
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* ── Left: visual ── */}
+            <div className="relative flex items-center justify-center">
+              {/* Main product card */}
+              <div className="w-[300px] md:w-[340px] h-[380px] md:h-[440px] bg-linear-to-br from-amber-900/60 to-amber-950 rounded-[2.5rem] border border-amber-700/30 shadow-2xl shadow-amber-900/40 flex flex-col items-center justify-end pb-10 relative overflow-hidden">
+                <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
+                <div className="text-center relative z-10">
+                  <div className="text-7xl mb-3 drop-shadow-2xl">🥩</div>
+                  <p className="text-white font-bold text-xl tracking-tight drop-shadow">
+                    Tré Rơm Cổ Điển
+                  </p>
+                  <p className="text-amber-300 text-sm mt-1 font-medium">
+                    Chợ Huyện · Bình Định
+                  </p>
+                </div>
+              </div>
+
+              {/* Floating leaf chip */}
+              <div className="absolute top-4 -right-2 md:-right-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-4 flex items-center gap-3 shadow-xl">
+                <span className="text-2xl">🌿</span>
+                <div>
+                  <p className="text-white font-bold text-sm">Lá ổi tươi</p>
+                  <p className="text-amber-300/80 text-xs">Lên men tự nhiên</p>
+                </div>
+              </div>
+
+              {/* Floating rơm chip */}
+              <div className="absolute -bottom-2 -left-2 md:-left-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-3 shadow-xl">
+                <p className="text-xs text-amber-300/70 font-semibold uppercase tracking-wider">
+                  Ủ rơm tự nhiên
+                </p>
+                <p className="text-white font-bold text-sm">24 – 36 tiếng</p>
+              </div>
+            </div>
+
+            {/* ── Right: copy ── */}
+            <div className="flex flex-col">
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-400 mb-5">
+                <span className="h-px w-8 bg-amber-600 block" />
+                Đặc sản số 1 của Xứ Nẫu
+              </span>
+
+              <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1] mb-6">
+                Tré Rơm
+                <br />
+                <span className="text-amber-400">Gia Truyền</span>
+                <br />
+                Bình Định.
+              </h2>
+
+              <p className="text-amber-100/70 text-base leading-relaxed mb-8 max-w-md">
+                Lên men tự nhiên bằng{" "}
+                <strong className="text-amber-200">lá ổi, rơm rạ</strong> —
+                không hàn the, không chất bảo quản. Công thức 3 thế hệ giữ trọn
+                vị chua thanh, dai giòn đặc trưng của miền Trung.
+              </p>
+
+              {/* Ingredient badges */}
+              <div className="flex flex-wrap gap-2 mb-10">
+                {[
+                  "🥩 Thịt heo nóng",
+                  "🌿 Lá ổi non",
+                  "🌾 Rơm ủ tự nhiên",
+                  "🚫 0% hàn the",
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs font-semibold px-3.5 py-1.5 rounded-full bg-white/10 text-amber-200 border border-white/15"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Trust stats */}
+              <div className="flex gap-8 mb-10 pb-10 border-b border-white/10">
+                {[
+                  { value: "3 đời", label: "Gia truyền" },
+                  { value: "200+", label: "Khách hài lòng" },
+                  { value: "4.9★", label: "Đánh giá trung bình" },
+                ].map((s) => (
+                  <div key={s.label}>
+                    <p className="text-2xl font-bold text-amber-400">
+                      {s.value}
+                    </p>
+                    <p className="text-xs text-amber-200/60 font-medium mt-0.5">
+                      {s.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <Link href={PATH.TRE} className="inline-flex self-start">
+                <Button
+                  size="lg"
+                  className="h-14 px-12 rounded-full bg-amber-300 hover:bg-amber-400 text-amber-950 font-bold text-md shadow-2xl shadow-amber-900/40 hover:scale-105 transition-all duration-200 gap-2"
+                >
+                  Khám phá Tré Bình Định
+                  <ArrowRight className="h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
           6. TESTIMONIAL — Simple, warm quote
           ═══════════════════════════════════════ */}
       <section className="py-20 bg-emerald-50 px-4">

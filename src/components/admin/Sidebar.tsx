@@ -12,41 +12,42 @@ import {
   Settings,
   Store,
 } from "lucide-react";
+import { PATH } from "@/constants/path";
 
 export const adminNavItems = [
   {
-    title: "Overview",
-    href: "/admin",
+    title: "Tổng quan",
+    href: PATH.ADMIN.DASHBOARD,
     icon: LayoutDashboard,
     disabled: false,
   },
   {
-    title: "Orders",
-    href: "/admin/orders",
+    title: "Đơn hàng",
+    href: PATH.ADMIN.ORDERS,
     icon: ShoppingCart,
     disabled: false,
   },
   {
-    title: "Inventory",
-    href: "/admin/inventory",
+    title: "Sản phẩm",
+    href: PATH.ADMIN.INVENTORY,
     icon: Package,
     disabled: false,
   },
   {
-    title: "Customers",
-    href: "/admin/customers",
+    title: "Khách hàng",
+    href: PATH.ADMIN.CUSTOMERS,
     icon: Users,
-    disabled: true,
+    disabled: false,
   },
   {
-    title: "Analytics",
-    href: "/admin/analytics",
+    title: "Thống kê",
+    href: PATH.ADMIN.ANALYTICS,
     icon: BarChart,
     disabled: true,
   },
   {
-    title: "Settings",
-    href: "/admin/settings",
+    title: "Cài đặt",
+    href: PATH.ADMIN.SETTINGS,
     icon: Settings,
     disabled: true,
   },
@@ -63,7 +64,9 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
         <div className="px-3 py-2">
           <div className="flex items-center gap-2 px-4 mb-6">
             <Store className="h-6 w-6 text-primary" />
-            <h2 className="text-xl font-bold tracking-tight">Admin Portal</h2>
+            <h2 className="text-xl font-bold tracking-tight">
+              Quản lý cửa hàng
+            </h2>
           </div>
           <div className="space-y-1">
             {adminNavItems.map((item) => (
@@ -73,7 +76,7 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-primary",
                   pathname === item.href
-                    ? "bg-secondary text-primary"
+                    ? "bg-primary text-white"
                     : "text-muted-foreground hover:bg-muted",
                   item.disabled && "cursor-not-allowed opacity-60",
                 )}

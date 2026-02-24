@@ -6,7 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Fish, Phone, Mail, MapPin, CheckCircle2, Loader2 } from "lucide-react";
+import {
+  Waves,
+  Phone,
+  Mail,
+  MapPin,
+  CheckCircle2,
+  Loader2,
+} from "lucide-react";
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
@@ -28,7 +35,7 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none" />
         <div className="container mx-auto max-w-7xl relative z-10">
           <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-4">
-            <Fish className="w-4 h-4" />
+            <Waves className="w-4 h-4" />
             Liên hệ
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">

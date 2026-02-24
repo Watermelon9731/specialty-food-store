@@ -43,7 +43,6 @@ export async function POST(request: Request) {
       Math.max(1, Number(body.pageSize) || PAGE_SIZE_DEFAULT),
     );
 
-    // Default date range: last 6 months
     const defaultDateFrom = new Date();
     defaultDateFrom.setMonth(defaultDateFrom.getMonth() - 6);
 
@@ -58,10 +57,8 @@ export async function POST(request: Request) {
     const where = {
       ...statusFilter,
       isDeleted: false,
-      createdAt: {
-        gte: dateFrom,
-        lte: dateTo,
-      },
+      createdAt: { gte: dateFrom, lte: dateTo },
+      ...(body.customerPhone && { customerPhone: body.customerPhone }),
     };
 
     const [total, dbOrders] = await db.$transaction([
@@ -80,7 +77,9 @@ export async function POST(request: Request) {
       customerName: o.customerName,
       customerPhone: o.customerPhone,
       customerAddress: o.customerAddress,
+      productName: o.productName,
       status: o.status,
+      rawAmount: Number(o.amount),
       date: new Date(o.createdAt).toLocaleDateString("vi-VN", {
         month: "long",
         day: "numeric",
@@ -103,6 +102,73 @@ export async function POST(request: Request) {
     console.error("Orders API Error:", error);
     return NextResponse.json(
       { success: false, error: "Failed to process orders request" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      id,
+      customerName,
+      customerPhone,
+      customerAddress,
+      productName,
+      amount,
+      status,
+    } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "Thiếu ID đơn hàng" },
+        { status: 400 },
+      );
+    }
+
+    const order = await db.order.update({
+      where: { id },
+      data: {
+        ...(customerName !== undefined && { customerName }),
+        ...(customerPhone !== undefined && { customerPhone }),
+        ...(customerAddress !== undefined && { customerAddress }),
+        ...(productName !== undefined && { productName }),
+        ...(amount !== undefined && { amount: Number(amount) }),
+        ...(status !== undefined && { status }),
+      },
+    });
+
+    return NextResponse.json({ success: true, order });
+  } catch (error) {
+    console.error("Orders PATCH Error:", error);
+    return NextResponse.json(
+      { success: false, error: "Không thể cập nhật đơn hàng" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "Thiếu ID đơn hàng" },
+        { status: 400 },
+      );
+    }
+
+    // Soft delete
+    await db.order.update({ where: { id }, data: { isDeleted: true } });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Orders DELETE Error:", error);
+    return NextResponse.json(
+      { success: false, error: "Không thể xóa đơn hàng" },
       { status: 500 },
     );
   }

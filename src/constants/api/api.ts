@@ -5,5 +5,6 @@ export const API_ROUTES = {
     DASHBOARD: "/api/admin/dashboard",
     ORDERS: "/api/admin/orders",
     INVENTORY: "/api/admin/inventory",
+    CUSTOMERS: "/api/admin/customers",
   },
 };

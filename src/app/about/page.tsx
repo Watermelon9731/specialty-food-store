@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Fish,
+  Waves,
   Leaf,
   ShieldCheck,
   HeartHandshake,
@@ -21,7 +21,7 @@ export default function AboutPage() {
         <div className="container mx-auto max-w-7xl relative z-10 grid md:grid-cols-2 gap-12 items-center">
           <div>
             <Badge className="bg-white/10 text-emerald-300 border-white/10 mb-6 px-4 py-1.5 rounded-full text-xs tracking-widest uppercase font-semibold">
-              Câu chuyện của lò
+              Câu chuyện của tiệm
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold leading-[1.1] mb-6">
               Ba thế hệ,

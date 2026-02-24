@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import { PATH } from "@/constants/path";
 import { useCart } from "@/hooks/use-cart";
-import { Fish, Menu, ShoppingBag } from "lucide-react";
+import { Waves, Menu, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -62,14 +62,14 @@ export function Header() {
         {/* ── Logo ── */}
         <Link href="/" className="flex items-center gap-2.5 group shrink-0">
           <div className="bg-[#1a3d2b] group-hover:bg-[#3a7851] p-2 rounded-xl text-white shadow-md transition-all duration-200 group-hover:scale-110">
-            <Fish className="h-5 w-5" />
+            <Waves className="h-5 w-5" />
           </div>
           <div className="flex flex-col leading-none">
             <span className="font-bold text-[17px] tracking-tight text-slate-900">
-              Tiệm Đồ Khô
+              Vị Chờ
             </span>
             <span className="text-[10px] text-[#3a7851] font-semibold tracking-[0.12em] uppercase hidden sm:block">
-              Đặc sản Bình Định
+              Tré & Chả Nem Bình Định
             </span>
           </div>
         </Link>
@@ -85,6 +85,14 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          {/* Tré spotlight pill */}
+          <Link
+            href={PATH.TRE}
+            className="ml-1 flex items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-full bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 hover:border-amber-300 transition-all duration-200 shadow-sm"
+          >
+            <span>🥩</span>
+            Tré Bình Định
+          </Link>
         </nav>
 
         {/* ── Right actions ── */}
@@ -136,14 +144,14 @@ export function Header() {
               {/* Sidebar header */}
               <div className="flex items-center gap-2.5 p-6 border-b border-slate-200/60">
                 <div className="bg-[#1a3d2b] p-2 rounded-xl text-white">
-                  <Fish className="h-5 w-5" />
+                  <Waves className="h-5 w-5" />
                 </div>
                 <div className="flex flex-col leading-none">
                   <span className="font-bold text-[17px] tracking-tight text-slate-900">
-                    Tiệm Đồ Khô
+                    Vị Chờ
                   </span>
                   <span className="text-[10px] text-[#3a7851] font-semibold tracking-[0.12em] uppercase">
-                    Đặc sản Bình Định
+                    Tré & Chả Nem Bình Định
                   </span>
                 </div>
               </div>
@@ -160,6 +168,24 @@ export function Header() {
                   </Link>
                 ))}
               </nav>
+
+              {/* Tré featured card — mobile */}
+              <div className="mx-4 mb-2 rounded-2xl bg-amber-50 border border-amber-200 p-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-1">
+                  Đặc sản nổi bật
+                </p>
+                <p className="font-bold text-slate-900 text-base mb-0.5">
+                  🥩 Tré Rơm Gia Truyền
+                </p>
+                <p className="text-xs text-slate-500 mb-3">
+                  Bình Định · Lên men tự nhiên · 3 thế hệ
+                </p>
+                <Link href={PATH.TRE} className="block">
+                  <Button className="w-full rounded-full bg-amber-800 hover:bg-amber-900 text-white h-10 font-semibold text-sm">
+                    Xem ngay →
+                  </Button>
+                </Link>
+              </div>
 
               {/* Sidebar CTA */}
               <div className="p-4 mt-4 border-t border-slate-200/60">

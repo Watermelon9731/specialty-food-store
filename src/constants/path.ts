@@ -10,10 +10,19 @@ export const PATH = {
   PRODUCTS_MEAT: "/san-pham?category=thit-gac-bep",
   PRODUCTS_NEM_CHA: "/san-pham?category=nem-cha-dac-san",
   PRODUCTS_SPICES: "/san-pham?category=gia-vi-truyen-thong",
+  TRE: "/tre-binh-dinh",
   ADMIN: {
     LOGIN: "/admin/login",
     DASHBOARD: "/admin",
     ORDERS: "/admin/orders",
+    INVENTORY: "/admin/inventory",
+    CUSTOMERS: "/admin/customers",
+    ANALYTICS: "/admin/analytics",
+    SETTINGS: "/admin/settings",
+  },
+  AUTH: {
+    LOGIN: "/auth/login",
+    LOGOUT: "/auth/logout",
   },
 };
 

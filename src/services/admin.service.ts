@@ -2,7 +2,10 @@ import { API_ROUTES } from "@/constants/api/api";
 import type {
   CreateOrderPayload,
   CreateProductPayload,
+  Customer,
+  CustomersResponse,
   DashboardStats,
+  GetCustomersParams,
   GetOrdersParams,
   GetProductsParams,
   Order,
@@ -10,6 +13,7 @@ import type {
   Product,
   ProductCategory,
   ProductsResponse,
+  UpdateOrderPayload,
   UpdateProductPayload,
 } from "@/types/admin";
 
@@ -47,6 +51,25 @@ export async function createOrder(payload: CreateOrderPayload): Promise<Order> {
   const data = await res.json();
   if (!data.success) throw new Error(data.message ?? "Failed to create order");
   return data.order as Order;
+}
+
+export async function updateOrder(payload: UpdateOrderPayload): Promise<Order> {
+  const res = await fetch(API_ROUTES.ADMIN.ORDERS, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!data.success) throw new Error(data.error ?? "Failed to update order");
+  return data.order as Order;
+}
+
+export async function deleteOrder(id: string): Promise<void> {
+  const res = await fetch(`${API_ROUTES.ADMIN.ORDERS}?id=${id}`, {
+    method: "DELETE",
+  });
+  const data = await res.json();
+  if (!data.success) throw new Error(data.error ?? "Failed to delete order");
 }
 
 // ─── Inventory / Products ──────────────────────────────────────────────────────
@@ -110,4 +133,23 @@ export async function getCategories(): Promise<ProductCategory[]> {
   if (!data.success)
     throw new Error(data.error ?? "Failed to fetch categories");
   return data.categories as ProductCategory[];
+}
+
+// ─── Customers ────────────────────────────────────────────────────────────────
+
+export async function getCustomers(
+  params: GetCustomersParams = {},
+): Promise<CustomersResponse> {
+  const query = new URLSearchParams();
+  if (params.search) query.set("search", params.search);
+  if (params.page) query.set("page", String(params.page));
+  if (params.pageSize) query.set("pageSize", String(params.pageSize));
+
+  const res = await fetch(`${API_ROUTES.ADMIN.CUSTOMERS}?${query.toString()}`);
+  const data = await res.json();
+  if (!data.success) throw new Error(data.error ?? "Failed to fetch customers");
+  return {
+    customers: data.customers as Customer[],
+    pagination: data.pagination,
+  };
 }

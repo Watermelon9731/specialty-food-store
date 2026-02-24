@@ -1,21 +1,29 @@
-import Link from "next/link";
-import {
-  Fish,
-  MapPin,
-  Phone,
-  Mail,
-  ArrowRight,
-  Instagram,
-  Facebook,
-} from "lucide-react";
 import { CONTACT_INFO, PATH } from "@/constants/path";
 import { formatPhoneNumber } from "@/lib/utils";
+import {
+  ArrowRight,
+  Ban,
+  Facebook,
+  Waves,
+  House,
+  Instagram,
+  Leaf,
+  MapPin,
+  Phone,
+  Truck,
+} from "lucide-react";
+import Link from "next/link";
 
 const SHOP_LINKS = [
-  { href: PATH.PRODUCTS_SEAFOOD, label: "Hải Sản Khô" },
-  { href: PATH.PRODUCTS_MEAT, label: "Bò khô/ Heo khô" },
-  { href: PATH.PRODUCTS_NEM_CHA, label: "Nem Chả Đặc Sản" },
-  { href: PATH.PRODUCTS_SPICES, label: "Gia Vị Truyền Thống" },
+  { href: PATH.TRE, label: "🥩 Tré Rơm Bình Định", highlight: true },
+  { href: PATH.PRODUCTS_SEAFOOD, label: "Hải Sản Khô", highlight: false },
+  { href: PATH.PRODUCTS_MEAT, label: "Bò khô/ Heo khô", highlight: false },
+  { href: PATH.PRODUCTS_NEM_CHA, label: "Nem Chả Đặc Sản", highlight: false },
+  {
+    href: PATH.PRODUCTS_SPICES,
+    label: "Gia Vị Truyền Thống",
+    highlight: false,
+  },
 ];
 
 const INFO_LINKS = [
@@ -30,23 +38,33 @@ export function Footer() {
     <footer className="bg-[#1a3d2b] text-white">
       {/* ── Top strip — CTA ── */}
       <div className="border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-6 py-10 max-w-7xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-400 mb-2">
-              Đặc sản Xứ Nẫu · Bình Định
+        <div className="container mx-auto px-4 md:px-6 py-12 max-w-7xl flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <div className="max-w-xl">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-400 mb-2">
+              🥩 Đặc sản bán chạy nhất
             </p>
-            <h2 className="text-2xl md:text-3xl font-bold text-white leading-snug">
-              Vị quê hương tươi ngon, <br className="hidden md:block" />
-              giao tận tay bạn.
+            <h2 className="text-2xl md:text-3xl font-bold text-white leading-snug mb-2">
+              Tré Rơm Gia Truyền Bình Định
             </h2>
+            <p className="text-emerald-200/70 text-sm leading-relaxed">
+              Lên men tự nhiên bằng lá ổi · Không hàn the · Công thức 3 thế hệ
+            </p>
           </div>
-          <Link
-            href={PATH.PRODUCTS}
-            className="shrink-0 flex items-center gap-2 bg-white text-[#1a3d2b] hover:bg-emerald-50 font-bold px-7 h-12 rounded-full text-sm transition-all duration-200 shadow-lg hover:scale-105 group"
-          >
-            Khám phá ngay
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+            <Link
+              href={PATH.TRE}
+              className="flex items-center justify-center gap-2 bg-amber-300 hover:bg-amber-400 text-amber-950 hover:text-amber-100 font-bold px-7 h-12 rounded-full text-sm transition-all duration-200 shadow-lg hover:scale-105 group"
+            >
+              Khám phá Tré Ngay
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <Link
+              href={PATH.PRODUCTS}
+              className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 h-12 rounded-full text-sm transition-all duration-200 border border-white/20"
+            >
+              Xem tất cả sản phẩm
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -56,21 +74,20 @@ export function Footer() {
         <div className="sm:col-span-2 lg:col-span-1 space-y-6">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="bg-white/15 group-hover:bg-[#3a7851] p-2.5 rounded-xl transition-all duration-200">
-              <Fish className="h-5 w-5 text-white" />
+              <Waves className="h-5 w-5 text-white" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-bold text-xl tracking-tight">
-                Tiệm Đồ Khô
-              </span>
+              <span className="font-bold text-xl tracking-tight">Vị Chờ</span>
               <span className="text-[10px] text-emerald-400 font-semibold tracking-[0.15em] uppercase">
-                Đặc sản Bình Định
+                Tré & Chả Nem Bình Định
               </span>
             </div>
           </Link>
 
           <p className="text-emerald-100/70 text-sm leading-relaxed max-w-xs">
-            Hương vị nhà làm, đậm đà tình quê. Ba thế hệ gia truyền gìn giữ công
-            thức tré rơm, nem chả và hải sản khô Bình Định.
+            Vị Chờ — tên gọi của sự kiên nhẫn. Tré rơm lên men 36 tiếng, chả nem
+            rán vàng đúng lửa. Ba thế hệ gia truyền gìn giữ từng công thức của
+            vùng đất Xứ Nẫu.
           </p>
 
           {/* Contact info */}
@@ -131,7 +148,11 @@ export function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-sm text-emerald-100/70 hover:text-white transition-colors flex items-center gap-1.5 group"
+                  className={`text-sm transition-colors flex items-center gap-1.5 group ${
+                    link.highlight
+                      ? "text-amber-300 hover:text-amber-200 font-semibold"
+                      : "text-emerald-100/70 hover:text-white"
+                  }`}
                 >
                   <span className="opacity-0 group-hover:opacity-100 transition-opacity text-emerald-400">
                     →
@@ -172,10 +193,22 @@ export function Footer() {
           </h3>
           <div className="space-y-4">
             {[
-              { emoji: "🚫", text: "Không hàn the, không phụ gia" },
-              { emoji: "🌿", text: "Lên men tự nhiên bằng lá ổi" },
-              { emoji: "🏡", text: "Sản xuất thủ công quy mô nhỏ" },
-              { emoji: "🚚", text: "Giao hàng toàn quốc, đóng gói lạnh" },
+              {
+                emoji: <Ban className="w-4 h-4" />,
+                text: "Không hàn the, không phụ gia",
+              },
+              {
+                emoji: <Leaf className="w-4 h-4" />,
+                text: "Lên men tự nhiên bằng lá ổi",
+              },
+              {
+                emoji: <House className="w-4 h-4" />,
+                text: "Sản xuất thủ công quy mô nhỏ",
+              },
+              {
+                emoji: <Truck className="w-4 h-4" />,
+                text: "Giao hàng toàn quốc, đóng gói lạnh",
+              },
             ].map((item) => (
               <div key={item.text} className="flex items-start gap-3">
                 <span className="text-base leading-none mt-0.5 shrink-0">
@@ -194,8 +227,8 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="container mx-auto px-4 md:px-6 py-5 max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-emerald-400/60">
           <p>
-            © {new Date().getFullYear()} Tiệm Đồ Khô · Bình Định, Việt Nam. Mọi
-            quyền được bảo lưu.
+            © {new Date().getFullYear()} Vị Chờ · Bình Định, Việt Nam. Mọi quyền
+            được bảo lưu.
           </p>
           <p className="flex items-center gap-1">
             Làm với <span className="text-red-400 mx-0.5">❤</span> từ Xứ Nẫu

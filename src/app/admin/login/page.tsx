@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Lock, Fish } from "lucide-react";
+import { Loader2, Lock, Waves } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { PATH } from "@/constants/path";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function AdminLoginPage() {
     setError("");
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(`${PATH.AUTH.LOGIN}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
@@ -37,7 +38,7 @@ export default function AdminLoginPage() {
         throw new Error(data.message || "Đăng nhập thất bại.");
       }
 
-      router.push("/admin");
+      router.push(PATH.ADMIN.DASHBOARD);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -56,14 +57,14 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link
-            href="/"
+            href={PATH.HOME}
             className="inline-flex flex-col items-center gap-2 group"
           >
             <div className="bg-white/10 group-hover:bg-[#3a7851] p-3.5 rounded-2xl text-white transition-all duration-200">
-              <Fish className="h-7 w-7" />
+              <Waves className="h-7 w-7" />
             </div>
             <span className="text-white font-bold text-xl tracking-tight">
-              Tiệm Đồ Khô
+              Vị Chờ
             </span>
             <span className="text-emerald-400 text-xs font-semibold tracking-[0.15em] uppercase">
               Quản lý hệ thống
@@ -130,7 +131,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="text-center text-emerald-400/60 text-xs mt-6">
-          © {new Date().getFullYear()} Tiệm Đồ Khô · Bình Định
+          © {new Date().getFullYear()} Vị Chờ · Bình Định
         </p>
       </div>
     </div>
