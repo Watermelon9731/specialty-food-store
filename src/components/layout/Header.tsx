@@ -1,28 +1,33 @@
 "use client";
 
-import Link from "next/link";
-import { ShoppingBag, Menu, Fish, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetTrigger,
   SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
+import { PATH } from "@/constants/path";
 import { useCart } from "@/hooks/use-cart";
+import { Fish, Menu, ShoppingBag } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
-  { href: "/products", label: "Sản phẩm" },
-  { href: "/categories", label: "Danh mục" },
-  { href: "/about", label: "Về chúng tôi" },
-  { href: "/contact", label: "Liên hệ" },
+  { href: PATH.PRODUCTS, label: "Sản phẩm" },
+  { href: PATH.CATEGORIES, label: "Danh mục" },
+  { href: PATH.ABOUT, label: "Về chúng tôi" },
+  { href: PATH.CONTACT, label: "Liên hệ" },
 ];
 
 export function Header() {
   const { items, setOpen } = useCart();
   const [isMounted, setIsMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const pathName = usePathname();
 
   useEffect(() => {
     setIsMounted(true);
@@ -31,17 +36,27 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (pathName.includes("/admin")) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
+  }, [pathName]);
+
   const itemCount = isMounted
     ? items.reduce((acc, item) => acc + item.quantity, 0)
     : 0;
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        scrolled
-          ? "bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-100"
-          : "bg-[#f8f7f4]/80 backdrop-blur-sm border-b border-transparent"
-      }`}
+      className={
+        `sticky top-0 z-50 w-full transition-all duration-300 ${
+          scrolled
+            ? "bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-100"
+            : "bg-[#f8f7f4]/80 backdrop-blur-sm border-b border-transparent"
+        }` + (isDisabled ? " hidden" : "")
+      }
     >
       <div className="container mx-auto flex h-[68px] items-center justify-between px-4 md:px-6 max-w-7xl">
         {/* ── Logo ── */}

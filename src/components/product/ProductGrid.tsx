@@ -109,7 +109,7 @@ function ProductCard({
         {/* Origin tag */}
         {product.origin && (
           <div className="flex items-center gap-1 text-slate-400 text-xs mb-2">
-            <MapPin className="w-3 h-3 flex-shrink-0" />
+            <MapPin className="w-3 h-3 shrink-0" />
             <span className="truncate">{product.origin}</span>
           </div>
         )}

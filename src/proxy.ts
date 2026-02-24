@@ -1,29 +1,31 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyToken } from "@/lib/auth";
+import { PATH } from "./constants/path";
+import { TOKEN } from "./constants/token";
 
 export async function proxy(req: NextRequest) {
-  const adminToken = req.cookies.get("admin_token")?.value;
+  const adminToken = req.cookies.get(TOKEN.ADMIN)?.value;
 
   const url = req.nextUrl.clone();
-  const isAdminPath = url.pathname.startsWith("/admin");
-  const isLoginPath = url.pathname === "/admin/login";
+  const isAdminPath = url.pathname.startsWith(PATH.ADMIN.DASHBOARD);
+  const isLoginPath = url.pathname === PATH.ADMIN.LOGIN;
 
   // Protect all /admin routes except the login page
   if (isAdminPath && !isLoginPath) {
     if (!adminToken) {
-      url.pathname = "/admin/login";
+      url.pathname = PATH.ADMIN.LOGIN;
       return NextResponse.redirect(url);
     }
 
     try {
       const payload = await verifyToken(adminToken);
       if (!payload || !payload.admin) {
-        url.pathname = "/admin/login";
+        url.pathname = PATH.ADMIN.LOGIN;
         return NextResponse.redirect(url);
       }
     } catch (e) {
-      url.pathname = "/admin/login";
+      url.pathname = PATH.ADMIN.LOGIN;
       return NextResponse.redirect(url);
     }
   }
@@ -33,7 +35,7 @@ export async function proxy(req: NextRequest) {
     try {
       const payload = await verifyToken(adminToken);
       if (payload && payload.admin) {
-        url.pathname = "/admin";
+        url.pathname = PATH.ADMIN.DASHBOARD;
         return NextResponse.redirect(url);
       }
     } catch {

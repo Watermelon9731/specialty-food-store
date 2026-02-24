@@ -8,19 +8,21 @@ import {
   Instagram,
   Facebook,
 } from "lucide-react";
+import { CONTACT_INFO, PATH } from "@/constants/path";
+import { formatPhoneNumber } from "@/lib/utils";
 
 const SHOP_LINKS = [
-  { href: "/products?category=seafood", label: "Hải Sản Khô" },
-  { href: "/products?category=meat", label: "Thịt Gác Bếp" },
-  { href: "/products?category=nem-cha", label: "Nem Chả Đặc Sản" },
-  { href: "/products?category=spices", label: "Gia Vị Truyền Thống" },
+  { href: PATH.PRODUCTS_SEAFOOD, label: "Hải Sản Khô" },
+  { href: PATH.PRODUCTS_MEAT, label: "Bò khô/ Heo khô" },
+  { href: PATH.PRODUCTS_NEM_CHA, label: "Nem Chả Đặc Sản" },
+  { href: PATH.PRODUCTS_SPICES, label: "Gia Vị Truyền Thống" },
 ];
 
 const INFO_LINKS = [
-  { href: "/about", label: "Câu chuyện lò bếp" },
-  { href: "/contact", label: "Liên hệ" },
-  { href: "/terms", label: "Điều khoản sử dụng" },
-  { href: "/privacy", label: "Chính sách bảo mật" },
+  { href: PATH.ABOUT, label: "Câu chuyện bếp nhà" },
+  { href: PATH.CONTACT, label: "Liên hệ" },
+  { href: PATH.TERMS, label: "Điều khoản sử dụng" },
+  { href: PATH.PRIVACY, label: "Chính sách bảo mật" },
 ];
 
 export function Footer() {
@@ -39,8 +41,8 @@ export function Footer() {
             </h2>
           </div>
           <Link
-            href="/products"
-            className="flex-shrink-0 flex items-center gap-2 bg-white text-[#1a3d2b] hover:bg-emerald-50 font-bold px-7 h-12 rounded-full text-sm transition-all duration-200 shadow-lg hover:scale-105 group"
+            href={PATH.PRODUCTS}
+            className="shrink-0 flex items-center gap-2 bg-white text-[#1a3d2b] hover:bg-emerald-50 font-bold px-7 h-12 rounded-full text-sm transition-all duration-200 shadow-lg hover:scale-105 group"
           >
             Khám phá ngay
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -74,22 +76,22 @@ export function Footer() {
           {/* Contact info */}
           <div className="space-y-3 text-sm">
             <a
-              href="tel:+84901234567"
+              href={`tel:${CONTACT_INFO.PHONE_CODE}${CONTACT_INFO.PHONE}`}
               className="flex items-center gap-2.5 text-emerald-200/80 hover:text-emerald-300 transition-colors group"
             >
               <Phone className="w-4 h-4 text-emerald-500 shrink-0" />
-              0901 234 567
+              {CONTACT_INFO.PHONE_CODE} {formatPhoneNumber(CONTACT_INFO.PHONE)}
             </a>
-            <a
-              href="mailto:tiemdokho@gmail.com"
+            {/* <a
+              href={`mailto:${CONTACT_INFO.EMAIL}`}
               className="flex items-center gap-2.5 text-emerald-200/80 hover:text-emerald-300 transition-colors group"
             >
               <Mail className="w-4 h-4 text-emerald-500 shrink-0" />
-              tiemdokho@gmail.com
-            </a>
+              {CONTACT_INFO.EMAIL}
+            </a> */}
             <div className="flex items-start gap-2.5 text-emerald-200/80">
               <MapPin className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-              <span>Chợ Huyện, Phù Cát, Bình Định</span>
+              <span>{CONTACT_INFO.ADDRESS}</span>
             </div>
           </div>
 
@@ -108,6 +110,13 @@ export function Footer() {
               className="h-9 w-9 rounded-full bg-white/10 hover:bg-[#3a7851] flex items-center justify-center text-white transition-all duration-200 hover:scale-110"
             >
               <Instagram className="w-4 h-4" />
+            </a>
+            <a
+              href={`https://zalo.me/${CONTACT_INFO.PHONE}`}
+              aria-label="Zalo"
+              className="h-9 w-9 rounded-full bg-white/10 hover:bg-[#3a7851] flex items-center justify-center text-white transition-all duration-200 hover:scale-110"
+            >
+              <span className="text-[10px] font-bold">Zalo</span>
             </a>
           </div>
         </div>

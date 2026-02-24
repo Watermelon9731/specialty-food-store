@@ -4,6 +4,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/Sidebar";
 import { MobileBottomNav } from "@/components/admin/MobileBottomNav";
 import { LogOut } from "lucide-react";
+import { PATH } from "@/constants/path";
+import { API_ROUTES } from "@/constants/api/api";
 
 export default function AdminLayout({
   children,
@@ -18,8 +20,8 @@ export default function AdminLayout({
   }
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/admin/login");
+    await fetch(API_ROUTES.ADMIN.LOGOUT, { method: "POST" });
+    router.push(PATH.ADMIN.LOGIN);
     router.refresh();
   };
 

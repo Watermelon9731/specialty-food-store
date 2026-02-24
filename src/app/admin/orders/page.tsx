@@ -1,30 +1,26 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { AddOrderDialog } from "@/components/admin/AddOrderDialog";
+import StatusBadge from "@/components/status-badge/StatusBadge";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -33,88 +29,114 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { File, ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { QUERY_KEY } from "@/constants/query-key/query-key";
+import { getOrders } from "@/services/admin.service";
+import type { OrderStatus } from "@/types/admin";
+import { useQuery } from "@tanstack/react-query";
+import {
+  ChevronLeft,
+  ChevronRight,
+  File,
+  ListFilter,
+  MoreHorizontal,
+  PlusCircle,
+} from "lucide-react";
+import { useState } from "react";
 
-type Order = {
-  id: string;
-  orderNumber: string;
-  customerName: string;
-  customerPhone?: string;
-  customerAddress?: string;
-  status: string;
-  date: string;
-  amount: string;
-};
+const PAGE_SIZE = 10;
+
+// Default: last 6 months
+function defaultDateFrom() {
+  const d = new Date();
+  d.setMonth(d.getMonth() - 6);
+  return d.toISOString().split("T")[0]; // YYYY-MM-DD
+}
+
+function todayString() {
+  return new Date().toISOString().split("T")[0];
+}
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [activeFilters, setActiveFilters] = useState<string[]>([
+  const [page, setPage] = useState(1);
+  const [activeFilters, setActiveFilters] = useState<OrderStatus[]>([
     "paid",
     "processing",
     "unfulfilled",
   ]);
-  const [debouncedFilters, setDebouncedFilters] =
-    useState<string[]>(activeFilters);
+  const [dateFrom, setDateFrom] = useState(defaultDateFrom());
+  const [dateTo, setDateTo] = useState(todayString());
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedFilters(activeFilters);
-    }, 500);
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      ...QUERY_KEY.ADMIN.ORDERS,
+      page,
+      activeFilters,
+      dateFrom,
+      dateTo,
+    ],
+    queryFn: () =>
+      getOrders({
+        page,
+        pageSize: PAGE_SIZE,
+        statuses: activeFilters,
+        dateFrom,
+        dateTo,
+      }),
+    placeholderData: (prev) => prev,
+  });
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [activeFilters]);
+  const orders = data?.orders ?? [];
+  const pagination = data?.pagination;
 
-  const toggleFilter = (status: string) => {
-    setActiveFilters((prev) => {
-      if (prev.includes(status)) {
-        // Don't allow deselecting the last filter (optional ux choice, but let's allow empty)
-        return prev.filter((item) => item !== status);
-      } else {
-        return [...prev, status];
-      }
-    });
+  const toggleFilter = (status: OrderStatus) => {
+    setPage(1);
+    setActiveFilters((prev) =>
+      prev.includes(status)
+        ? (prev.filter((s) => s !== status) as OrderStatus[])
+        : [...prev, status],
+    );
   };
 
-  useEffect(() => {
-    async function fetchOrders() {
-      setLoading(true);
-      try {
-        const res = await fetch("/api/admin/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            statuses: debouncedFilters,
-          }),
-        });
-        const data = await res.json();
-        if (data.success) {
-          setOrders(data.orders);
-        }
-      } catch (error) {
-        console.error("Failed to fetch orders", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchOrders();
-  }, [debouncedFilters]);
+  const handleDateChange = (field: "dateFrom" | "dateTo", value: string) => {
+    setPage(1);
+    if (field === "dateFrom") setDateFrom(value);
+    else setDateTo(value);
+  };
 
   return (
     <div className="grid flex-1 items-start gap-4 p-2 sm:px-6 sm:py-0 md:gap-8">
-      <div className="flex items-center">
+      {/* Header */}
+      <div className="flex items-center flex-wrap gap-3">
         <h1 className="text-xl md:text-2xl font-bold tracking-tight">
           Đơn hàng
         </h1>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2 flex-wrap">
+          {/* Date range */}
+          <div className="flex items-center gap-1 text-sm">
+            <Input
+              id="date-from"
+              type="date"
+              value={dateFrom}
+              max={dateTo}
+              onChange={(e) => handleDateChange("dateFrom", e.target.value)}
+              className="h-8 w-36 text-xs"
+            />
+            <span className="text-muted-foreground">→</span>
+            <Input
+              id="date-to"
+              type="date"
+              value={dateTo}
+              min={dateFrom}
+              max={todayString()}
+              onChange={(e) => handleDateChange("dateTo", e.target.value)}
+              className="h-8 w-36 text-xs"
+            />
+          </div>
+
+          {/* Status filter */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-7 gap-1">
+              <Button variant="outline" size="sm" className="h-8 gap-1">
                 <ListFilter className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                   Lọc
@@ -122,38 +144,38 @@ export default function OrdersPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Lọc theo</DropdownMenuLabel>
+              <DropdownMenuLabel>Lọc trạng thái</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem
-                checked={activeFilters.includes("paid")}
-                onCheckedChange={() => toggleFilter("paid")}
-              >
-                Đã thanh toán
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                checked={activeFilters.includes("processing")}
-                onCheckedChange={() => toggleFilter("processing")}
-              >
-                Đang xử lý
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                checked={activeFilters.includes("unfulfilled")}
-                onCheckedChange={() => toggleFilter("unfulfilled")}
-              >
-                Chưa giao
-              </DropdownMenuCheckboxItem>
+              {(
+                [
+                  { value: "paid", label: "Đã thanh toán" },
+                  { value: "processing", label: "Đang xử lý" },
+                  { value: "unfulfilled", label: "Chưa giao" },
+                ] as { value: OrderStatus; label: string }[]
+              ).map(({ value, label }) => (
+                <DropdownMenuCheckboxItem
+                  key={value}
+                  checked={activeFilters.includes(value)}
+                  onCheckedChange={() => toggleFilter(value)}
+                >
+                  {label}
+                </DropdownMenuCheckboxItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
+
           <Button
             size="sm"
             variant="outline"
-            className="h-10 gap-2 hidden sm:flex"
+            className="h-8 gap-2 hidden sm:flex"
           >
             <File className="h-4 w-4" />
-            <span className="whitespace-nowrap text-base">Xuất</span>
+            <span className="whitespace-nowrap">Xuất</span>
           </Button>
         </div>
       </div>
+
+      {/* Add order */}
       <div>
         <AddOrderDialog>
           <Button
@@ -167,85 +189,89 @@ export default function OrdersPage() {
           </Button>
         </AddOrderDialog>
       </div>
-      {/* Desktop Table View */}
+
+      {/* ── Desktop Table ── */}
       <Card className="hidden md:block">
         <CardContent>
-          {loading ? (
-            <div className="text-center py-10">Đang tải đơn hàng...</div>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-10">
+              <Spinner />
+              <span className="ml-2 text-muted-foreground">
+                Đang tải đơn hàng...
+              </span>
+            </div>
           ) : orders.length === 0 ? (
-            <div className="text-center py-10">Không tìm thấy đơn hàng.</div>
+            <div className="text-center py-10 text-muted-foreground">
+              Không tìm thấy đơn hàng.
+            </div>
           ) : (
-            <>
-              <div>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[150px]">Đơn hàng</TableHead>
-                      <TableHead>Khách hàng</TableHead>
-                      <TableHead>Trạng thái</TableHead>
-                      <TableHead>Ngày</TableHead>
-                      <TableHead className="text-right">Số tiền</TableHead>
-                      <TableHead className="w-[50px]"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {orders.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell className="font-medium">
-                          {order.orderNumber}
-                        </TableCell>
-                        <TableCell>{order.customerName}</TableCell>
-                        <TableCell>
-                          {order.status === "paid" && (
-                            <Badge className="bg-green-100 text-green-700 hover:bg-green-100/80 border-green-200">
-                              Đã thanh toán
-                            </Badge>
-                          )}
-                          {order.status === "processing" && (
-                            <Badge variant="secondary">Đang xử lý</Badge>
-                          )}
-                          {order.status === "unfulfilled" && (
-                            <Badge variant="outline">Chưa giao</Badge>
-                          )}
-                        </TableCell>
-                        <TableCell>{order.date}</TableCell>
-                        <TableCell className="text-right">
-                          {order.amount}
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Hành động</DropdownMenuLabel>
-                              <DropdownMenuItem>Xem đơn hàng</DropdownMenuItem>
-                              <DropdownMenuItem>Chỉnh sửa</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[150px]">Đơn hàng</TableHead>
+                  <TableHead>Khách hàng</TableHead>
+                  <TableHead>Trạng thái</TableHead>
+                  <TableHead>Ngày</TableHead>
+                  <TableHead className="text-right">Số tiền</TableHead>
+                  <TableHead className="w-[50px]" />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {orders.map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell className="font-medium">
+                      {order.orderNumber}
+                    </TableCell>
+                    <TableCell>{order.customerName}</TableCell>
+                    <TableCell>
+                      <StatusBadge status={order.status} />
+                    </TableCell>
+                    <TableCell>{order.date}</TableCell>
+                    <TableCell className="text-right">{order.amount}</TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Toggle menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Hành động</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuCheckboxItem checked={false}>
+                            Xem đơn hàng
+                          </DropdownMenuCheckboxItem>
+                          <DropdownMenuCheckboxItem checked={false}>
+                            Chỉnh sửa
+                          </DropdownMenuCheckboxItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>
 
-      {/* Mobile Accordion View */}
-      {loading ? (
-        <div className="text-center py-10">Đang tải đơn hàng...</div>
+      {/* ── Mobile Accordion ── */}
+      {isLoading ? (
+        <div className="md:hidden flex items-center justify-center py-10">
+          <Spinner />
+          <span className="ml-2 text-muted-foreground">
+            Đang tải đơn hàng...
+          </span>
+        </div>
       ) : orders.length === 0 ? (
-        <div className="text-center py-10">Không tìm thấy đơn hàng.</div>
+        <div className="md:hidden text-center py-10 text-muted-foreground">
+          Không tìm thấy đơn hàng.
+        </div>
       ) : (
         <div className="md:hidden">
           <Accordion type="single" collapsible className="w-full">
@@ -266,29 +292,7 @@ export default function OrdersPage() {
                     <span className="text-xs font-semibold tracking-widest text-slate-600 dark:text-slate-400">
                       {order.customerPhone || "N/A"}
                     </span>
-                    <span className="mr-1">
-                      {order.status === "paid" && (
-                        <Badge className="bg-green-100 text-green-700 hover:bg-green-100/80 border-green-200 text-xs py-0 h-5 leading-none flex items-center">
-                          Đã thanh toán
-                        </Badge>
-                      )}
-                      {order.status === "processing" && (
-                        <Badge
-                          variant="secondary"
-                          className="text-xs py-0 h-5 leading-none flex items-center text-gray-100"
-                        >
-                          Đang xử lý
-                        </Badge>
-                      )}
-                      {order.status === "unfulfilled" && (
-                        <Badge
-                          variant="outline"
-                          className="text-xs py-0 h-5 leading-none flex items-center"
-                        >
-                          Chưa giao
-                        </Badge>
-                      )}
-                    </span>
+                    <StatusBadge status={order.status} small />
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="pb-4">
@@ -337,6 +341,83 @@ export default function OrdersPage() {
               </AccordionItem>
             ))}
           </Accordion>
+        </div>
+      )}
+
+      {/* ── Pagination ── */}
+      {pagination && pagination.totalPages > 1 && (
+        <div className="flex items-center justify-between gap-4 py-2">
+          <p className="text-sm text-muted-foreground">
+            Hiển thị{" "}
+            <span className="font-medium">
+              {(pagination.page - 1) * pagination.pageSize + 1}
+            </span>
+            {" – "}
+            <span className="font-medium">
+              {Math.min(
+                pagination.page * pagination.pageSize,
+                pagination.total,
+              )}
+            </span>{" "}
+            / <span className="font-medium">{pagination.total}</span> đơn hàng
+          </p>
+          <div className="flex items-center gap-1">
+            <Button
+              id="pagination-prev"
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              disabled={page <= 1 || isLoading}
+              onClick={() => setPage((p) => p - 1)}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1)
+              .filter(
+                (p) =>
+                  p === 1 ||
+                  p === pagination.totalPages ||
+                  Math.abs(p - page) <= 1,
+              )
+              .reduce<(number | "...")[]>((acc, p, idx, arr) => {
+                if (idx > 0 && p - (arr[idx - 1] as number) > 1)
+                  acc.push("...");
+                acc.push(p);
+                return acc;
+              }, [])
+              .map((p, i) =>
+                p === "..." ? (
+                  <span
+                    key={`ellipsis-${i}`}
+                    className="px-1 text-muted-foreground text-sm"
+                  >
+                    …
+                  </span>
+                ) : (
+                  <Button
+                    key={p}
+                    id={`pagination-page-${p}`}
+                    variant={p === page ? "default" : "outline"}
+                    size="icon"
+                    className="h-8 w-8 text-xs"
+                    disabled={isLoading}
+                    onClick={() => setPage(p as number)}
+                  >
+                    {p}
+                  </Button>
+                ),
+              )}
+            <Button
+              id="pagination-next"
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              disabled={page >= pagination.totalPages || isLoading}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       )}
     </div>

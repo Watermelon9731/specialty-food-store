@@ -17,6 +17,7 @@ import {
   MapPin,
   Quote,
 } from "lucide-react";
+import { PATH } from "@/constants/path";
 
 export const dynamic = "force-dynamic";
 
@@ -83,11 +84,11 @@ export default async function Home() {
               Tré rơm, nem chả, mực một nắng — mỗi thức quà đều được làm thủ
               công, không chất bảo quản, giữ trọn tinh túy của vùng đất{" "}
               <strong className="text-slate-800 font-semibold">Xứ Nẫu</strong>{" "}
-              qua ba thế hệ.
+              qua bao thế hệ.
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <Link href="/products">
+              <Link href={PATH.PRODUCTS}>
                 <Button
                   size="lg"
                   className="h-14 px-8 rounded-full bg-[#3a7851] hover:bg-[#2f6342] text-white text-base font-semibold shadow-lg shadow-[#3a7851]/25 hover:-translate-y-0.5 transition-all duration-200"
@@ -96,13 +97,13 @@ export default async function Home() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/about">
+              <Link href={PATH.ABOUT}>
                 <Button
                   size="lg"
                   variant="outline"
                   className="h-14 px-8 rounded-full border-slate-300 text-slate-700 hover:bg-white hover:border-[#3a7851] hover:text-[#3a7851] text-base font-semibold transition-all duration-200 bg-white/60 backdrop-blur-sm"
                 >
-                  Câu chuyện lò bếp
+                  Câu chuyện bếp nhà
                 </Button>
               </Link>
             </div>
@@ -110,9 +111,9 @@ export default async function Home() {
             {/* Social proof strip */}
             <div className="flex items-center gap-6 mt-12 pt-8 border-t border-slate-200/60 w-full">
               {[
-                { value: "3 thế hệ", label: "Gia truyền" },
+                { value: "Gia truyền", label: "3 thế hệ" },
                 { value: "100%", label: "Thủ công" },
-                { value: "0 hàn the", label: "Tuyệt đối" },
+                { value: "Toàn quốc", label: "Giao hỏa tốc" },
               ].map((stat) => (
                 <div key={stat.label}>
                   <p className="text-2xl font-bold text-[#3a7851]">
@@ -156,9 +157,9 @@ export default async function Home() {
               </div>
               <div>
                 <p className="font-bold text-slate-900 text-sm">
-                  Không hàn the
+                  Giao toàn quốc
                 </p>
-                <p className="text-slate-500 text-xs">Cam kết 100%</p>
+                <p className="text-slate-500 text-xs">Tốc hành 2–3 ngày</p>
               </div>
             </div>
           </div>
@@ -305,7 +306,7 @@ export default async function Home() {
                 </p>
               </div>
 
-              <Link href="/about" className="inline-block mt-10">
+              <Link href={PATH.ABOUT} className="inline-block mt-10">
                 <Button
                   variant="outline"
                   className="rounded-full border-emerald-500/40 text-emerald-300 hover:bg-emerald-800 hover:border-emerald-400 h-12 px-7 gap-2 group bg-transparent"
@@ -403,7 +404,7 @@ export default async function Home() {
                 Đặc sản nổi bật
               </h2>
             </div>
-            <Link href="/products">
+            <Link href={PATH.PRODUCTS}>
               <Button
                 variant="outline"
                 className="rounded-full border-[#3a7851] text-[#3a7851] hover:bg-[#3a7851] hover:text-white px-7 h-11 font-semibold transition-all duration-200"
@@ -463,7 +464,7 @@ export default async function Home() {
                 Món quà biếu tặng hay bữa ăn gia đình — sự chân thật trong từng
                 hương vị sẽ thay bạn nói lên tấm lòng.
               </p>
-              <Link href="/products">
+              <Link href={PATH.PRODUCTS}>
                 <Button
                   size="lg"
                   className="h-14 px-12 rounded-full bg-white text-[#1a3d2b] hover:bg-emerald-50 font-bold text-base shadow-2xl hover:scale-105 transition-all duration-200"

@@ -1,11 +1,13 @@
-import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { NextResponse } from "next/server";
+
+const PAGE_SIZE_DEFAULT = 10;
 
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
 
-    // If there's an action for "create", insert a new record
+    // ── CREATE ────────────────────────────────────────────────────────────────
     if (body.action === "create") {
       const {
         customerName,
@@ -14,6 +16,7 @@ export async function POST(request: Request) {
         productName,
         amount,
         status,
+        isDeleted,
       } = body;
 
       const newOrderNumber = `#${Math.floor(1000 + Math.random() * 9000)}`;
@@ -27,23 +30,50 @@ export async function POST(request: Request) {
           productName: productName || "",
           amount: amount ? Number(amount) : 0,
           status: status || "processing",
+          isDeleted: isDeleted || false,
         },
       });
       return NextResponse.json({ success: true, order });
     }
 
-    // Default: Return all orders from DB with optional status filter
+    // ── LIST with pagination + date filter ────────────────────────────────────
+    const page = Math.max(1, Number(body.page) || 1);
+    const pageSize = Math.min(
+      100,
+      Math.max(1, Number(body.pageSize) || PAGE_SIZE_DEFAULT),
+    );
+
+    // Default date range: last 6 months
+    const defaultDateFrom = new Date();
+    defaultDateFrom.setMonth(defaultDateFrom.getMonth() - 6);
+
+    const dateFrom = body.dateFrom ? new Date(body.dateFrom) : defaultDateFrom;
+    const dateTo = body.dateTo ? new Date(body.dateTo) : new Date();
+
     const statusFilter =
       body.statuses && Array.isArray(body.statuses) && body.statuses.length > 0
         ? { status: { in: body.statuses } }
         : {};
 
-    const dbOrders = await db.order.findMany({
-      where: statusFilter,
-      orderBy: { createdAt: "desc" },
-    });
+    const where = {
+      ...statusFilter,
+      isDeleted: false,
+      createdAt: {
+        gte: dateFrom,
+        lte: dateTo,
+      },
+    };
 
-    // Transform them to match the UI component signature
+    const [total, dbOrders] = await db.$transaction([
+      db.order.count({ where }),
+      db.order.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+    ]);
+
     const orders = dbOrders.map((o) => ({
       id: o.id,
       orderNumber: o.orderNumber,
@@ -62,6 +92,12 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       orders,
+      pagination: {
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
     });
   } catch (error) {
     console.error("Orders API Error:", error);

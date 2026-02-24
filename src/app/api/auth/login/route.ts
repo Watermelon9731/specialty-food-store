@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { signToken } from "@/lib/auth";
 import { cookies } from "next/headers";
+import { TOKEN } from "@/constants/token";
 
 export async function POST(request: Request) {
   try {
@@ -31,7 +32,7 @@ export async function POST(request: Request) {
 
     const cookieStore = await cookies();
     cookieStore.set({
-      name: "admin_token",
+      name: TOKEN.ADMIN,
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

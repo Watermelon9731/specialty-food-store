@@ -22,6 +22,7 @@ model Product {
   origin        String
   shelfLifeDays Int
   
+  isDeleted     Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -65,7 +66,8 @@ model Order {
   product      Product? @relation(fields: [productId], references: [id])
   amount       Decimal  @db.Decimal(10, 2)
   status       String   @default("processing") // e.g. "processing", "paid", "unfulfilled"
-  
+  isDeleted    Boolean  @default(false)
+
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

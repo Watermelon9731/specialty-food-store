@@ -113,7 +113,7 @@ export default async function CategoriesPage() {
                 >
                   {/* Card image / color block */}
                   <div
-                    className={`aspect-[4/3] bg-gradient-to-br ${meta.gradient} flex items-center justify-center relative overflow-hidden`}
+                    className={`aspect-4/3 bg-linear-to-br ${meta.gradient} flex items-center justify-center relative overflow-hidden`}
                   >
                     {/* Decorative large icon behind */}
                     <div className="absolute opacity-10 scale-[3] pointer-events-none">
@@ -157,7 +157,7 @@ export default async function CategoriesPage() {
               href="/products"
               className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-[#1a3d2b] border border-transparent hover:border-emerald-500/30 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
             >
-              <div className="aspect-[4/3] flex items-center justify-center relative overflow-hidden">
+              <div className="aspect-4/3 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] bg-size-[20px_20px]" />
                 <p className="text-5xl relative z-10">🛒</p>
               </div>

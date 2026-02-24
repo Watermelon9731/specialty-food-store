@@ -1,44 +1,45 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { QUERY_KEY } from "@/constants/query-key/query-key";
+import { getDashboardStats } from "@/services/admin.service";
+import { useQuery } from "@tanstack/react-query";
 import { DollarSign, Package, ShoppingCart, TrendingUp } from "lucide-react";
 import {
   Bar,
   BarChart,
   ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
 } from "recharts";
 
-const data = [
-  {
-    name: "Jan",
-    total: Math.floor(Math.random() * 50000000) + 10000000,
-  },
-  {
-    name: "Feb",
-    total: Math.floor(Math.random() * 50000000) + 10000000,
-  },
-  {
-    name: "Mar",
-    total: Math.floor(Math.random() * 50000000) + 10000000,
-  },
-  {
-    name: "Apr",
-    total: Math.floor(Math.random() * 50000000) + 10000000,
-  },
-  {
-    name: "May",
-    total: Math.floor(Math.random() * 50000000) + 10000000,
-  },
-  {
-    name: "Jun",
-    total: Math.floor(Math.random() * 50000000) + 10000000,
-  },
-];
-
 export default function AdminPage() {
+  const { data: stats } = useQuery({
+    queryKey: QUERY_KEY.ADMIN.STATS,
+    queryFn: getDashboardStats,
+  });
+
+  const totalRevenue =
+    stats?.monthlyRevenue.reduce((acc, month) => acc + month.revenue, 0) || 0;
+
+  const totalOrders =
+    stats?.monthlyRevenue.reduce((acc, month) => acc + month.count, 0) || 0;
+
+  const renderIncreaseTrend = (
+    currentValue: number,
+    prevValue: number | undefined,
+  ) => {
+    if (!currentValue || !prevValue) return null;
+    const increase = currentValue - prevValue;
+    const percentage = (increase / prevValue) * 100;
+    return (
+      <p className="text-xs text-muted-foreground">
+        +{percentage.toFixed(2)}% so với tháng trước
+      </p>
+    );
+  };
+
   return (
     <div className="flex-1 space-y-4">
       <div className="flex items-center justify-between space-y-2">
@@ -46,17 +47,20 @@ export default function AdminPage() {
           Tổng quan
         </h2>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        <Card className="col-span-2">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Doanh thu</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,085,565,000 VNĐ</div>
-            <p className="text-xs text-muted-foreground">
-              +20.1% so với tháng trước
-            </p>
+            <div className="text-2xl font-bold">
+              {totalRevenue?.toLocaleString("vi-VN")} VNĐ
+            </div>
+            {renderIncreaseTrend(
+              totalRevenue,
+              stats?.monthlyRevenue[0].revenue,
+            )}
           </CardContent>
         </Card>
         <Card>
@@ -65,10 +69,8 @@ export default function AdminPage() {
             <ShoppingCart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+2350</div>
-            <p className="text-xs text-muted-foreground">
-              +180.1% so với tháng trước
-            </p>
+            <div className="text-2xl font-bold">{totalOrders}</div>
+            {renderIncreaseTrend(totalOrders, stats?.monthlyRevenue[0].count)}
           </CardContent>
         </Card>
         <Card>
@@ -103,13 +105,19 @@ export default function AdminPage() {
           </CardHeader>
           <CardContent className="pl-2">
             <ResponsiveContainer width="100%" height={350}>
-              <BarChart data={data}>
+              <BarChart data={stats?.monthlyRevenue}>
                 <XAxis
-                  dataKey="name"
+                  dataKey="month"
                   stroke="#888888"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
+                  tickFormatter={(value) =>
+                    new Date(value).toLocaleString("vi-VN", {
+                      month: "short",
+                      year: "numeric",
+                    })
+                  }
                 />
                 <YAxis
                   stroke="#888888"
@@ -130,9 +138,22 @@ export default function AdminPage() {
                     boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                   }}
                   cursor={{ fill: "transparent" }}
+                  labelFormatter={(value) =>
+                    new Date(value).toLocaleString("vi-VN", {
+                      month: "short",
+                      year: "numeric",
+                    })
+                  }
+                  formatter={(value) => {
+                    if (typeof value !== "number") return value;
+                    if (value >= 1000000) {
+                      return `${(value / 1000000).toLocaleString("vi-VN")}M ₫`;
+                    }
+                    return `${new Intl.NumberFormat("vi-VN").format(value)} ₫`;
+                  }}
                 />
                 <Bar
-                  dataKey="total"
+                  dataKey="revenue"
                   fill="currentColor"
                   radius={[4, 4, 0, 0]}
                   className="fill-primary"
@@ -148,7 +169,7 @@ export default function AdminPage() {
               Tổng đơn tháng này.
             </div>
           </CardHeader>
-          <CardContent className="pl-2 md:pl-0">
+          <CardContent className="pl-2 md:pl-6">
             <div className="space-y-8">
               <div className="flex items-center">
                 <div className="hidden md:flex h-9 w-9 rounded-full bg-secondary items-center justify-center font-bold text-xs text-secondary-foreground">

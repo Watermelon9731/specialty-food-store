@@ -128,7 +128,7 @@ async function main() {
   // Create Orders using those products
   const orders = [
     {
-      orderNumber: "ORD-1001",
+      orderNumber: "#1001",
       customerName: "Nguyễn Văn A",
       customerPhone: "0901234567",
       customerAddress: "123 Lê Lợi, TP.HCM",
@@ -136,10 +136,11 @@ async function main() {
       productId: dbProducts[0].id,
       amount: 150000,
       status: "paid",
+      isDeleted: false,
       createdAt: new Date(new Date().setDate(new Date().getDate() - 1)),
     },
     {
-      orderNumber: "ORD-1002",
+      orderNumber: "#1002",
       customerName: "Trần Thị B",
       customerPhone: "0987654321",
       customerAddress: "456 Nguyễn Trãi, Hà Nội",
@@ -147,10 +148,11 @@ async function main() {
       productId: dbProducts[1].id,
       amount: 450000,
       status: "processing",
+      isDeleted: false,
       createdAt: new Date(new Date().setHours(new Date().getHours() - 3)),
     },
     {
-      orderNumber: "ORD-1003",
+      orderNumber: "#1003",
       customerName: "Lê Cường",
       customerPhone: "091223344",
       customerAddress: "789 Hùng Vương, Đà Nẵng",
@@ -158,10 +160,11 @@ async function main() {
       productId: dbProducts[3].id,
       amount: 980000,
       status: "unfulfilled",
+      isDeleted: false,
       createdAt: new Date(),
     },
     {
-      orderNumber: "ORD-1004",
+      orderNumber: "#1004",
       customerName: "Hoàng Ngân",
       customerPhone: "0933112233",
       customerAddress: "10/2 Khu phố 1, Bình Dương",
@@ -169,6 +172,7 @@ async function main() {
       productId: dbProducts[2].id,
       amount: 555000,
       status: "paid",
+      isDeleted: false,
       createdAt: new Date(new Date().setDate(new Date().getDate() - 3)),
     },
   ];
