@@ -4,12 +4,18 @@ import { Badge } from "@/components/ui/badge";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { getProductsService } from "@/server/products/service";
 import {
-  ShieldCheck,
+  Leaf,
   ArrowRight,
-  Fish,
-  MapPin,
+  ShieldCheck,
+  HeartHandshake,
+  Sparkles,
   ChefHat,
-  Home as HomeIcon,
+  Search,
+  PackageCheck,
+  Truck,
+  CheckCircle2,
+  MapPin,
+  Quote,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -17,7 +23,6 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const products = await getProductsService();
 
-  // Take first 4 products as featured
   const featuredProducts = products.slice(0, 4).map((p) => ({
     id: p.id,
     name: p.name,
@@ -29,154 +34,446 @@ export default async function Home() {
   }));
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden">
-      {/* Hero Section */}
-      <section className="relative pt-24 pb-32 px-4 md:px-6 overflow-hidden">
-        {/* Background ambient shapes */}
-        <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-[500px] h-[500px] bg-[#3a7851]/10 rounded-full blur-3xl opacity-50 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-[500px] h-[500px] bg-[#3a7851]/10 rounded-full blur-3xl opacity-50 pointer-events-none" />
+    <div className="flex flex-col min-h-screen bg-[#f8f7f4] text-slate-800 overflow-hidden selection:bg-emerald-200">
+      {/* ═══════════════════════════════════════
+          1. HERO — Full-width, editorial style
+          ═══════════════════════════════════════ */}
+      <section className="relative min-h-[92vh] flex items-center px-4 md:px-6 overflow-hidden bg-[#f8f7f4]">
+        {/* Warm dot-grid texture */}
+        <div className="absolute inset-0 bg-[radial-gradient(#d6d3c8_1px,transparent_1px)] bg-size-[28px_28px] opacity-60 pointer-events-none" />
 
-        <div className="container mx-auto max-w-5xl relative z-10 text-center">
-          <Badge className="bg-[#3a7851]/10 text-[#3a7851] hover:bg-[#3a7851]/20 border-none mb-6 px-4 py-1.5 text-sm gap-2">
-            <HomeIcon className="h-4 w-4" />
-            <span className="font-semibold">Đặc sản Xứ Nẫu truyền thống</span>
-          </Badge>
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-8 text-slate-900 dark:text-white leading-[1.1]">
-            Hương Vị Quê Nhà <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-[#3a7851] to-emerald-600">
-              Đậm Đà Bình Định
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Thưởng thức hương vị trứ danh từ quê hương Bình Định với mực ngào,
-            chả cá, tré rơm thắm đượm tình quê và các loại hải sản phơi sấy thủ
-            công tự nhiên nhất.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+        {/* Ambient blobs */}
+        <div className="absolute top-1/4 right-0 w-[720px] h-[720px] bg-emerald-100/50 rounded-full blur-[120px] translate-x-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-50/60 rounded-full blur-[100px] -translate-x-1/3 translate-y-1/3 pointer-events-none" />
+
+        <div className="container mx-auto max-w-7xl relative z-10 grid md:grid-cols-2 gap-12 items-center py-24 md:py-0">
+          {/* Left — copy */}
+          <div className="flex flex-col items-start">
+            <div className="flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-emerald-200/60 rounded-full px-4 py-2 mb-8 shadow-sm">
+              <MapPin className="w-4 h-4 text-[#3a7851]" />
+              <span className="text-sm font-semibold text-[#3a7851]">
+                Đặc sản Bình Định · Xứ Nẫu
+              </span>
+            </div>
+
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.08] mb-6">
+              Vị ngon{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10 text-[#3a7851]">quê nhà</span>
+                {/* Hand-drawn underline effect */}
+                <svg
+                  className="absolute -bottom-2 left-0 w-full"
+                  viewBox="0 0 200 12"
+                  fill="none"
+                >
+                  <path
+                    d="M2 8 C 40 2, 100 10, 198 6"
+                    stroke="#3a7851"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    opacity="0.5"
+                  />
+                </svg>
+              </span>
+              <br />
+              theo từng mùa.
+            </h1>
+
+            <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-lg leading-relaxed">
+              Tré rơm, nem chả, mực một nắng — mỗi thức quà đều được làm thủ
+              công, không chất bảo quản, giữ trọn tinh túy của vùng đất{" "}
+              <strong className="text-slate-800 font-semibold">Xứ Nẫu</strong>{" "}
+              qua ba thế hệ.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Link href="/products">
+                <Button
+                  size="lg"
+                  className="h-14 px-8 rounded-full bg-[#3a7851] hover:bg-[#2f6342] text-white text-base font-semibold shadow-lg shadow-[#3a7851]/25 hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  Khám phá sản phẩm
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/about">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-14 px-8 rounded-full border-slate-300 text-slate-700 hover:bg-white hover:border-[#3a7851] hover:text-[#3a7851] text-base font-semibold transition-all duration-200 bg-white/60 backdrop-blur-sm"
+                >
+                  Câu chuyện lò bếp
+                </Button>
+              </Link>
+            </div>
+
+            {/* Social proof strip */}
+            <div className="flex items-center gap-6 mt-12 pt-8 border-t border-slate-200/60 w-full">
+              {[
+                { value: "3 thế hệ", label: "Gia truyền" },
+                { value: "100%", label: "Thủ công" },
+                { value: "0 hàn the", label: "Tuyệt đối" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <p className="text-2xl font-bold text-[#3a7851]">
+                    {stat.value}
+                  </p>
+                  <p className="text-sm text-slate-500 font-medium">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right — hero image collage */}
+          <div className="relative hidden md:flex items-center justify-center">
+            {/* Main image placeholder - tall portrait */}
+            <div className="w-[340px] h-[460px] bg-linear-to-br from-emerald-100 to-teal-200 rounded-[2.5rem] shadow-2xl shadow-emerald-900/15 overflow-hidden flex items-end justify-center relative">
+              <div className="absolute inset-0 bg-[#3a7851]/5" />
+              <div className="text-center pb-8 relative z-10">
+                <div className="text-6xl mb-2">🐟</div>
+                <p className="text-emerald-800 font-semibold text-sm">
+                  Mực một nắng Bình Định
+                </p>
+              </div>
+            </div>
+
+            {/* Secondary image — offset */}
+            <div className="absolute top-10 -right-6 w-[180px] h-[220px] bg-linear-to-br from-amber-50 to-orange-100 rounded-[1.5rem] shadow-xl overflow-hidden flex items-end justify-center border-4 border-white">
+              <div className="text-center pb-6">
+                <div className="text-4xl mb-1">🥩</div>
+                <p className="text-amber-900 font-semibold text-xs px-2">
+                  Tré rơm gia truyền
+                </p>
+              </div>
+            </div>
+
+            {/* Floating badge */}
+            <div className="absolute -bottom-2 -left-8 bg-white rounded-2xl p-4 shadow-xl border border-slate-100 flex items-center gap-3">
+              <div className="h-10 w-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                <CheckCircle2 className="w-5 h-5 text-[#3a7851]" />
+              </div>
+              <div>
+                <p className="font-bold text-slate-900 text-sm">
+                  Không hàn the
+                </p>
+                <p className="text-slate-500 text-xs">Cam kết 100%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          2. COMMITMENTS — Icon cards, staggered
+          ═══════════════════════════════════════ */}
+      <section className="py-24 bg-white px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+            <div>
+              <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 mb-4 rounded-full px-4 py-1.5">
+                <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                Triết lý của chúng tôi
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
+                Cam kết khắt khe,
+                <br />
+                không thỏa hiệp.
+              </h2>
+            </div>
+            <p className="text-slate-500 max-w-sm text-base md:text-right leading-relaxed">
+              Sức khoẻ của gia đình bạn là tiêu chuẩn không thể đánh đổi tại lò
+              của chúng tôi.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                icon: <Leaf className="h-6 w-6" />,
+                color: "emerald",
+                title: "100% Tự Nhiên",
+                desc: "Lên men bằng lá ổi, rơm rạ. Tuyệt đối không sử dụng hàn the hay chất bảo quản công nghiệp trong bất kỳ sản phẩm nào.",
+                offset: false,
+              },
+              {
+                icon: <ShieldCheck className="h-6 w-6" />,
+                color: "teal",
+                title: "Minh Bạch Nguồn Gốc",
+                desc: "Kiểm soát từ khâu tuyển chọn thịt heo nóng tại lò mổ địa phương lúc rạng sáng, đến khi sản phẩm đến tay bạn.",
+                offset: true,
+              },
+              {
+                icon: <HeartHandshake className="h-6 w-6" />,
+                color: "emerald",
+                title: "Tôn Vinh Nghề Cũ",
+                desc: "Giữ gìn công thức gia truyền và đôi bàn tay khéo léo của các nghệ nhân, đặt tình yêu nghề lên hàng đầu.",
+                offset: false,
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className={`group bg-slate-50 hover:bg-white border border-slate-100 hover:border-emerald-200 rounded-[2rem] p-8 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-900/5 hover:-translate-y-1 ${item.offset ? "md:mt-8" : ""}`}
+              >
+                <div
+                  className={`h-14 w-14 rounded-2xl flex items-center justify-center mb-6 text-${item.color}-600 bg-${item.color}-50 border border-${item.color}-100 group-hover:bg-${item.color}-600 group-hover:text-white group-hover:border-transparent transition-all duration-300`}
+                >
+                  {item.icon}
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-3">
+                  {item.title}
+                </h3>
+                <p className="text-slate-500 leading-relaxed text-sm">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          3. STORY — Dark green editorial block
+          ═══════════════════════════════════════ */}
+      <section className="bg-[#1a3d2b] text-white py-24 overflow-hidden relative">
+        {/* Decorative large leaf outline */}
+        <div className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 opacity-5 pointer-events-none">
+          <Leaf className="w-[500px] h-[500px]" />
+        </div>
+
+        <div className="container mx-auto px-4 md:px-6 max-w-6xl relative z-10">
+          <div className="grid md:grid-cols-2 gap-20 items-center">
+            {/* Image side */}
+            <div className="relative">
+              <div className="aspect-4/5 bg-[#2a5c3e] rounded-[2.5rem] overflow-hidden shadow-2xl ring-1 ring-white/10">
+                {/* Placeholder for actual image */}
+                <div className="w-full h-full flex items-center justify-center flex-col gap-4 opacity-60">
+                  <span className="text-8xl">👨‍🍳</span>
+                  <p className="text-emerald-200 text-sm text-center px-6">
+                    Ảnh thực tế lò bếp
+                  </p>
+                </div>
+              </div>
+              {/* Floating stat card */}
+              <div className="absolute -bottom-6 -right-4 md:-right-10 bg-white/10 backdrop-blur-xl border border-white/20 text-white p-6 rounded-3xl shadow-2xl w-[220px]">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <span className="font-bold text-3xl text-emerald-300">3</span>
+                </div>
+                <p className="text-emerald-100 font-semibold">
+                  Thế hệ gia truyền
+                </p>
+                <p className="text-emerald-400 text-xs mt-1">
+                  Chợ Huyện, Bình Định
+                </p>
+              </div>
+            </div>
+
+            {/* Text side */}
+            <div className="pt-8 md:pt-0">
+              <Badge className="bg-white/10 text-emerald-300 border-white/10 mb-6 px-4 py-1.5 rounded-full text-xs tracking-widest uppercase font-semibold">
+                Câu chuyện lò bếp
+              </Badge>
+
+              <h2 className="text-3xl md:text-5xl font-bold mb-8 leading-[1.2]">
+                Không chạy theo số lượng,{" "}
+                <span className="text-emerald-400 italic">
+                  chúng tôi chọn sự tử tế.
+                </span>
+              </h2>
+
+              <div className="space-y-5 text-emerald-50/80 text-base leading-relaxed">
+                <p>
+                  Mỗi chiếc nem, lọn tré tại lò đều bắt đầu từ 3 giờ sáng. Đó là
+                  lúc những tảng thịt heo nóng hổi nhất vừa ra lò được lựa chọn
+                  cẩn thận bằng đôi tay đã quen với nghề hàng chục năm.
+                </p>
+                <p>
+                  Vị chua thanh của nem đến từ quá trình lên men lá ổi tự nhiên.
+                  Vị giòn dai của chả đến từ sức lực giã tay đều đặn — không máy
+                  móc, không công thức công nghiệp.
+                </p>
+              </div>
+
+              {/* Pull quote */}
+              <div className="mt-8 border-l-2 border-emerald-400 pl-5">
+                <Quote className="w-5 h-5 text-emerald-400 mb-2" />
+                <p className="text-emerald-200 italic font-medium">
+                  "Chúng tôi không đánh đổi sức khỏe của khách hàng lấy lợi
+                  nhuận."
+                </p>
+              </div>
+
+              <Link href="/about" className="inline-block mt-10">
+                <Button
+                  variant="outline"
+                  className="rounded-full border-emerald-500/40 text-emerald-300 hover:bg-emerald-800 hover:border-emerald-400 h-12 px-7 gap-2 group bg-transparent"
+                >
+                  Xem chi tiết hành trình
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          4. PROCESS — Horizontal timeline
+          ═══════════════════════════════════════ */}
+      <section className="py-24 bg-[#f8f7f4] px-4 md:px-6 border-b border-slate-200/60">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-20">
+            <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 mb-4 rounded-full px-4 py-1.5">
+              Quy trình
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              4 bước · 1 cam kết
+            </h2>
+            <p className="text-slate-500 text-lg">
+              Minh bạch từ lò bếp đến bàn ăn của bạn.
+            </p>
+          </div>
+
+          <div className="relative grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-4">
+            {/* Connector line */}
+            <div className="hidden md:block absolute top-13 left-[15%] right-[15%] border-t-2 border-dashed border-slate-300" />
+
+            {[
+              {
+                num: "01",
+                icon: <Search className="w-6 h-6" />,
+                title: "Tuyển Chọn",
+                desc: "Thịt heo nóng từ lò mổ địa phương, chọn lúc 3 giờ sáng.",
+              },
+              {
+                num: "02",
+                icon: <ChefHat className="w-6 h-6" />,
+                title: "Chế Biến",
+                desc: "Giã tay truyền thống, gia vị gia truyền 3 đời, không máy móc.",
+              },
+              {
+                num: "03",
+                icon: <PackageCheck className="w-6 h-6" />,
+                title: "Gói & Lên Men",
+                desc: "Bọc lá ổi, lá chuối tươi. Lên men tự nhiên 24–36 tiếng.",
+              },
+              {
+                num: "04",
+                icon: <Truck className="w-6 h-6" />,
+                title: "Giao Tận Tay",
+                desc: "Đóng gói hút chân không, bảo quản lạnh, giao nhanh toàn quốc.",
+              },
+            ].map((step, idx) => (
+              <div
+                key={idx}
+                className="relative flex flex-col items-center text-center group z-10"
+              >
+                <div className="w-26 h-26 bg-white border-2 border-slate-200 group-hover:border-[#3a7851] rounded-3xl flex flex-col items-center justify-center mb-5 shadow-sm group-hover:shadow-lg group-hover:shadow-emerald-900/10 transition-all duration-300">
+                  <span className="text-[#3a7851] mb-1">{step.icon}</span>
+                  <span className="text-xs font-bold text-slate-400 tracking-widest">
+                    {step.num}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-slate-500 text-sm leading-relaxed max-w-[180px]">
+                  {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          5. FEATURED PRODUCTS
+          ═══════════════════════════════════════ */}
+      <section className="py-24 px-4 md:px-6 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-5">
+            <div>
+              <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 mb-4 rounded-full px-4 py-1.5">
+                <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                Được chọn nhiều nhất
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
+                Đặc sản nổi bật
+              </h2>
+            </div>
             <Link href="/products">
               <Button
-                size="lg"
-                className="w-full sm:w-auto h-14 px-8 text-lg font-semibold rounded-full shadow-lg shadow-[#3a7851]/25 bg-[#3a7851] hover:bg-[#2e6041] hover:-translate-y-1 transition-all text-white"
-              >
-                Mua Ngay Hôm Nay
-              </Button>
-            </Link>
-            <Link href="/categories">
-              <Button
-                size="lg"
                 variant="outline"
-                className="w-full sm:w-auto h-14 px-8 text-lg font-semibold rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border-[#3a7851]/20 text-[#3a7851] dark:text-[#52a672] bg-white/50 backdrop-blur-sm dark:bg-slate-900/50"
+                className="rounded-full border-[#3a7851] text-[#3a7851] hover:bg-[#3a7851] hover:text-white px-7 h-11 font-semibold transition-all duration-200"
               >
-                Xem Danh Mục
+                Xem tất cả
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
+
+          <ProductGrid products={featuredProducts} />
         </div>
       </section>
 
-      {/* Our Commitments / Why Choose Us */}
-      <section className="py-24 bg-white dark:bg-slate-900 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
-              Sản Phẩm Của Nhà
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Không sản xuất công nghiệp đại trà, mỗi mẻ cá, mẻ thịt tại Tiệm
-              đều được làm thủ công bằng tất cả sự tỉ mỉ.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-[2rem] bg-[#3a7851]/5 dark:bg-[#3a7851]/10 border border-[#3a7851]/20 text-center flex flex-col items-center hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
-              <div className="h-20 w-20 bg-[#3a7851]/10 dark:bg-[#3a7851]/20 rounded-2xl flex items-center justify-center mb-6 text-[#3a7851] dark:text-[#52a672] rotate-3 hover:-rotate-3 transition-transform">
-                <Fish className="h-10 w-10" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
-                Hải Sản Biển Quy Nhơn
-              </h3>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                Mực khô, cá cơm, tôm biển được đánh bắt trực tiếp từ vùng biển
-                Quy Nhơn, tẩm ướp và phơi nắng gió tự nhiên giữ trọn độ mặn
-                ngọt.
-              </p>
-            </div>
-
-            <div className="p-8 rounded-[2rem] bg-[#3a7851]/5 dark:bg-[#3a7851]/10 border border-[#3a7851]/20 text-center flex flex-col items-center hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
-              <div className="h-20 w-20 bg-[#3a7851]/10 dark:bg-[#3a7851]/20 rounded-2xl flex items-center justify-center mb-6 text-[#3a7851] dark:text-[#52a672] -rotate-3 hover:rotate-3 transition-transform">
-                <MapPin className="h-10 w-10" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
-                Món Ngon Xứ Nẫu
-              </h3>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                Nức lòng với Tré rơm Bình Định, nem chua chợ Huyện, bánh tráng
-                nước dừa. Từng thức quà là một câu chuyện văn hoá mộc mạc, đậm
-                tình.
-              </p>
-            </div>
-
-            <div className="p-8 rounded-[2rem] bg-[#3a7851]/5 dark:bg-[#3a7851]/10 border border-[#3a7851]/20 text-center flex flex-col items-center hover:shadow-xl transition-all hover:-translate-y-1 duration-300">
-              <div className="h-20 w-20 bg-[#3a7851]/10 dark:bg-[#3a7851]/20 rounded-2xl flex items-center justify-center mb-6 text-[#3a7851] dark:text-[#52a672] rotate-3 hover:-rotate-3 transition-transform">
-                <ChefHat className="h-10 w-10" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
-                Chế Biến Thủ Công
-              </h3>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                Sản xuất theo mẻ nhỏ, không sử dụng chất bảo quản hay phẩm màu
-                công nghiệp. Hương vị mộc mạc y như món quà từ bàn tay gia đình.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Products Segment */}
-      <section className="py-24 px-4 md:px-6 container mx-auto bg-slate-50 dark:bg-slate-950">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-6">
-          <div className="max-w-xl">
-            <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-300 border-none mb-4 px-3 py-1">
-              Best Sellers
-            </Badge>
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-white tracking-tight">
-              Sản Phẩm Đang Hot
-            </h2>
-            <p className="text-muted-foreground text-lg">
-              Những gói đặc sản hấp dẫn được khách hàng gửi gắm nhiều niềm tin
-              nhất trong thời gian qua.
-            </p>
-          </div>
-          <Link href="/products">
-            <Button
-              variant="ghost"
-              className="text-[#3a7851] font-semibold group h-12 px-6 rounded-full hover:text-[#2e6041] hover:bg-[#3a7851]/10"
-            >
-              Xem toàn bộ sản phẩm
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
-        </div>
-        <ProductGrid products={featuredProducts} />
-      </section>
-
-      {/* Mini CTA footer segment */}
-      <section className="py-16 bg-[#3a7851]/5 border-t border-[#3a7851]/20">
-        <div className="container mx-auto text-center px-4">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#3a7851]">
-            Đem mồi bén về ngay!
-          </h2>
-          <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-            Hương vị nhà làm, đảm bảo hao bia. Thêm ngay vào giỏ hàng những món
-            đồ nhắm thủ công tâm huyết nhất từ gia đình chúng tôi.
+      {/* ═══════════════════════════════════════
+          6. TESTIMONIAL — Simple, warm quote
+          ═══════════════════════════════════════ */}
+      <section className="py-20 bg-emerald-50 px-4">
+        <div className="container mx-auto max-w-3xl text-center">
+          <Quote className="w-10 h-10 text-emerald-300 mx-auto mb-6" />
+          <p className="text-2xl md:text-3xl font-medium text-slate-800 leading-relaxed italic mb-8">
+            "Đặt thử một lần vì tò mò, giờ cứ 2 tuần là order lại. Tré rơm ở đây
+            chua vừa, dai giòn, hoàn toàn khác với loại ngoài chợ."
           </p>
-          <Link href="/products">
-            <Button
-              size="lg"
-              className="h-12 px-8 rounded-full bg-[#3a7851] hover:bg-[#2e6041] text-white shadow-lg"
-            >
-              Bắt Đầu Mua Sắm
-            </Button>
-          </Link>
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-700 font-bold">
+              L
+            </div>
+            <div className="text-left">
+              <p className="font-semibold text-slate-900 text-sm">
+                Nguyễn Thuỳ Linh
+              </p>
+              <p className="text-slate-500 text-xs">
+                Khách hàng tại TP. Hồ Chí Minh
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          7. BOTTOM CTA — Bold & clean
+          ═══════════════════════════════════════ */}
+      <section className="py-20 px-4 md:px-6 bg-white border-t border-slate-100">
+        <div className="container mx-auto max-w-5xl">
+          <div className="bg-[#1a3d2b] rounded-[3rem] py-20 px-8 md:px-20 relative overflow-hidden text-center">
+            {/* Glow */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-[500px] h-[300px] bg-emerald-500/20 rounded-full blur-[80px]" />
+            </div>
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-6">
+                Gói trọn vị quê,
+                <br className="hidden md:block" /> gửi người trân quý.
+              </h2>
+              <p className="text-emerald-200 text-lg md:text-xl font-light mb-10 max-w-xl mx-auto leading-relaxed">
+                Món quà biếu tặng hay bữa ăn gia đình — sự chân thật trong từng
+                hương vị sẽ thay bạn nói lên tấm lòng.
+              </p>
+              <Link href="/products">
+                <Button
+                  size="lg"
+                  className="h-14 px-12 rounded-full bg-white text-[#1a3d2b] hover:bg-emerald-50 font-bold text-base shadow-2xl hover:scale-105 transition-all duration-200"
+                >
+                  Đặt mua ngay hôm nay
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>
