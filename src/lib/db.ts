@@ -2,13 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import { neonConfig, Pool } from "@neondatabase/serverless";
 
-// Required for the Neon serverless driver in edge environments
-// (no-op in Node, but needed for Cloudflare Workers)
-if (typeof WebSocket === "undefined") {
-  // In Node.js (local dev), the WebSocket polyfill is handled automatically
-} else {
-  neonConfig.webSocketConstructor = WebSocket;
-}
+// Use HTTP fetch instead of WebSocket — works on Cloudflare Workers
+// without any Node.js native modules (ws, net, tls, etc.)
+neonConfig.poolQueryViaFetch = true;
 
 function createPrismaClient() {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL! });
