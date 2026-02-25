@@ -1,4 +1,4 @@
-export const runtime = 'edge';
+export const runtime = "edge";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import {
   Quote,
 } from "lucide-react";
 import { PATH } from "@/constants/path";
+import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -133,21 +134,29 @@ export default async function Home() {
           <div className="relative hidden md:flex items-center justify-center">
             {/* Main image placeholder - tall portrait */}
             <div className="w-[340px] h-[460px] bg-linear-to-br from-emerald-100 to-teal-200 rounded-[2.5rem] shadow-2xl shadow-emerald-900/15 overflow-hidden flex items-end justify-center relative">
-              <div className="absolute inset-0 bg-[#3a7851]/5" />
-              <div className="text-center pb-8 relative z-10">
-                <div className="text-6xl mb-2">🐟</div>
-                <p className="text-emerald-800 font-semibold text-sm">
-                  Mực một nắng Bình Định
-                </p>
-              </div>
+              <Image
+                src={
+                  "https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/tre-ruot.jpg"
+                }
+                fill
+                alt="Tré Bà Liên"
+                className="object-cover"
+              />
             </div>
 
             {/* Secondary image — offset */}
             <div className="absolute top-10 -right-6 w-[180px] h-[220px] bg-linear-to-br from-amber-50 to-orange-100 rounded-[1.5rem] shadow-xl overflow-hidden flex items-end justify-center border-4 border-white">
-              <div className="text-center pb-6">
-                <div className="text-4xl mb-1">🥩</div>
-                <p className="text-amber-900 font-semibold text-xs px-2">
-                  Tré rơm gia truyền
+              <Image
+                src={
+                  "https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/cha-ram-tom-dat.jpg"
+                }
+                fill
+                alt="Chả ram tôm đất"
+                className="object-cover"
+              />
+              <div className="text-center pb-6 relative z-10">
+                <p className="text-amber-900 font-bold text-md px-2 py-1 bg-white rounded-full">
+                  Chả ram tôm đất
                 </p>
               </div>
             </div>
@@ -251,51 +260,51 @@ export default async function Home() {
             <div className="relative">
               <div className="aspect-4/5 bg-[#2a5c3e] rounded-[2.5rem] overflow-hidden shadow-2xl ring-1 ring-white/10">
                 {/* Placeholder for actual image */}
-                <div className="w-full h-full flex items-center justify-center flex-col gap-4 opacity-60">
-                  <span className="text-8xl">👨‍🍳</span>
-                  <p className="text-emerald-200 text-sm text-center px-6">
-                    Ảnh thực tế lò bếp
-                  </p>
-                </div>
+                <Image
+                  src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/bep-tong-hop.jpg"
+                  alt="Tré Đặc Sản Bình Định"
+                  fill
+                  className="absolute inset-0 w-full h-full object-cover rounded-2xl"
+                />
               </div>
               {/* Floating stat card */}
-              <div className="absolute -bottom-6 -right-4 md:-right-10 bg-white/10 backdrop-blur-xl border border-white/20 text-white p-6 rounded-3xl shadow-2xl w-[220px]">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                  <span className="font-bold text-3xl text-emerald-300">3</span>
+              <div className="absolute -bottom-6 -left-4 md:-left-10 bg-linear-to-br from-amber-50 to-orange-100 border border-white/20 text-white p-5 rounded-3xl shadow-2xl w-[220px]">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="font-bold text-3xl text-amber-600">3</span>
+                  <div>
+                    <p className="text-amber-600 font-semibold">
+                      Thế hệ gia truyền
+                    </p>
+                    <p className="text-amber-600 text-xs">
+                      Chợ Huyện, Bình Định
+                    </p>
+                  </div>
                 </div>
-                <p className="text-emerald-100 font-semibold">
-                  Thế hệ gia truyền
-                </p>
-                <p className="text-emerald-400 text-xs mt-1">
-                  Chợ Huyện, Bình Định
-                </p>
               </div>
             </div>
 
             {/* Text side */}
             <div className="pt-8 md:pt-0">
               <Badge className="bg-white/10 text-emerald-300 border-white/10 mb-6 px-4 py-1.5 rounded-full text-xs tracking-widest uppercase font-semibold">
-                Câu chuyện lò bếp
+                Chuyện của bếp
               </Badge>
 
               <h2 className="text-3xl md:text-5xl font-bold mb-8 leading-[1.2]">
-                Không chạy theo số lượng,{" "}
+                Đồ bán cho khách phải sạch và ngon,{" "}
                 <span className="text-emerald-400 italic">
-                  chúng tôi chọn sự tử tế.
+                  đúng chuẩn đồ nhà đang ăn.
                 </span>
               </h2>
 
               <div className="space-y-5 text-emerald-50/80 text-base leading-relaxed">
                 <p>
-                  Mỗi chiếc nem, lọn tré tại lò đều bắt đầu từ 3 giờ sáng. Đó là
-                  lúc những tảng thịt heo nóng hổi nhất vừa ra lò được lựa chọn
-                  cẩn thận bằng đôi tay đã quen với nghề hàng chục năm.
+                  Mỗi phần tré, nem tại đây đều được làm thủ công tỉ mỉ. Đó là
+                  sự kết hợp giữa kinh nghiệm gia truyền và nguyên liệu tươi
+                  ngon được tuyển chọn kỹ lưỡng.
                 </p>
                 <p>
-                  Vị chua thanh của nem đến từ quá trình lên men lá ổi tự nhiên.
-                  Vị giòn dai của chả đến từ sức lực giã tay đều đặn — không máy
-                  móc, không công thức công nghiệp.
+                  Không sử dụng hóa chất hay phụ gia, chúng tôi cam kết mang đến
+                  sản phẩm an toàn và chất lượng nhất cho khách hàng.
                 </p>
               </div>
 
@@ -303,15 +312,16 @@ export default async function Home() {
               <div className="mt-8 border-l-2 border-emerald-400 pl-5">
                 <Quote className="w-5 h-5 text-emerald-400 mb-2" />
                 <p className="text-emerald-200 italic font-medium">
-                  "Chúng tôi không đánh đổi sức khỏe của khách hàng lấy lợi
-                  nhuận."
+                  "Người quê làm hàng quê, cốt ở cái tình. Tré chả bán cho bà
+                  con cũng là thức nhà mình ăn hàng ngày, tuyệt đối không vì vài
+                  đồng lời mà làm ẩu."
                 </p>
               </div>
 
               <Link href={PATH.ABOUT} className="inline-block mt-10">
                 <Button
                   variant="outline"
-                  className="rounded-full border-emerald-500/40 text-emerald-300 hover:bg-emerald-800 hover:border-emerald-400 h-12 px-7 gap-2 group bg-transparent"
+                  className="rounded-full border-emerald-500/40 text-emerald-300 hover:bg-white hover:border-emerald-400 h-12 px-7 gap-2 group bg-transparent"
                 >
                   Xem chi tiết hành trình
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -437,12 +447,16 @@ export default async function Home() {
             {/* ── Left: visual ── */}
             <div className="relative flex items-center justify-center">
               {/* Main product card */}
-              <div className="w-[300px] md:w-[340px] h-[380px] md:h-[440px] bg-linear-to-br from-amber-900/60 to-amber-950 rounded-[2.5rem] border border-amber-700/30 shadow-2xl shadow-amber-900/40 flex flex-col items-center justify-end pb-10 relative overflow-hidden">
-                <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
+              <div className="w-[300px] md:w-[340px] h-[380px] md:h-[440px] bg-linear-to-br from-amber-900/60 to-amber-950 rounded-[2.5rem] border border-amber-700/30 shadow-2xl shadow-amber-900/40 flex flex-col items-center justify-end pb-14 relative overflow-hidden">
+                <Image
+                  src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/chen-tre.jpg"
+                  alt="Tré Rơm Cổ Điển"
+                  fill
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
                 <div className="text-center relative z-10">
-                  <div className="text-7xl mb-3 drop-shadow-2xl">🥩</div>
                   <p className="text-white font-bold text-xl tracking-tight drop-shadow">
-                    Tré Rơm Cổ Điển
+                    Tré Đặc Sản Bình Định
                   </p>
                   <p className="text-amber-300 text-sm mt-1 font-medium">
                     Chợ Huyện · Bình Định

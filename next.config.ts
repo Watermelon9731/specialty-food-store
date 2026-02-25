@@ -11,6 +11,16 @@ const nextConfig: NextConfig = {
       { source: "/chinh-sach-bao-mat", destination: "/privacy" },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "oepinbezzuykjqxxdrzn.supabase.co",
+        port: "",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
