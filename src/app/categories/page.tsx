@@ -1,14 +1,6 @@
 import Link from "next/link";
 import { getCategoriesService } from "@/server/categories/service";
-import {
-  ArrowRight,
-  Fish,
-  ChefHat,
-  Beef,
-  ChefHat,
-  Leaf,
-  Package2,
-} from "lucide-react";
+import { ArrowRight, Fish, ChefHat, Beef, Leaf, Package2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export const dynamic = "force-dynamic";
