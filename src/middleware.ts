@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyToken } from "@/lib/auth";
-import { PATH } from "./constants/path";
-import { TOKEN } from "./constants/token";
+import { PATH } from "@/constants/path";
+import { TOKEN } from "@/constants/token";
 
-export async function proxy(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const adminToken = req.cookies.get(TOKEN.ADMIN)?.value;
 
   const url = req.nextUrl.clone();
@@ -24,7 +24,7 @@ export async function proxy(req: NextRequest) {
         url.pathname = PATH.ADMIN.LOGIN;
         return NextResponse.redirect(url);
       }
-    } catch (e) {
+    } catch {
       url.pathname = PATH.ADMIN.LOGIN;
       return NextResponse.redirect(url);
     }
@@ -39,7 +39,7 @@ export async function proxy(req: NextRequest) {
         return NextResponse.redirect(url);
       }
     } catch {
-      // Ignored: Token invalid, proceed to login page
+      // Token invalid, let them through to login
     }
   }
 
