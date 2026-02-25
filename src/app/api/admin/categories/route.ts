@@ -1,14 +1,16 @@
-export const runtime = 'edge';
+export const runtime = "edge";
 
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const categories = await db.category.findMany({
-      orderBy: { name: "asc" },
-      select: { id: true, name: true },
-    });
+    const { data: categories, error } = await db
+      .from("Category")
+      .select("id, name")
+      .order("name", { ascending: true });
+
+    if (error) throw error;
     return NextResponse.json({ success: true, categories });
   } catch (error) {
     console.error("Categories GET Error:", error);

@@ -1,21 +1,17 @@
-import { PrismaClient } from "@prisma/client";
-import { PrismaNeon } from "@prisma/adapter-neon";
-import { neonConfig, Pool } from "@neondatabase/serverless";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/types/database.types";
 
-// Use HTTP fetch instead of WebSocket — works on Cloudflare Workers
-// without any Node.js native modules (ws, net, tls, etc.)
-neonConfig.poolQueryViaFetch = true;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-function createPrismaClient() {
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL! });
-  const adapter = new PrismaNeon(pool as any); // eslint-disable-line @typescript-eslint/no-explicit-any
-  return new PrismaClient({ adapter } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
-}
-
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+const globalForSupabase = globalThis as unknown as {
+  supabase: ReturnType<typeof createClient<Database>> | undefined;
 };
 
-export const db = globalForPrisma.prisma ?? createPrismaClient();
+export const db =
+  globalForSupabase.supabase ??
+  createClient<Database>(supabaseUrl, supabaseKey, {
+    auth: { persistSession: false },
+  });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+if (process.env.NODE_ENV !== "production") globalForSupabase.supabase = db;

@@ -1,4 +1,4 @@
-export const runtime = 'edge';
+export const runtime = "edge";
 
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
@@ -14,28 +14,24 @@ export async function GET(request: Request) {
       Math.max(1, Number(searchParams.get("pageSize") ?? 20)),
     );
 
-    const where = {
-      isDeleted: false,
-      ...(search && {
-        OR: [
-          { name: { contains: search, mode: "insensitive" as const } },
-          { sku: { contains: search, mode: "insensitive" as const } },
-        ],
-      }),
-      ...(categoryId && { categoryId }),
-    };
+    let query = db
+      .from("Product")
+      .select("*, category:Category(id, name)", { count: "exact" })
+      .eq("isDeleted", false)
+      .order("createdAt", { ascending: false })
+      .range((page - 1) * pageSize, page * pageSize - 1);
 
-    const [total, products] = await db.$transaction([
-      db.product.count({ where }),
-      db.product.findMany({
-        where,
-        include: { category: { select: { id: true, name: true } } },
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-      }),
-    ]);
+    if (search) {
+      query = query.or(`name.ilike.%${search}%,sku.ilike.%${search}%`);
+    }
+    if (categoryId) {
+      query = query.eq("categoryId", categoryId);
+    }
 
+    const { data: products, count, error } = await query;
+    if (error) throw error;
+
+    const total = count ?? 0;
     return NextResponse.json({
       success: true,
       products,
@@ -77,8 +73,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const product = await db.product.create({
-      data: {
+    const { data: product, error } = await db
+      .from("Product")
+      .insert({
         name,
         sku,
         description: description || null,
@@ -88,19 +85,24 @@ export async function POST(request: Request) {
         origin: origin || "Việt Nam",
         shelfLifeDays: Number(shelfLifeDays) || 365,
         categoryId,
-      },
-      include: { category: { select: { id: true, name: true } } },
-    });
+      })
+      .select("*, category:Category(id, name)")
+      .single();
+
+    if (error) {
+      if (error.code === "23505") {
+        // unique violation
+        return NextResponse.json(
+          { success: false, error: "SKU đã tồn tại" },
+          { status: 409 },
+        );
+      }
+      throw error;
+    }
 
     return NextResponse.json({ success: true, product }, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Inventory POST Error:", error);
-    if (error?.code === "P2002") {
-      return NextResponse.json(
-        { success: false, error: "SKU đã tồn tại" },
-        { status: 409 },
-      );
-    }
     return NextResponse.json(
       { success: false, error: "Không thể tạo sản phẩm" },
       { status: 500 },
@@ -112,40 +114,36 @@ export async function PATCH(request: Request) {
   try {
     const body = await request.json();
     const { id, ...updates } = body;
-
-    if (!id) {
+    if (!id)
       return NextResponse.json(
         { success: false, error: "Thiếu ID sản phẩm" },
         { status: 400 },
       );
-    }
 
-    const product = await db.product.update({
-      where: { id },
-      data: {
-        ...(updates.name !== undefined && { name: updates.name }),
-        ...(updates.sku !== undefined && { sku: updates.sku }),
-        ...(updates.description !== undefined && {
-          description: updates.description,
-        }),
-        ...(updates.pricePerUnit !== undefined && {
-          pricePerUnit: Number(updates.pricePerUnit),
-        }),
-        ...(updates.unitType !== undefined && { unitType: updates.unitType }),
-        ...(updates.stockQuantity !== undefined && {
-          stockQuantity: Number(updates.stockQuantity),
-        }),
-        ...(updates.origin !== undefined && { origin: updates.origin }),
-        ...(updates.shelfLifeDays !== undefined && {
-          shelfLifeDays: Number(updates.shelfLifeDays),
-        }),
-        ...(updates.categoryId !== undefined && {
-          categoryId: updates.categoryId,
-        }),
-      },
-      include: { category: { select: { id: true, name: true } } },
-    });
+    const updateData: Record<string, unknown> = {};
+    if (updates.name !== undefined) updateData.name = updates.name;
+    if (updates.sku !== undefined) updateData.sku = updates.sku;
+    if (updates.description !== undefined)
+      updateData.description = updates.description;
+    if (updates.pricePerUnit !== undefined)
+      updateData.pricePerUnit = Number(updates.pricePerUnit);
+    if (updates.unitType !== undefined) updateData.unitType = updates.unitType;
+    if (updates.stockQuantity !== undefined)
+      updateData.stockQuantity = Number(updates.stockQuantity);
+    if (updates.origin !== undefined) updateData.origin = updates.origin;
+    if (updates.shelfLifeDays !== undefined)
+      updateData.shelfLifeDays = Number(updates.shelfLifeDays);
+    if (updates.categoryId !== undefined)
+      updateData.categoryId = updates.categoryId;
 
+    const { data: product, error } = await db
+      .from("Product")
+      .update(updateData)
+      .eq("id", id)
+      .select("*, category:Category(id, name)")
+      .single();
+
+    if (error) throw error;
     return NextResponse.json({ success: true, product });
   } catch (error) {
     console.error("Inventory PATCH Error:", error);
@@ -160,20 +158,17 @@ export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
-
-    if (!id) {
+    if (!id)
       return NextResponse.json(
         { success: false, error: "Thiếu ID sản phẩm" },
         { status: 400 },
       );
-    }
 
-    // Soft delete
-    await db.product.update({
-      where: { id },
-      data: { isDeleted: true },
-    });
-
+    const { error } = await db
+      .from("Product")
+      .update({ isDeleted: true })
+      .eq("id", id);
+    if (error) throw error;
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Inventory DELETE Error:", error);

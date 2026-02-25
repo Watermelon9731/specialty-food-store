@@ -1,4 +1,4 @@
-export const runtime = 'edge';
+export const runtime = "edge";
 
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
@@ -13,32 +13,55 @@ export async function GET(request: Request) {
       Math.max(1, Number(searchParams.get("pageSize") ?? 20)),
     );
 
-    // Group orders by customerName + customerPhone to derive unique customers
-    const grouped = await db.order.groupBy({
-      by: ["customerName", "customerPhone"],
-      where: {
-        isDeleted: false,
-        ...(search && {
-          OR: [
-            { customerName: { contains: search, mode: "insensitive" } },
-            { customerPhone: { contains: search, mode: "insensitive" } },
-          ],
-        }),
-      },
-      _count: { id: true },
-      _sum: { amount: true },
-      orderBy: { _count: { id: "desc" } },
-    });
+    // Group by customerName + customerPhone via raw SQL through Supabase RPC
+    // or aggregate client-side from orders
+    let query = db
+      .from("Order")
+      .select("customerName, customerPhone, amount")
+      .eq("isDeleted", false);
 
-    const total = grouped.length;
-    const paginated = grouped.slice((page - 1) * pageSize, page * pageSize);
+    if (search) {
+      query = query.or(
+        `customerName.ilike.%${search}%,customerPhone.ilike.%${search}%`,
+      );
+    }
 
+    const { data, error } = await query;
+    if (error) throw error;
+
+    // Group client-side
+    const grouped = new Map<
+      string,
+      {
+        customerName: string;
+        customerPhone: string;
+        orderCount: number;
+        totalSpent: number;
+      }
+    >();
+    for (const o of data ?? []) {
+      const key = `${o.customerName}__${o.customerPhone}`;
+      if (!grouped.has(key)) {
+        grouped.set(key, {
+          customerName: o.customerName,
+          customerPhone: o.customerPhone,
+          orderCount: 0,
+          totalSpent: 0,
+        });
+      }
+      const g = grouped.get(key)!;
+      g.orderCount += 1;
+      g.totalSpent += Number(o.amount ?? 0);
+    }
+
+    const all = [...grouped.values()].sort(
+      (a, b) => b.orderCount - a.orderCount,
+    );
+    const total = all.length;
+    const paginated = all.slice((page - 1) * pageSize, page * pageSize);
     const customers = paginated.map((g) => ({
-      customerName: g.customerName,
-      customerPhone: g.customerPhone,
-      orderCount: g._count.id,
-      totalSpent: Number(g._sum.amount ?? 0),
-      totalSpentFormatted: `${new Intl.NumberFormat("vi-VN").format(Number(g._sum.amount ?? 0))} VNĐ`,
+      ...g,
+      totalSpentFormatted: `${new Intl.NumberFormat("vi-VN").format(g.totalSpent)} VNĐ`,
     }));
 
     return NextResponse.json({

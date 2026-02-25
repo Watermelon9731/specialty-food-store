@@ -7,26 +7,33 @@ export const adjustInventory = async (
   batchNumber?: string,
   expiryDate?: Date,
 ) => {
-  return await db.$transaction(async (tx) => {
-    // Create log
-    const log = await tx.inventoryLog.create({
-      data: {
-        productId,
-        quantityChange,
-        reason,
-        batchNumber,
-        expiryDate,
-      },
-    });
+  // Create inventory log
+  const { data: log, error: logError } = await db
+    .from("InventoryLog")
+    .insert({
+      productId,
+      quantityChange,
+      reason,
+      batchNumber,
+      expiryDate: expiryDate?.toISOString(),
+    })
+    .select()
+    .single();
+  if (logError) throw logError;
 
-    // Update product stock
-    await tx.product.update({
-      where: { id: productId },
-      data: {
-        stockQuantity: { increment: quantityChange },
-      },
-    });
+  // Fetch current stock and increment
+  const { data: product, error: fetchError } = await db
+    .from("Product")
+    .select("stockQuantity")
+    .eq("id", productId)
+    .single();
+  if (fetchError) throw fetchError;
 
-    return log;
-  });
+  const { error: updateError } = await db
+    .from("Product")
+    .update({ stockQuantity: (product.stockQuantity ?? 0) + quantityChange })
+    .eq("id", productId);
+  if (updateError) throw updateError;
+
+  return log;
 };
