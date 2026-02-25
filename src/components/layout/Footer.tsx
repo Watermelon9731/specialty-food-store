@@ -4,7 +4,7 @@ import {
   ArrowRight,
   Ban,
   Facebook,
-  Waves,
+  ChefHat,
   House,
   Instagram,
   Leaf,
@@ -15,7 +15,7 @@ import {
 import Link from "next/link";
 
 const SHOP_LINKS = [
-  { href: PATH.TRE, label: "🥩 Tré Rơm Bình Định", highlight: true },
+  { href: PATH.TRE, label: "🥩 Tré Bình Định", highlight: true },
   { href: PATH.PRODUCTS_SEAFOOD, label: "Hải Sản Khô", highlight: false },
   { href: PATH.PRODUCTS_MEAT, label: "Bò khô/ Heo khô", highlight: false },
   { href: PATH.PRODUCTS_NEM_CHA, label: "Nem Chả Đặc Sản", highlight: false },
@@ -44,7 +44,7 @@ export function Footer() {
               🥩 Đặc sản bán chạy nhất
             </p>
             <h2 className="text-2xl md:text-3xl font-bold text-white leading-snug mb-2">
-              Tré Rơm Gia Truyền Bình Định
+              Tré Gia Truyền Bình Định
             </h2>
             <p className="text-emerald-200/70 text-sm leading-relaxed">
               Lên men tự nhiên bằng lá ổi · Không hàn the · Công thức 3 thế hệ
@@ -74,10 +74,10 @@ export function Footer() {
         <div className="sm:col-span-2 lg:col-span-1 space-y-6">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="bg-white/15 group-hover:bg-[#3a7851] p-2.5 rounded-xl transition-all duration-200">
-              <Waves className="h-5 w-5 text-white" />
+              <ChefHat className="h-5 w-5 text-white" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-bold text-xl tracking-tight">Vị Chờ</span>
+              <span className="font-bold text-xl tracking-tight">Tré Bà Liên</span>
               <span className="text-[10px] text-emerald-400 font-semibold tracking-[0.15em] uppercase">
                 Tré & Chả Nem Bình Định
               </span>
@@ -85,7 +85,7 @@ export function Footer() {
           </Link>
 
           <p className="text-emerald-100/70 text-sm leading-relaxed max-w-xs">
-            Vị Chờ — tên gọi của sự kiên nhẫn. Tré rơm lên men 36 tiếng, chả nem
+            Tré Bà Liên — tên gọi của sự kiên nhẫn. Tré rơm lên men 36 tiếng, chả nem
             rán vàng đúng lửa. Ba thế hệ gia truyền gìn giữ từng công thức của
             vùng đất Xứ Nẫu.
           </p>
@@ -227,7 +227,7 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="container mx-auto px-4 md:px-6 py-5 max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-emerald-400/60">
           <p>
-            © {new Date().getFullYear()} Vị Chờ · Bình Định, Việt Nam. Mọi quyền
+            © {new Date().getFullYear()} Tré Bà Liên · Bình Định, Việt Nam. Mọi quyền
             được bảo lưu.
           </p>
           <p className="flex items-center gap-1">

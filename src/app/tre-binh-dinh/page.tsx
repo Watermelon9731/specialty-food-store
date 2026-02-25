@@ -6,7 +6,6 @@ import {
   ArrowRight,
   CheckCircle2,
   ChefHat,
-  Waves,
   Leaf,
   MapPin,
   PackageCheck,
@@ -469,7 +468,7 @@ export default function TrePage() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 mb-5 rounded-full px-4 py-1.5">
-                <Waves className="w-3.5 h-3.5 mr-1.5" />
+                <ChefHat className="w-3.5 h-3.5 mr-1.5" />
                 Nguyên liệu
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight mb-6">

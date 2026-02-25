@@ -9,9 +9,9 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
 export const metadata: Metadata = {
-  title: "Tiệm Đồ Khô · Đặc Sản Bình Định",
+  title: "Tré Bà Liên - Tré & Chả Nem Bình Định",
   description:
-    "Đặc sản thủ công từ Bình Định — tré rơm, nem chả, mực khô, hải sản phơi sấy tự nhiên. Không hàn the, không chất bảo quản, gia truyền 3 thế hệ.",
+    "Đặc sản thủ công từ Bình Định — tré rơm, nem chả, mực khô, hải sản phơi sấy tự nhiên. Không hàn the, không chất bảo quản, gia truyền.",
   keywords: [
     "Bình Định",
     "đặc sản",
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     "Xứ Nẫu",
   ],
   openGraph: {
-    title: "Vị Chờ · Tré & Chả Nem Bình Định",
-    description: "Đặc sản thủ công gia truyền 3 thế hệ từ Bình Định.",
+    title: "Tré Bà Liên - Tré & Chả Nem Bình Định",
+    description: "Đặc sản thủ công gia truyền từ Bình Định.",
     locale: "vi_VN",
     type: "website",
   },

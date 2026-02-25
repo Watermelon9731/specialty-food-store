@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Lock, Waves } from "lucide-react";
+import { Loader2, Lock, ChefHat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -61,10 +61,10 @@ export default function AdminLoginPage() {
             className="inline-flex flex-col items-center gap-2 group"
           >
             <div className="bg-white/10 group-hover:bg-[#3a7851] p-3.5 rounded-2xl text-white transition-all duration-200">
-              <Waves className="h-7 w-7" />
+              <ChefHat className="h-7 w-7" />
             </div>
             <span className="text-white font-bold text-xl tracking-tight">
-              Vị Chờ
+              Tré Bà Liên
             </span>
             <span className="text-emerald-400 text-xs font-semibold tracking-[0.15em] uppercase">
               Quản lý hệ thống
@@ -131,7 +131,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="text-center text-emerald-400/60 text-xs mt-6">
-          © {new Date().getFullYear()} Vị Chờ · Bình Định
+          © {new Date().getFullYear()} Tré Bà Liên · Bình Định
         </p>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { getCategoriesService } from "@/server/categories/service";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { Badge } from "@/components/ui/badge";
 import { Suspense } from "react";
-import { Waves, SlidersHorizontal } from "lucide-react";
+import { ChefHat, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -48,8 +48,8 @@ export default async function ProductsPage({
         <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none" />
         <div className="container mx-auto max-w-7xl relative z-10">
           <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-4">
-            <Waves className="w-4 h-4" />
-            Vị Chờ
+            <ChefHat className="w-4 h-4" />
+            Tré Bà Liên
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
             Tất cả sản phẩm
