@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { PATH } from "@/constants/path";
+import { API_ROUTES } from "@/constants/api/api";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function AdminLoginPage() {
     setError("");
 
     try {
-      const response = await fetch(`${PATH.AUTH.LOGIN}`, {
+      const response = await fetch(`${API_ROUTES.ADMIN.LOGIN}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
