@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ShoppingBag, Star, MapPin } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ShoppingBag, Star, MapPin, Check } from "lucide-react";
+import { useCart } from "@/hooks/use-cart";
+import { useState, useCallback } from "react";
 
 type ProductProps = {
   id: string;
@@ -28,12 +30,37 @@ function ProductCard({
   product: ProductProps;
   index: number;
 }) {
+  const { addItem } = useCart();
+  const [justAdded, setJustAdded] = useState(false);
+
   const isLowStock =
     product.stockQuantity !== undefined &&
     product.stockQuantity <= 5 &&
     product.stockQuantity > 0;
   const isOutOfStock =
     product.stockQuantity !== undefined && product.stockQuantity === 0;
+
+  const handleAddToCart = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (isOutOfStock) return;
+
+      addItem({
+        id: product.id,
+        name: product.name,
+        price: product.pricePerUnit,
+        quantity: 1,
+        unitType: product.unitType,
+        image: `/images/products/${product.id}.jpg`,
+        stock: product.stockQuantity ?? 999,
+      });
+
+      setJustAdded(true);
+      setTimeout(() => setJustAdded(false), 1500);
+    },
+    [addItem, product, isOutOfStock],
+  );
 
   return (
     <motion.article
@@ -91,17 +118,32 @@ function ProductCard({
         </div>
 
         {/* Quick-add button — slides up on hover */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out pointer-events-none group-hover:pointer-events-auto">
-          <div className="p-3">
-            <button
-              className="w-full bg-[#1a3d2b]/90 backdrop-blur-md text-white py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[#3a7851] transition-colors duration-200 shadow-lg font-semibold text-sm"
-              onClick={(e) => e.preventDefault()}
-            >
-              <ShoppingBag className="w-4 h-4" />
-              Thêm vào giỏ
-            </button>
+        {!isOutOfStock && (
+          <div className="absolute bottom-0 left-0 right-0 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out pointer-events-none group-hover:pointer-events-auto">
+            <div className="p-3">
+              <button
+                className={`w-full backdrop-blur-md text-white py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors duration-200 shadow-lg font-semibold text-sm ${
+                  justAdded
+                    ? "bg-emerald-500"
+                    : "bg-[#1a3d2b]/90 hover:bg-[#3a7851]"
+                }`}
+                onClick={handleAddToCart}
+              >
+                {justAdded ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Đã thêm vào giỏ
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="w-4 h-4" />
+                    Thêm vào giỏ
+                  </>
+                )}
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* ── Info area ── */}
@@ -143,9 +185,37 @@ function ProductCard({
             </span>
           </div>
           {!isOutOfStock && (
-            <div className="h-8 w-8 bg-[#3a7851]/10 rounded-xl flex items-center justify-center text-[#3a7851] hover:bg-[#3a7851] hover:text-white transition-colors duration-200 cursor-pointer shrink-0">
-              <ShoppingBag className="w-4 h-4" />
-            </div>
+            <button
+              onClick={handleAddToCart}
+              aria-label={`Thêm ${product.name} vào giỏ`}
+              className={`h-8 w-8 rounded-xl flex items-center justify-center transition-all duration-200 cursor-pointer shrink-0 ${
+                justAdded
+                  ? "bg-emerald-500 text-white scale-110"
+                  : "bg-[#3a7851]/10 text-[#3a7851] hover:bg-[#3a7851] hover:text-white"
+              }`}
+            >
+              <AnimatePresence mode="wait">
+                {justAdded ? (
+                  <motion.span
+                    key="check"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                  >
+                    <Check className="w-4 h-4" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="bag"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
           )}
         </div>
       </div>

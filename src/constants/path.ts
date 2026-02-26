@@ -29,6 +29,9 @@ export const PATH = {
 export const CONTACT_INFO = {
   PHONE_CODE: "+84",
   PHONE: "359668896",
-  EMAIL: "[EMAIL_ADDRESS]",
+  EMAIL: "lienhe@trebinhdinh.com",
   ADDRESS: "Thành phố Quy Nhơn, Tỉnh Bình Định | Phường Quy Nhơn, Tỉnh Gia Lai",
+  FACEBOOK: "https://www.facebook.com/profile.php?id=61587786952919",
+  FACEBOOK_MESSENGER: "https://m.me/61587786952919",
+  ZALO: "https://zalo.me/359668896",
 };

@@ -7,13 +7,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { PATH } from "@/constants/path";
+import { PATH, CONTACT_INFO } from "@/constants/path";
 import { useCart } from "@/hooks/use-cart";
-import { ChefHat, Menu, ShoppingBag } from "lucide-react";
+import { ChefHat, Menu, ShoppingBag, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import BrandLogo from "../brand-logo/BrandLogo";
+import ZaloIcon from "../icons/ZaloIcon";
 
 const NAV_LINKS = [
   { href: PATH.PRODUCTS, label: "Sản phẩm" },
@@ -104,14 +105,20 @@ export function Header() {
           </button>
 
           {/* CTA — desktop */}
-          <Link href="/products" className="hidden md:inline-flex">
+          <a
+            href={CONTACT_INFO.ZALO}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:inline-flex"
+          >
             <Button
               size="sm"
-              className="rounded-full bg-[#1a3d2b] hover:bg-[#3a7851] text-white h-10 px-5 font-semibold shadow-md transition-all duration-200"
+              className="rounded-full bg-[#0068FF] hover:bg-[#0055d4] text-white h-10 px-5 font-semibold shadow-md transition-all duration-200 gap-1.5"
             >
-              Mua ngay
+              <ZaloIcon />
+              Zalo
             </Button>
-          </Link>
+          </a>
 
           {/* Mobile hamburger */}
           <Sheet>
@@ -180,11 +187,17 @@ export function Header() {
 
               {/* Sidebar CTA */}
               <div className="p-4 mt-4 border-t border-slate-200/60">
-                <Link href="/products" className="block">
-                  <Button className="w-full rounded-full bg-[#1a3d2b] hover:bg-[#3a7851] text-white h-12 font-semibold text-base">
-                    Khám phá sản phẩm →
+                <a
+                  href={CONTACT_INFO.ZALO}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <Button className="w-full rounded-full bg-[#0068FF] hover:bg-[#0055d4] text-white h-12 font-semibold text-base gap-2">
+                    <MessageCircle className="h-5 w-5" />
+                    Đặt mua qua Zalo
                   </Button>
-                </Link>
+                </a>
               </div>
             </SheetContent>
           </Sheet>

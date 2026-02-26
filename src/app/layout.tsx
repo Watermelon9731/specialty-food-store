@@ -5,6 +5,7 @@ import { Providers } from "@/components/providers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { FloatingContact } from "@/components/layout/FloatingContact";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
@@ -44,6 +45,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <CartDrawer />
+          <FloatingContact />
         </Providers>
       </body>
     </html>

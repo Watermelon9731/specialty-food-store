@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { CONTACT_INFO } from "@/constants/path";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -180,15 +180,19 @@ export default function AboutPage() {
                 Đặt hàng ngay hôm nay và cảm nhận sự khác biệt của đặc sản thủ
                 công Bình Định.
               </p>
-              <Link href="/products">
+              <a
+                href={CONTACT_INFO.ZALO}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Button
                   size="lg"
-                  className="h-13 px-10 rounded-full bg-white text-[#1a3d2b] hover:bg-emerald-50 font-bold shadow-xl hover:scale-105 transition-all"
+                  className="h-13 px-10 rounded-full bg-white text-[#0068FF] hover:bg-blue-50 font-bold shadow-xl hover:scale-105 transition-all gap-2"
                 >
-                  Khám phá sản phẩm
+                  💬 Đặt mua qua Zalo
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>

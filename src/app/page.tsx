@@ -18,9 +18,12 @@ import {
   CheckCircle2,
   MapPin,
   Quote,
+  Facebook,
+  Mail,
 } from "lucide-react";
-import { PATH } from "@/constants/path";
+import { PATH, CONTACT_INFO } from "@/constants/path";
 import Image from "next/image";
+import ZaloIcon from "@/components/icons/ZaloIcon";
 
 export const dynamic = "force-dynamic";
 
@@ -358,19 +361,19 @@ export default async function Home() {
                 num: "01",
                 icon: <Search className="w-6 h-6" />,
                 title: "Tuyển Chọn",
-                desc: "Thịt heo nóng từ lò mổ địa phương, chọn lúc 3 giờ sáng.",
+                desc: "Thịt heo nóng từ lò mổ địa phương",
               },
               {
                 num: "02",
                 icon: <ChefHat className="w-6 h-6" />,
                 title: "Chế Biến",
-                desc: "Giã tay truyền thống, gia vị gia truyền 3 đời, không máy móc.",
+                desc: "Giã tay truyền thống, gia vị gia truyền, không dùng phụ gia.",
               },
               {
                 num: "03",
                 icon: <PackageCheck className="w-6 h-6" />,
                 title: "Gói & Lên Men",
-                desc: "Bọc lá ổi, lá chuối tươi. Lên men tự nhiên 24–36 tiếng.",
+                desc: "Bọc lá ổi, lá chuối tươi. Lên men tự nhiên 24-36 tiếng.",
               },
               {
                 num: "04",
@@ -598,15 +601,43 @@ export default async function Home() {
                 Món quà biếu tặng hay bữa ăn gia đình — sự chân thật trong từng
                 hương vị sẽ thay bạn nói lên tấm lòng.
               </p>
-              <Link href={PATH.PRODUCTS}>
-                <Button
-                  size="lg"
-                  className="h-14 px-12 rounded-full bg-white text-[#1a3d2b] hover:bg-emerald-50 font-bold text-base shadow-2xl hover:scale-105 transition-all duration-200"
+              <div className="flex flex-col sm:flex-row gap-5 justify-center">
+                <a
+                  href={CONTACT_INFO.ZALO}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Đặt mua ngay hôm nay
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+                  <Button
+                    size="lg"
+                    className="h-14 px-8 rounded-full bg-[#0068FF] text-white hover:bg-[#0055d4] font-bold text-base shadow-2xl hover:scale-105 transition-all duration-200 gap-2 w-full sm:w-auto"
+                  >
+                    <ZaloIcon />
+                    Zalo
+                  </Button>
+                </a>
+                <a
+                  href={CONTACT_INFO.FACEBOOK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    size="lg"
+                    className="h-14 px-8 rounded-full bg-[#1877F2] text-white hover:bg-[#1466d8] font-bold text-base shadow-2xl hover:scale-105 transition-all duration-200 gap-2 w-full sm:w-auto"
+                  >
+                    <Facebook className="h-5 w-5" />
+                    Facebook
+                  </Button>
+                </a>
+                <a href={`mailto:${CONTACT_INFO.EMAIL}`}>
+                  <Button
+                    size="lg"
+                    className="h-14 px-8 rounded-full bg-white/15 text-white hover:bg-white/25 font-bold text-base shadow-2xl hover:scale-105 transition-all duration-200 gap-2 border border-white/30 w-full sm:w-auto"
+                  >
+                    <Mail className="h-5 w-5" />
+                    Email
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
         </div>

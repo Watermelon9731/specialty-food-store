@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { CONTACT_INFO } from "@/constants/path";
+import { formatPhoneNumber } from "@/lib/utils";
 import {
   ChefHat,
   Phone,
@@ -13,6 +15,8 @@ import {
   MapPin,
   CheckCircle2,
   Loader2,
+  Facebook,
+  MessageCircle,
 } from "lucide-react";
 
 export default function ContactPage() {
@@ -74,30 +78,46 @@ export default function ContactPage() {
               {
                 icon: <Phone className="w-5 h-5" />,
                 label: "Điện thoại / Zalo",
-                value: "0901 234 567",
-                href: "tel:+84901234567",
+                value: `${CONTACT_INFO.PHONE_CODE} ${formatPhoneNumber(CONTACT_INFO.PHONE)}`,
+                href: CONTACT_INFO.ZALO,
+                color: "bg-[#0068FF]",
+              },
+              {
+                icon: <Facebook className="w-5 h-5" />,
+                label: "Facebook Messenger",
+                value: "Nhắn tin qua Facebook",
+                href: CONTACT_INFO.FACEBOOK_MESSENGER,
+                color: "bg-[#1877F2]",
               },
               {
                 icon: <Mail className="w-5 h-5" />,
                 label: "Email",
-                value: "tiemdokho@gmail.com",
-                href: "mailto:tiemdokho@gmail.com",
+                value: CONTACT_INFO.EMAIL,
+                href: `mailto:${CONTACT_INFO.EMAIL}`,
+                color: "bg-[#1a3d2b]",
               },
               {
                 icon: <MapPin className="w-5 h-5" />,
                 label: "Địa chỉ",
-                value: "Chợ Huyện, Phù Cát, Bình Định, Việt Nam",
+                value: CONTACT_INFO.ADDRESS,
                 href: "https://maps.google.com",
+                color: "bg-emerald-600",
               },
             ].map((c) => (
               <a
                 key={c.label}
                 href={c.href}
-                target={c.href.startsWith("http") ? "_blank" : undefined}
+                target={
+                  c.href.startsWith("http") || c.href.startsWith("https")
+                    ? "_blank"
+                    : undefined
+                }
                 rel="noopener noreferrer"
                 className="flex items-start gap-4 p-5 bg-white border border-slate-100 rounded-2xl hover:border-emerald-200 hover:shadow-md transition-all duration-200 group"
               >
-                <div className="h-11 w-11 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-center text-[#3a7851] shrink-0 group-hover:bg-[#1a3d2b] group-hover:text-white group-hover:border-transparent transition-all duration-200">
+                <div
+                  className={`h-11 w-11 ${c.color} rounded-xl flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-all duration-200`}
+                >
                   {c.icon}
                 </div>
                 <div>

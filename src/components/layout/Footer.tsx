@@ -77,7 +77,9 @@ export function Footer() {
               <ChefHat className="h-5 w-5 text-white" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-bold text-xl tracking-tight">Tré Bà Liên</span>
+              <span className="font-bold text-xl tracking-tight">
+                Tré Bà Liên
+              </span>
               <span className="text-[10px] text-emerald-400 font-semibold tracking-[0.15em] uppercase">
                 Tré & Chả Nem Bình Định
               </span>
@@ -85,9 +87,9 @@ export function Footer() {
           </Link>
 
           <p className="text-emerald-100/70 text-sm leading-relaxed max-w-xs">
-            Tré Bà Liên — tên gọi của sự kiên nhẫn. Tré rơm lên men 36 tiếng, chả nem
-            rán vàng đúng lửa. Ba thế hệ gia truyền gìn giữ từng công thức của
-            vùng đất Xứ Nẫu.
+            Tré Bà Liên — tên gọi của sự kiên nhẫn. Tré rơm lên men 36 tiếng,
+            chả nem rán vàng đúng lửa. Ba thế hệ gia truyền gìn giữ từng công
+            thức của vùng đất Xứ Nẫu.
           </p>
 
           {/* Contact info */}
@@ -115,9 +117,11 @@ export function Footer() {
           {/* Social icons */}
           <div className="flex items-center gap-3 pt-2">
             <a
-              href="#"
+              href={CONTACT_INFO.FACEBOOK}
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="Facebook"
-              className="h-9 w-9 rounded-full bg-white/10 hover:bg-[#3a7851] flex items-center justify-center text-white transition-all duration-200 hover:scale-110"
+              className="h-9 w-9 rounded-full bg-white/10 hover:bg-[#1877F2] flex items-center justify-center text-white transition-all duration-200 hover:scale-110"
             >
               <Facebook className="w-4 h-4" />
             </a>
@@ -129,9 +133,11 @@ export function Footer() {
               <Instagram className="w-4 h-4" />
             </a>
             <a
-              href={`https://zalo.me/${CONTACT_INFO.PHONE}`}
+              href={CONTACT_INFO.ZALO}
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="Zalo"
-              className="h-9 w-9 rounded-full bg-white/10 hover:bg-[#3a7851] flex items-center justify-center text-white transition-all duration-200 hover:scale-110"
+              className="h-9 w-9 rounded-full bg-white/10 hover:bg-[#0068FF] flex items-center justify-center text-white transition-all duration-200 hover:scale-110"
             >
               <span className="text-[10px] font-bold">Zalo</span>
             </a>
@@ -227,8 +233,8 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="container mx-auto px-4 md:px-6 py-5 max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-emerald-400/60">
           <p>
-            © {new Date().getFullYear()} Tré Bà Liên · Bình Định, Việt Nam. Mọi quyền
-            được bảo lưu.
+            © {new Date().getFullYear()} Tré Bà Liên · Bình Định, Việt Nam. Mọi
+            quyền được bảo lưu.
           </p>
           <p className="flex items-center gap-1">
             Làm với <span className="text-red-400 mx-0.5">❤</span> từ Xứ Nẫu

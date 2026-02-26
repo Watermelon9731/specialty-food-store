@@ -8,16 +8,19 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useCart } from "@/hooks/use-cart";
+import { useCart, type CartItem } from "@/hooks/use-cart";
+import { CONTACT_INFO } from "@/constants/path";
 import {
   Trash2,
   Plus,
   Minus,
   ShoppingBag,
   ChefHat,
-  ArrowRight,
   X,
   Tag,
+  MessageCircle,
+  Facebook,
+  Mail,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -26,6 +29,50 @@ function formatVND(amount: number) {
     style: "currency",
     currency: "VND",
   }).format(amount);
+}
+
+/**
+ * Build the order message text used across all channels.
+ */
+function buildOrderMessage(items: CartItem[], subtotal: number): string {
+  const lines = [
+    "🛒 ĐƠN HÀNG MỚI — Tré Bà Liên",
+    "━━━━━━━━━━━━━━━━━",
+    "",
+    ...items.map(
+      (item, idx) =>
+        `${idx + 1}. ${item.name}\n   Số lượng: ${item.quantity} ${item.unitType}\n   Đơn giá: ${formatVND(item.price)}\n   Thành tiền: ${formatVND(item.price * item.quantity)}`,
+    ),
+    "",
+    "━━━━━━━━━━━━━━━━━",
+    `💰 Tổng cộng: ${formatVND(subtotal)}`,
+    "",
+    "📦 Thông tin giao hàng:",
+    "Họ tên: ",
+    "SĐT: ",
+    "Địa chỉ: ",
+    "",
+    "Cảm ơn bạn đã đặt hàng tại Tré Bà Liên! 🙏",
+  ];
+  return lines.join("\n");
+}
+
+/** Zalo deep-link with pre-filled message */
+function buildZaloOrderUrl(items: CartItem[], subtotal: number): string {
+  const message = encodeURIComponent(buildOrderMessage(items, subtotal));
+  return `${CONTACT_INFO.ZALO}?text=${message}`;
+}
+
+/** Facebook Messenger deep-link */
+function buildFacebookOrderUrl(): string {
+  return CONTACT_INFO.FACEBOOK_MESSENGER;
+}
+
+/** mailto: link with pre-filled subject and body */
+function buildEmailOrderUrl(items: CartItem[], subtotal: number): string {
+  const subject = encodeURIComponent("Đơn hàng mới — Tré Bà Liên");
+  const body = encodeURIComponent(buildOrderMessage(items, subtotal));
+  return `mailto:${CONTACT_INFO.EMAIL}?subject=${subject}&body=${body}`;
 }
 
 export function CartDrawer() {
@@ -37,6 +84,21 @@ export function CartDrawer() {
     0,
   );
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
+
+  const handleOrderViaZalo = () => {
+    const url = buildZaloOrderUrl(items, subtotal);
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const handleOrderViaFacebook = () => {
+    const url = buildFacebookOrderUrl();
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const handleOrderViaEmail = () => {
+    const url = buildEmailOrderUrl(items, subtotal);
+    window.location.href = url;
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -217,21 +279,32 @@ export function CartDrawer() {
               </div>
             </div>
 
-            {/* CTA buttons */}
-            <div className="space-y-2.5">
+            {/* CTA buttons — 3 checkout channels */}
+            <div className="space-y-2">
               <Button
-                className="w-full h-13 rounded-full bg-[#1a3d2b] hover:bg-[#3a7851] text-white font-bold text-base shadow-lg shadow-[#1a3d2b]/20 transition-all hover:scale-[1.02]"
-                onClick={() => setOpen(false)}
-                asChild
+                className="w-full h-12 rounded-full bg-[#0068FF] hover:bg-[#0055d4] text-white font-bold text-sm shadow-lg shadow-[#0068FF]/20 transition-all hover:scale-[1.02] gap-2"
+                onClick={handleOrderViaZalo}
               >
-                <Link href="/checkout">
-                  Đặt hàng ngay
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                <MessageCircle className="h-4 w-4" />
+                Đặt hàng qua Zalo
+              </Button>
+              <Button
+                className="w-full h-12 rounded-full bg-[#1877F2] hover:bg-[#1466d8] text-white font-bold text-sm shadow-lg shadow-[#1877F2]/20 transition-all hover:scale-[1.02] gap-2"
+                onClick={handleOrderViaFacebook}
+              >
+                <Facebook className="h-4 w-4" />
+                Nhắn tin qua Facebook
+              </Button>
+              <Button
+                className="w-full h-12 rounded-full bg-[#1a3d2b] hover:bg-[#3a7851] text-white font-bold text-sm shadow-lg shadow-[#1a3d2b]/20 transition-all hover:scale-[1.02] gap-2"
+                onClick={handleOrderViaEmail}
+              >
+                <Mail className="h-4 w-4" />
+                Gửi đơn qua Email
               </Button>
               <Button
                 variant="ghost"
-                className="w-full h-11 rounded-full text-slate-500 hover:text-[#1a3d2b] hover:bg-slate-100 font-medium"
+                className="w-full h-10 rounded-full text-slate-500 hover:text-[#1a3d2b] hover:bg-slate-100 font-medium text-sm"
                 onClick={() => setOpen(false)}
               >
                 Tiếp tục mua sắm
@@ -239,7 +312,7 @@ export function CartDrawer() {
             </div>
 
             <p className="text-[10px] text-slate-400 text-center leading-relaxed">
-              Thanh toán an toàn · Đổi trả trong 7 ngày · Giao hàng toàn quốc
+              Zalo · Facebook · Email · Đổi trả 7 ngày · Giao toàn quốc
             </p>
           </div>
         )}

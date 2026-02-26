@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PATH } from "@/constants/path";
+import { PATH, CONTACT_INFO } from "@/constants/path";
 import {
   ArrowRight,
   CheckCircle2,
   ChefHat,
+  FacebookIcon,
   Leaf,
   MapPin,
   PackageCheck,
@@ -16,6 +17,8 @@ import {
   Star,
   Truck,
 } from "lucide-react";
+import ZaloIcon from "@/components/icons/ZaloIcon";
+import Image from "next/image";
 
 export const metadata = {
   title: "Tré Rơm Gia Truyền Bình Định | Đặc Sản Xứ Nẫu",
@@ -24,25 +27,35 @@ export const metadata = {
 };
 
 // ─── Product variants ─────────────────────────────────────────────────────────
-const VARIANTS = [
+const TRE_ROM = [
   {
-    name: "Tré Rơm Cổ Điển",
-    weight: "300g",
-    price: "85.000 VNĐ",
+    name: "Tré Rơm Truyền Thống",
+    weight: "150g / 1 cây",
+    price: "40.000 VNĐ",
+    badge: "Đẹp mắt",
+    highlight: true,
+  },
+  {
+    name: "Tré Rơm Combo",
+    weight: "1kg / 5 cây",
+    price: "180.000 VNĐ",
+    badge: "Tiết kiệm",
+    highlight: false,
+  },
+];
+
+const TRE_HU = [
+  {
+    name: "Tré Hũ Tiện Lợi",
+    weight: "500g / 1 hũ",
+    price: "150.000 VNĐ",
     badge: "Bán chạy nhất",
     highlight: true,
   },
   {
-    name: "Tré Rơm Tỏi Ớt",
-    weight: "300g",
-    price: "90.000 VNĐ",
-    badge: "Cay nhẹ",
-    highlight: false,
-  },
-  {
-    name: "Tré Rơm Combo",
-    weight: "600g (×2)",
-    price: "160.000 VNĐ",
+    name: "Tré Hũ Combo",
+    weight: "1kg / 2 hũ",
+    price: "280.000 VNĐ",
     badge: "Tiết kiệm",
     highlight: false,
   },
@@ -54,25 +67,25 @@ const PROCESS = [
     num: "01",
     icon: <Search className="w-6 h-6" />,
     title: "Tuyển Thịt",
-    desc: "Thịt heo nóng hổi từ lò mổ địa phương, lấy vào lúc 3 giờ sáng — chọn phần nạc vai đúng chuẩn.",
+    desc: "Thịt heo nóng hổi từ lò mổ địa phương — chọn phần tai heo đúng chuẩn.",
   },
   {
     num: "02",
     icon: <ChefHat className="w-6 h-6" />,
     title: "Giã & Trộn",
-    desc: "Giã tay đều đặn với sả, riềng, tỏi và mè rang. Gia vị gia truyền, không dùng máy móc.",
+    desc: "Giã tay với sả, riềng, tỏi và mè rang. Hương vị gia truyền.",
   },
   {
     num: "03",
     icon: <Leaf className="w-6 h-6" />,
     title: "Gói Lá & Ủ",
-    desc: "Bọc nhiều lớp lá ổi non, lá chuối tươi. Buộc rơm, ủ lên men tự nhiên 24–36 tiếng.",
+    desc: "Bọc nhiều lớp lá ổi non, lá chuối tươi. Buộc rơm, ủ lên men tự nhiên.",
   },
   {
     num: "04",
     icon: <Truck className="w-6 h-6" />,
     title: "Đóng Gói & Giao",
-    desc: "Hút chân không, bảo quản lạnh. Giao nhanh toàn quốc trong 2–3 ngày.",
+    desc: "Bảo quản lạnh. Giao nhanh toàn quốc.",
   },
 ];
 
@@ -152,15 +165,18 @@ export default function TrePage() {
             </p>
 
             <div className="flex flex-wrap gap-4 mb-12">
-              <Link href={PATH.CONTACT}>
+              <a
+                href={CONTACT_INFO.ZALO}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Button
                   size="lg"
-                  className="h-14 px-8 rounded-full bg-[#3a7851] hover:bg-[#2f6342] text-white text-base font-semibold shadow-lg shadow-[#3a7851]/25 hover:-translate-y-0.5 transition-all duration-200"
+                  className="h-14 px-8 rounded-full bg-[#0068FF] hover:bg-[#0055d4] text-white text-base font-semibold shadow-lg shadow-[#0068FF]/25 hover:-translate-y-0.5 transition-all duration-200 gap-2"
                 >
-                  Đặt mua ngay
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ZaloIcon /> Đặt mua qua Zalo
                 </Button>
-              </Link>
+              </a>
               <Link href="#story">
                 <Button
                   size="lg"
@@ -193,15 +209,21 @@ export default function TrePage() {
           <div className="relative hidden md:flex items-center justify-center">
             {/* Main card */}
             <div className="w-[360px] h-[480px] bg-linear-to-br from-amber-50 to-emerald-100 rounded-[2.5rem] shadow-2xl shadow-amber-900/15 overflow-hidden flex flex-col items-center justify-end pb-10 relative border border-amber-100">
-              <div className="absolute inset-0 bg-linear-to-t from-[#1a3d2b]/30 to-transparent" />
-              <div className="text-center relative z-10">
-                <div className="text-7xl mb-3 drop-shadow-lg">🥩</div>
-                <p className="text-white font-bold text-lg drop-shadow">
-                  Tré Rơm Cổ Điển
-                </p>
-                <p className="text-emerald-200 text-sm mt-1">
-                  Chợ Huyện · Bình Định
-                </p>
+              <Image
+                src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/tre-cay.jpg"
+                alt="Tré Rơm Truyền Thống"
+                fill
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="text-center absolute bottom-16 left-1/3 z-10">
+                <div className="bg-black/40 p-4 rounded-2xl w-[220px] mx-auto">
+                  <p className="text-white font-bold text-md drop-shadow">
+                    Tré Rơm Truyền Thống
+                  </p>
+                  <p className="text-emerald-200 text-sm mt-1">
+                    Chợ Huyện · Bình Định
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -217,15 +239,27 @@ export default function TrePage() {
             </div>
 
             {/* Small product card */}
-            <div className="absolute -bottom-4 -left-6 w-[175px] h-[200px] bg-linear-to-br from-[#1a3d2b] to-[#2a5c3e] rounded-[1.5rem] shadow-xl overflow-hidden flex flex-col items-center justify-end pb-6 border-4 border-white">
-              <div className="text-4xl mb-2">🌾</div>
-              <p className="text-white font-bold text-xs text-center px-2">
-                Bọc rơm ủ 36 tiếng
-              </p>
+            <div className="absolute -bottom-4 -left-6 w-[220px] h-[388px] bg-linear-to-br from-[#1a3d2b] to-[#2a5c3e] rounded-[1.5rem] shadow-xl overflow-hidden flex flex-col items-center justify-end pb-6 border-4 border-white">
+              <Image
+                src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/tre-hu.jpg"
+                alt="Tré Hũ Hiện Đại"
+                fill
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="text-center absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+                <div className="bg-black/40 p-4 rounded-2xl w-[180px] mx-auto">
+                  <p className="text-white font-bold text-md drop-shadow">
+                    Tré Hũ Hiện Đại
+                  </p>
+                  <p className="text-emerald-200 text-sm mt-1">
+                    Tiện lợi · Dễ bảo quản
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Stars badge */}
-            <div className="absolute top-1/2 -left-8 bg-white rounded-2xl px-4 py-3 shadow-xl border border-slate-100">
+            <div className="absolute top-1/3 -left-10 bg-white rounded-2xl px-4 py-3 shadow-xl border border-slate-100">
               <div className="flex gap-0.5 mb-1">
                 {[...Array(5)].map((_, i) => (
                   <Star
@@ -251,8 +285,14 @@ export default function TrePage() {
             <div className="relative">
               <div className="aspect-square max-w-md mx-auto bg-linear-to-br from-amber-50 to-orange-100 rounded-[3rem] overflow-hidden shadow-2xl ring-1 ring-amber-200/40 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-8xl mb-4">🥩</div>
-                  <div className="text-5xl">🌿</div>
+                  <Image
+                    src={
+                      "https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/tre-ruot.jpg"
+                    }
+                    fill
+                    alt="Tré Bà Liên"
+                    className="object-cover rounded-2xl"
+                  />
                   <p className="text-amber-800 font-semibold text-sm mt-4 px-4">
                     Lá ổi · Rơm rạ · Tré cuộn tay
                   </p>
@@ -292,13 +332,11 @@ export default function TrePage() {
                   không thể nhầm lẫn.
                 </p>
                 <p>
-                  Nguyên liệu chính là thịt heo nạc vai, tai, bì — xay thô rồi
-                  trộn với{" "}
+                  Nguyên liệu chính là tai heo, bì heo — thái sợi rồi trộn với{" "}
                   <strong className="text-slate-800">
                     sả, riềng, tỏi, mè rang, ớt và muối
                   </strong>
-                  . Hỗn hợp được gói chặt, buộc rơm, ủ lên men 24–36 tiếng ở
-                  nhiệt độ phòng.
+                  . Hỗn hợp được gói chặt, buộc rơm, ủ lên men 24-36 tiếng.
                 </p>
                 <p>
                   Kết quả là một loại thực phẩm lên men có vị{" "}
@@ -346,43 +384,51 @@ export default function TrePage() {
             {/* Image */}
             <div className="relative">
               <div className="aspect-4/5 bg-[#2a5c3e] rounded-[2.5rem] overflow-hidden shadow-2xl ring-1 ring-white/10 flex items-center justify-center flex-col gap-4">
-                <div className="text-8xl opacity-70">👨‍🍳</div>
-                <p className="text-emerald-300 text-sm text-center px-6">
-                  Ba và mẹ tại lò tré — Chợ Huyện, Bình Định
-                </p>
+                <Image
+                  src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/chen-tre.jpg"
+                  alt="Tré Rơm Cổ Điển"
+                  fill
+                  className="absolute inset-0 w-full h-full object-cover rounded-3xl"
+                />
               </div>
               {/* Stat card */}
-              <div className="absolute -bottom-6 -right-4 md:-right-10 bg-white/10 backdrop-blur-xl border border-white/20 text-white p-6 rounded-3xl shadow-2xl w-[220px]">
+              <div className="absolute -bottom-6 -right-4 md:-right-10 bg-white border border-white/20 text-white p-4 rounded-3xl shadow-2xl w-[250px]">
                 <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                  <span className="font-bold text-3xl text-emerald-300">3</span>
+                  <CheckCircle2 className="w-5 h-5 text-emerald-900" />
+                  <span className="font-bold text-3xl text-emerald-900">3</span>
+                  <div className="flex flex-col">
+                    <p className="text-emerald-900 font-semibold">
+                      Thế hệ gia truyền
+                    </p>
+                    <p className="text-emerald-900 text-xs mt-1">
+                      Chợ Huyện · Bình Định
+                    </p>
+                  </div>
                 </div>
-                <p className="text-emerald-100 font-semibold">
-                  Thế hệ gia truyền
-                </p>
-                <p className="text-emerald-400 text-xs mt-1">
-                  Chợ Huyện · Bình Định
-                </p>
               </div>
             </div>
 
             {/* Text */}
             <div className="pt-8 md:pt-0">
               <Badge className="bg-white/10 text-emerald-300 border-white/10 mb-6 px-4 py-1.5 rounded-full text-xs tracking-widest uppercase font-semibold">
-                Câu chuyện của chúng tôi
+                Câu chuyện của nhà
               </Badge>
               <h2 className="text-3xl md:text-5xl font-bold mb-8 leading-[1.2]">
-                Không chạy theo số lượng,{" "}
+                Sản phẩm mình làm ra phải ăn được, thấy ngon{" "}
                 <span className="text-emerald-400 italic">
-                  chúng tôi chọn sự tử tế.
+                  thì khách hàng mới tin tưởng và dùng.
                 </span>
               </h2>
               <div className="space-y-5 text-emerald-50/80 text-base leading-relaxed">
                 <p>
-                  Mỗi lọn tré tại lò đều bắt đầu từ{" "}
-                  <strong className="text-white">3 giờ sáng</strong>. Đó là lúc
-                  những tảng thịt heo nóng hổi nhất vừa ra lò được lựa chọn cẩn
-                  thận bằng đôi tay đã gắn bó với nghề hàng chục năm.
+                  Làm tré không khó, nhưng để giữ được vị ngon truyền thống thì
+                  cần{" "}
+                  <strong className="text-white">
+                    sự cẩn trọng trong từng chi tiết nhỏ
+                  </strong>
+                  . Đôi tay hàng chục năm tuổi nghề của bà khắt khe từ bước chọn
+                  nguyên liệu tươi sạch nhất, đến việc nhào trộn, gói ghém bằng
+                  cả tấm lòng chân thật để trao gửi hương vị quê nhà trọn vẹn.
                 </p>
                 <p>
                   Vị chua thanh của tré đến từ quá trình lên men lá ổi tự nhiên.
@@ -390,8 +436,7 @@ export default function TrePage() {
                   <strong className="text-white">
                     không máy móc, không công thức công nghiệp
                   </strong>
-                  . Chúng tôi giới hạn số lượng mỗi lô để đảm bảo chất lượng
-                  đồng đều.
+                  .
                 </p>
                 <p>
                   Đây là di sản ẩm thực mà ông bà để lại — và chúng tôi giữ gìn
@@ -406,11 +451,10 @@ export default function TrePage() {
               <div className="mt-8 border-l-2 border-emerald-400 pl-5">
                 <Quote className="w-5 h-5 text-emerald-400 mb-2" />
                 <p className="text-emerald-200 italic font-medium">
-                  "Chúng tôi không đánh đổi sức khỏe của khách hàng lấy lợi
-                  nhuận."
+                  "Mình ăn sao thì bán cho khách vậy"
                 </p>
                 <p className="text-emerald-500 text-sm mt-2">
-                  — Bà Nguyễn Thị Hạnh, thế hệ thứ hai
+                  — Bà Đoàn Thị Bích Liên, người kế thừa
                 </p>
               </div>
             </div>
@@ -431,7 +475,7 @@ export default function TrePage() {
               4 bước · 1 cam kết
             </h2>
             <p className="text-slate-500 text-lg">
-              Minh bạch từ lò bếp đến bàn ăn của bạn.
+              Minh bạch từ bếp đến bàn ăn của bạn.
             </p>
           </div>
           <div className="relative grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-4">
@@ -484,8 +528,8 @@ export default function TrePage() {
                 {[
                   {
                     emoji: "🥩",
-                    name: "Thịt heo nạc vai tươi",
-                    note: "Lấy từ lò mổ địa phương, không đông lạnh",
+                    name: "Tai heo tươi",
+                    note: "Lấy từ lò mổ địa phương",
                   },
                   {
                     emoji: "🌿",
@@ -538,13 +582,13 @@ export default function TrePage() {
                 {
                   icon: <Leaf className="h-6 w-6" />,
                   title: "Không chất bảo quản",
-                  desc: "Lên men tự nhiên giúp tré giữ được 5–7 ngày ở nhiệt độ phòng và lên đến 30 ngày khi bảo quản lạnh — không cần phụ gia.",
+                  desc: "Lên men tự nhiên giúp tré giữ được 5–7 ngày ở nhiệt độ phòng và lên đến 30 ngày khi bảo quản lạnh — nói không với phụ gia.",
                   color: "teal",
                 },
                 {
                   icon: <PackageCheck className="h-6 w-6" />,
-                  title: "Kiểm soát từng lô",
-                  desc: "Mỗi lô tré được ghi chép ngày sản xuất và kiểm tra chất lượng trước khi đóng gói giao khách.",
+                  title: "Đóng gói cẩn thận",
+                  desc: "Đóng gói cẩn thận giúp giữ tré tươi ngon trong quá trình vận chuyển.",
                   color: "emerald",
                 },
               ].map((card) => (
@@ -553,7 +597,7 @@ export default function TrePage() {
                   className="group bg-slate-50 hover:bg-white border border-slate-100 hover:border-emerald-200 rounded-3xl p-7 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-900/5 hover:-translate-y-0.5"
                 >
                   <div
-                    className={`h-12 w-12 rounded-2xl flex items-center justify-center mb-4 text-${card.color}-600 bg-${card.color}-50 border border-${card.color}-100 group-hover:bg-${card.color}-600 group-hover:text-white group-hover:border-transparent transition-all duration-300`}
+                    className={`h-12 w-12 rounded-2xl flex items-center justify-center mb-4 text-${card.color}-600 bg-${card.color}-50 border border-${card.color}-100 group-hover:bg-${card.color}-600 group-hover:text-black group-hover:border-transparent transition-all duration-300`}
                   >
                     {card.icon}
                   </div>
@@ -571,65 +615,193 @@ export default function TrePage() {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          6. VARIANTS — Product cards
+          6. VARIANTS — Two product categories
       ══════════════════════════════════════════════════ */}
       <section className="py-24 bg-[#f8f7f4] px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-14">
+          <div className="text-center mb-16">
             <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 mb-4 rounded-full px-4 py-1.5">
               <Sparkles className="w-3.5 h-3.5 mr-1.5" />
               Sản phẩm
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
-              Chọn theo khẩu vị
+              Hai kiểu đóng gói — cùng một hương vị
             </h2>
-            <p className="text-slate-500 text-lg">
-              Giao hỏa tốc toàn quốc · Bảo quản lạnh · Hút chân không
+            <p className="text-slate-500 text-lg max-w-2xl mx-auto">
+              Dù gói rơm truyền thống hay hũ nhựa tiện lợi, tré đều được làm từ
+              cùng một công thức gia truyền.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {VARIANTS.map((v) => (
-              <div
-                key={v.name}
-                className={`relative rounded-[2rem] overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-900/10 ${v.highlight ? "border-[#3a7851] bg-[#1a3d2b] text-white ring-2 ring-[#3a7851]/30" : "border-slate-200 bg-white hover:border-emerald-200"}`}
-              >
-                {v.badge && (
-                  <div
-                    className={`absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full ${v.highlight ? "bg-emerald-400/20 text-emerald-300 border border-emerald-400/30" : "bg-emerald-50 text-emerald-700 border border-emerald-200"}`}
-                  >
-                    {v.badge}
-                  </div>
-                )}
-                <div className={`p-8 ${v.highlight ? "" : ""}`}>
-                  <div className="text-5xl mb-5">🥩</div>
-                  <h3
-                    className={`text-xl font-bold mb-1 ${v.highlight ? "text-white" : "text-slate-900"}`}
-                  >
-                    {v.name}
-                  </h3>
-                  <p
-                    className={`text-sm mb-6 ${v.highlight ? "text-emerald-300" : "text-slate-500"}`}
-                  >
-                    {v.weight}
-                  </p>
-                  <p
-                    className={`text-3xl font-bold mb-8 ${v.highlight ? "text-emerald-300" : "text-[#3a7851]"}`}
-                  >
-                    {v.price}
-                  </p>
-                  <Link href={PATH.CONTACT}>
-                    <Button
-                      className={`w-full rounded-full h-12 font-semibold transition-all ${v.highlight ? "bg-emerald-400 hover:bg-emerald-300 text-[#1a3d2b]" : "bg-[#3a7851] hover:bg-[#2f6342] text-white"}`}
-                    >
-                      Đặt mua →
-                    </Button>
-                  </Link>
-                </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* ── Category 1: Tré Rơm ── */}
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-3xl">🌾</span>
+                <h3 className="text-2xl font-bold text-slate-900">Tré Rơm</h3>
               </div>
-            ))}
+              <p className="text-slate-500 text-sm mb-4 leading-relaxed">
+                Gói bằng lá ổi, buộc rơm truyền thống — đẹp mắt, sang trọng, lý
+                tưởng làm{" "}
+                <strong className="text-slate-700">quà biếu tặng</strong>.
+              </p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {[
+                  "🎁 Quà biếu sang trọng",
+                  "🌿 Lá ổi & rơm rạ",
+                  "📸 Đẹp mắt trình bày",
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-3 py-1"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="space-y-4">
+                {TRE_ROM.map((v) => (
+                  <div
+                    key={v.name}
+                    className={`rounded-2xl overflow-hidden border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl ${v.highlight ? "border-[#3a7851] bg-[#1a3d2b] text-white ring-2 ring-[#3a7851]/30" : "border-slate-200 bg-white hover:border-emerald-200"}`}
+                  >
+                    <div className="p-6">
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="text-4xl shrink-0">🌾</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            <h4
+                              className={`text-lg font-bold ${v.highlight ? "text-white" : "text-slate-900"}`}
+                            >
+                              {v.name}
+                            </h4>
+                            {v.badge && (
+                              <span
+                                className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${v.highlight ? "bg-emerald-400/20 text-emerald-300 border border-emerald-400/30" : "bg-emerald-50 text-emerald-700 border border-emerald-200"}`}
+                              >
+                                {v.badge}
+                              </span>
+                            )}
+                          </div>
+                          <p
+                            className={`text-sm ${v.highlight ? "text-emerald-300" : "text-slate-500"}`}
+                          >
+                            {v.weight}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <p
+                          className={`text-2xl font-bold ${v.highlight ? "text-emerald-300" : "text-[#3a7851]"}`}
+                        >
+                          {v.price}
+                        </p>
+                        <a
+                          href={CONTACT_INFO.ZALO}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button
+                            size="sm"
+                            className={`rounded-full h-10 px-6 font-semibold text-sm ${v.highlight ? "bg-[#0068FF] hover:bg-[#0055d4] text-white" : "bg-[#3a7851] hover:bg-[#2f6342] text-white"}`}
+                          >
+                            Đặt mua
+                          </Button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ── Category 2: Tré Hũ ── */}
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-3xl">🫙</span>
+                <h3 className="text-2xl font-bold text-slate-900">Tré Hũ</h3>
+              </div>
+              <p className="text-slate-500 text-sm mb-4 leading-relaxed">
+                Đóng hũ nhựa kín,{" "}
+                <strong className="text-slate-700">bảo quản lâu hơn</strong>, dễ
+                vận chuyển, tiện dùng nhiều lần — phù hợp ăn dần và ship xa.
+              </p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {[
+                  "📦 Dễ vận chuyển",
+                  "❄️ Bảo quản lâu",
+                  "🔄 Dùng nhiều lần",
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-3 py-1"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="space-y-4">
+                {TRE_HU.map((v) => (
+                  <div
+                    key={v.name}
+                    className={`rounded-2xl overflow-hidden border transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl ${v.highlight ? "border-[#3a7851] bg-[#1a3d2b] text-white ring-2 ring-[#3a7851]/30" : "border-slate-200 bg-white hover:border-emerald-200"}`}
+                  >
+                    <div className="p-6">
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="text-4xl shrink-0">🫙</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            <h4
+                              className={`text-lg font-bold ${v.highlight ? "text-white" : "text-slate-900"}`}
+                            >
+                              {v.name}
+                            </h4>
+                            {v.badge && (
+                              <span
+                                className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${v.highlight ? "bg-emerald-400/20 text-emerald-300 border border-emerald-400/30" : "bg-emerald-50 text-emerald-700 border border-emerald-200"}`}
+                              >
+                                {v.badge}
+                              </span>
+                            )}
+                          </div>
+                          <p
+                            className={`text-sm ${v.highlight ? "text-emerald-300" : "text-slate-500"}`}
+                          >
+                            {v.weight}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <p
+                          className={`text-2xl font-bold ${v.highlight ? "text-emerald-300" : "text-[#3a7851]"}`}
+                        >
+                          {v.price}
+                        </p>
+                        <a
+                          href={CONTACT_INFO.ZALO}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button
+                            size="sm"
+                            className={`rounded-full h-10 px-6 font-semibold text-sm ${v.highlight ? "bg-[#0068FF] hover:bg-[#0055d4] text-white" : "bg-[#3a7851] hover:bg-[#2f6342] text-white"}`}
+                          >
+                            Đặt mua
+                          </Button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <p className="text-center text-sm text-slate-400 mt-6">
+
+          <p className="text-center text-sm text-slate-400 mt-8">
             Giá chưa bao gồm phí vận chuyển · Freeship đơn từ 500.000 VNĐ
+          </p>
+          <p className="text-center text-xs text-slate-400 mt-1 italic">
+            * Giá có thể thay đổi nhẹ tuỳ theo giá thị trường và dịp lễ, Tết.
           </p>
         </div>
       </section>
@@ -695,12 +867,17 @@ export default function TrePage() {
               Tré ngon nhất khi…
             </h2>
           </div>
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-5">
+          <div className="grid sm:grid-cols-3 md:grid-cols-5 gap-5">
             {[
               {
                 emoji: "🫓",
                 title: "Với bánh tráng",
                 desc: "Cuộn cùng rau sống và nước mắm tỏi ớt chua ngọt.",
+              },
+              {
+                emoji: "🥢",
+                title: "Với chả và nem chua",
+                desc: "Trộn cùng chả, nem chua, rau sống và nước mắm chua ngọt.",
               },
               {
                 emoji: "🥬",
@@ -757,20 +934,40 @@ export default function TrePage() {
                 Bình Định sẽ thay bạn nói lên tấm lòng.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href={PATH.CONTACT}>
+                <a
+                  href={CONTACT_INFO.ZALO}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Button
                     size="lg"
-                    className="h-14 px-12 rounded-full bg-white text-[#1a3d2b] hover:bg-emerald-50 font-bold text-base shadow-2xl hover:scale-105 transition-all duration-200 w-full sm:w-auto"
+                    className="h-14 px-12 rounded-full bg-blue-50 text-[#0068FF] hover:bg-[#0068FF] hover:text-white font-bold text-base shadow-2xl hover:scale-105 transition-all duration-200 w-full sm:w-auto gap-2"
                   >
-                    Liên hệ đặt mua
+                    <ZaloIcon />
+                    Đặt mua qua Zalo
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                </Link>
+                </a>
+                <a
+                  href={CONTACT_INFO.ZALO}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    size="lg"
+                    className="h-14 px-12 rounded-full bg-[#0068FF] text-white hover:bg-blue-50
+                    hover:text-[#0068FF] font-bold text-base shadow-2xl hover:scale-105 transition-all duration-200 w-full sm:w-auto gap-2"
+                  >
+                    <FacebookIcon />
+                    Đặt mua qua Facebook
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </a>
                 <Link href={PATH.PRODUCTS}>
                   <Button
                     size="lg"
                     variant="outline"
-                    className="h-14 px-10 rounded-full border-emerald-500/40 text-emerald-300 hover:bg-emerald-800 font-semibold text-base bg-transparent w-full sm:w-auto"
+                    className="h-14 px-10 rounded-full border-emerald-500/40 text-emerald-300 hover:text-white hover:bg-emerald-800 font-semibold text-base bg-transparent w-full sm:w-auto"
                   >
                     Xem thêm sản phẩm
                   </Button>
