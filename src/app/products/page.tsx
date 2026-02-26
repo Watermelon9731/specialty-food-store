@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 import { getProductsService } from "@/server/products/service";
 import { getCategoriesService } from "@/server/categories/service";
 import { ProductGrid } from "@/components/product/ProductGrid";

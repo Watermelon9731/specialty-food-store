@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 import Link from "next/link";
 import { getCategoriesService } from "@/server/categories/service";
 import { ArrowRight, Fish, ChefHat, Beef, Leaf, Package2 } from "lucide-react";
