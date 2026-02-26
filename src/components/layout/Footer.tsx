@@ -47,7 +47,7 @@ export function Footer() {
               Tré Gia Truyền Bình Định
             </h2>
             <p className="text-emerald-200/70 text-sm leading-relaxed">
-              Lên men tự nhiên bằng lá ổi · Không hàn the · Công thức 3 thế hệ
+              Lên men tự nhiên bằng lá ổi · Không hàn the · Làm bằng tâm huyết
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
@@ -87,9 +87,9 @@ export function Footer() {
           </Link>
 
           <p className="text-emerald-100/70 text-sm leading-relaxed max-w-xs">
-            Tré Bà Liên — tên gọi của sự kiên nhẫn. Tré rơm lên men 36 tiếng,
-            chả nem rán vàng đúng lửa. Ba thế hệ gia truyền gìn giữ từng công
-            thức của vùng đất Xứ Nẫu.
+            Tré Bà Liên — tên gọi của sự kiên nhẫn. Tré rơm lên men tự nhiên,
+            làm thủ công từ tâm huyết. Gìn giữ hương vị chính gốc của vùng đất
+            Xứ Nẫu.
           </p>
 
           {/* Contact info */}

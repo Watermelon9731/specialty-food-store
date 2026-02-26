@@ -23,7 +23,7 @@ import Image from "next/image";
 export const metadata = {
   title: "Tré Rơm Gia Truyền Bình Định | Đặc Sản Xứ Nẫu",
   description:
-    "Tré rơm Bình Định gia truyền 3 thế hệ — lên men tự nhiên bằng lá ổi, không hàn the, không chất bảo quản. Giao hỏa tốc toàn quốc.",
+    "Tré rơm Bình Định chính gốc — lên men tự nhiên bằng lá ổi, không hàn the, không chất bảo quản. Giao hỏa tốc toàn quốc.",
 };
 
 // ─── Product variants ─────────────────────────────────────────────────────────
@@ -159,7 +159,7 @@ export default function TrePage() {
             <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-lg leading-relaxed">
               Lên men tự nhiên bằng{" "}
               <strong className="text-slate-800">lá ổi, rơm rạ</strong> — không
-              hàn the, không chất bảo quản. Công thức 3 thế hệ giữ trọn vị chua
+              hàn the, không chất bảo quản. Công thức tâm huyết giữ trọn vị chua
               thanh, dai giòn đặc trưng của{" "}
               <strong className="text-slate-800">miền Trung</strong>.
             </p>
@@ -395,10 +395,12 @@ export default function TrePage() {
               <div className="absolute -bottom-6 -right-4 md:-right-10 bg-white border border-white/20 text-white p-4 rounded-3xl shadow-2xl w-[250px]">
                 <div className="flex items-center gap-2 mb-2">
                   <CheckCircle2 className="w-5 h-5 text-emerald-900" />
-                  <span className="font-bold text-3xl text-emerald-900">3</span>
+                  <span className="font-bold text-3xl text-emerald-900">
+                    ❤️
+                  </span>
                   <div className="flex flex-col">
                     <p className="text-emerald-900 font-semibold">
-                      Thế hệ gia truyền
+                      Từ tâm huyết
                     </p>
                     <p className="text-emerald-900 text-xs mt-1">
                       Chợ Huyện · Bình Định

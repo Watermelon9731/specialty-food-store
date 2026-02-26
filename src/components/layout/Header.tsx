@@ -176,7 +176,7 @@ export function Header() {
                   🥩 Tré Rơm Gia Truyền
                 </p>
                 <p className="text-xs text-slate-500 mb-3">
-                  Bình Định · Lên men tự nhiên · 3 thế hệ
+                  Bình Định · Lên men tự nhiên · Thủ công
                 </p>
                 <Link href={PATH.TRE} className="block">
                   <Button className="w-full rounded-full bg-amber-800 hover:bg-amber-900 text-white h-10 font-semibold text-sm">

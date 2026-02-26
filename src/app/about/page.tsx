@@ -1,16 +1,24 @@
 import { CONTACT_INFO } from "@/constants/path";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
-  ChefHat,
   Leaf,
   ShieldCheck,
   HeartHandshake,
   MapPin,
   ArrowRight,
-  CheckCircle2,
   Quote,
+  Facebook,
+  Mail,
 } from "lucide-react";
+import ZaloIcon from "@/components/icons/ZaloIcon";
+
+export const metadata = {
+  title: "Về Chúng Tôi | Tré Bà Liên — Đặc Sản Bình Định",
+  description:
+    "Câu chuyện gia đình ba thế hệ giữ lửa nghề làm tré rơm truyền thống tại Chợ Huyện, Phù Cát, Bình Định.",
+};
 
 export default function AboutPage() {
   return (
@@ -21,29 +29,33 @@ export default function AboutPage() {
         <div className="container mx-auto max-w-7xl relative z-10 grid md:grid-cols-2 gap-12 items-center">
           <div>
             <Badge className="bg-white/10 text-emerald-300 border-white/10 mb-6 px-4 py-1.5 rounded-full text-xs tracking-widest uppercase font-semibold">
-              Câu chuyện của tiệm
+              Về Tré Bà Liên
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold leading-[1.1] mb-6">
-              Ba thế hệ,
+              Mình ăn sao,
               <br />
-              <span className="text-emerald-400">một tình yêu</span>
+              <span className="text-emerald-400">bán cho khách</span>
               <br />
-              với nghề cũ.
+              vậy.
             </h1>
             <p className="text-emerald-100/80 text-lg leading-relaxed max-w-lg">
-              Từ góc bếp nhỏ ở Chợ Huyện, Bình Định, những người phụ nữ trong
-              gia đình chúng tôi cần mẫn giữ lửa cho công thức nem chả, tré rơm
-              qua từng mùa.
+              Từ góc bếp nhỏ ở Chợ Huyện, Phù Cát, Bình Định — bà Liên cần mẫn
+              giữ gìn công thức tré rơm gia truyền, không vì lợi nhuận mà đánh
+              đổi chất lượng.
             </p>
           </div>
 
           {/* Floating stat cards */}
           <div className="grid grid-cols-2 gap-4">
             {[
-              { num: "3", label: "Thế hệ gia truyền", icon: "🏡" },
+              { num: "❤️", label: "Từ đam mê nấu ăn", icon: "🏡" },
               { num: "0", label: "Chất bảo quản", icon: "🚫" },
-              { num: "100%", label: "Chế biến thủ công", icon: "🤲" },
-              { num: "1960s", label: "Bắt đầu từ năm", icon: "📅" },
+              { num: "100%", label: "Làm thủ công", icon: "🤲" },
+              {
+                num: "Bình Định",
+                label: "Chợ Huyện, Phù Cát",
+                icon: "📍",
+              },
             ].map((s) => (
               <div
                 key={s.label}
@@ -62,49 +74,64 @@ export default function AboutPage() {
 
       {/* ── Story section ── */}
       <section className="py-24 px-4 md:px-6 bg-white">
-        <div className="container mx-auto max-w-4xl">
-          <div className="prose prose-lg prose-slate max-w-none">
-            <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 rounded-full px-4 py-1.5 mb-6 not-prose inline-flex">
-              <MapPin className="w-3.5 h-3.5 mr-1.5" />
-              Chợ Huyện, Phù Cát, Bình Định
-            </Badge>
-
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8 not-prose leading-tight">
-              Lò bếp không bao giờ tắt
-              <br />
-              <span className="text-[#3a7851]">từ năm 1960.</span>
-            </h2>
-
-            <div className="space-y-6 text-slate-600 text-lg leading-relaxed">
-              <p>
-                Bà nội của chúng tôi bắt đầu làm nem chả từ những năm 1960 tại
-                chợ Phù Cát. Thời đó, chưa có máy móc, chưa có túi hút chân
-                không — chỉ có đôi tay, chiếc cối đá và niềm đam mê với hương vị
-                quê hương.
-              </p>
-              <p>
-                Đến thế hệ thứ hai, mẹ chúng tôi tiếp nối và mở rộng thêm các
-                dòng sản phẩm hải sản khô từ biển Quy Nhơn — mực ngào, cá cơm,
-                tôm khô. Tất cả đều được tẩm ướp và phơi sấy hoàn toàn thủ công
-                theo mùa.
-              </p>
-              <p>
-                Hôm nay, thế hệ thứ ba của chúng tôi mang lò bếp đó lên internet
-                — không để công nghiệp hóa, mà để nhiều người hơn được thưởng
-                thức vị ngon thuần khiết từ vùng đất Xứ Nẫu.
-              </p>
+        <div className="container mx-auto max-w-5xl">
+          <div className="grid md:grid-cols-5 gap-12 items-start">
+            {/* Image */}
+            <div className="md:col-span-2 relative">
+              <div className="aspect-4/5 bg-[#2a5c3e] rounded-[2.5rem] overflow-hidden shadow-2xl ring-1 ring-white/10 relative">
+                <Image
+                  src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/chen-tre.jpg"
+                  alt="Tré Bà Liên"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-4 -right-4 bg-white rounded-2xl px-5 py-3 shadow-xl border border-slate-100">
+                <p className="text-2xl font-bold text-[#3a7851]">❤️</p>
+                <p className="text-slate-500 text-xs font-medium">
+                  Từ đam mê nấu ăn
+                </p>
+              </div>
             </div>
 
-            {/* Pull quote */}
-            <div className="my-12 border-l-4 border-[#3a7851] pl-8 not-prose">
-              <Quote className="w-8 h-8 text-emerald-300 mb-3" />
-              <p className="text-2xl font-medium text-slate-800 italic leading-relaxed">
-                "Mỗi lọn tré, mỗi chiếc nem đều có linh hồn của người làm ra nó.
-                Chúng tôi không bán hàng loạt vì đó là điều bà nội dặn."
-              </p>
-              <p className="text-slate-500 text-sm mt-4 font-medium">
-                — Người sáng lập, thế hệ thứ ba
-              </p>
+            {/* Text */}
+            <div className="md:col-span-3">
+              <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 rounded-full px-4 py-1.5 mb-6 inline-flex">
+                <MapPin className="w-3.5 h-3.5 mr-1.5" />
+                Quy Nhơn, Bình Định
+              </Badge>
+
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8 leading-tight">
+                Ăn Sao <span className="text-[#3a7851]">Bán Vậy.</span>
+              </h2>
+
+              <div className="space-y-5 text-slate-600 text-base leading-relaxed italic">
+                <p>
+                  Là một người sinh ra và lớn lên tại Bình Định và Tré là một
+                  món ăn truyền thống. Tôi đã tự mình tìm tòi, học hỏi cách làm.
+                  Tôi dần cải tiến công thức theo cách riêng, giữ nguyên cái hồn
+                  truyền thống nhưng tinh chỉnh để phù hợp với khẩu vị nhiều
+                  người hơn.
+                </p>
+                <p>
+                  Nguyên tắc của tôi rất đơn giản:{" "}
+                  <strong className="text-slate-800 not-italic">
+                    mình ăn sao thì bán cho khách vậy
+                  </strong>
+                  .
+                </p>
+              </div>
+
+              {/* Attribution */}
+              <div className="mt-10 border-l-4 border-[#3a7851] pl-6">
+                <Quote className="w-6 h-6 text-emerald-300 mb-3" />
+                <p className="text-lg font-semibold text-slate-800">
+                  Đoàn Thị Bích Liên
+                </p>
+                <p className="text-slate-500 text-sm mt-1 font-medium">
+                  Người sáng lập Tré Bà Liên
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -115,32 +142,29 @@ export default function AboutPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Điều chúng tôi tin
+              Ba nguyên tắc không bao giờ thay đổi.
             </h2>
-            <p className="text-slate-500 text-lg max-w-xl mx-auto">
-              Những giá trị cốt lõi không thay đổi qua ba thế hệ.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 icon: <Leaf className="h-7 w-7" />,
-                title: "Thuần tự nhiên",
-                desc: "Không hàn the. Không phụ gia. Không chất bảo quản công nghiệp. Mọi hương vị đến từ nguyên liệu tươi và quy trình lên men tự nhiên.",
+                title: "Nói không với phụ gia",
+                desc: "Không hàn the. Không chất bảo quản. Không phẩm màu. Vị tré đến từ lên men tự nhiên bằng lá ổi — đúng cách của bà xưa.",
                 color: "emerald",
               },
               {
                 icon: <ShieldCheck className="h-7 w-7" />,
-                title: "Minh bạch tuyệt đối",
-                desc: "Chúng tôi biết tên người bán thịt, biết con thuyền nào đánh bắt mực. Sự minh bạch là cam kết không phải slogan.",
+                title: "Nguyên liệu chất lượng",
+                desc: "Tai heo, bì heo lấy từ lò mổ quen, sả riềng tỏi mua sáng dùng sáng. Không dùng đồ đông lạnh, không dùng hàng tồn.",
                 color: "teal",
                 offset: true,
               },
               {
                 icon: <HeartHandshake className="h-7 w-7" />,
-                title: "Tôn vinh nghề cũ",
-                desc: "Kỹ thuật giã tay, bọc lá ổi, buộc rơm — những thao tác tưởng lỗi thời này chính là bí quyết tạo ra hương vị không máy nào làm được.",
+                title: "Ăn sao bán vậy",
+                desc: "Mỗi phần Tré đều được làm cẩn thận, tỉ mỉ, đảm bảo chất lượng.",
                 color: "emerald",
               },
             ].map((v) => (
@@ -149,7 +173,7 @@ export default function AboutPage() {
                 className={`bg-white border border-slate-100 hover:border-emerald-200 rounded-[2rem] p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group ${v.offset ? "md:mt-8" : ""}`}
               >
                 <div
-                  className={`h-14 w-14 rounded-2xl flex items-center justify-center mb-6 text-${v.color}-600 bg-${v.color}-50 border border-${v.color}-100 group-hover:bg-${v.color}-600 group-hover:text-white group-hover:border-transparent transition-all duration-300`}
+                  className={`h-14 w-14 rounded-2xl flex items-center justify-center mb-6 text-${v.color}-600 bg-${v.color}-50 border border-${v.color}-100 group-hover:bg-${v.color}-600 group-hover:text-black group-hover:border-transparent transition-all duration-300`}
                 >
                   {v.icon}
                 </div>
@@ -177,22 +201,46 @@ export default function AboutPage() {
                 Thử một lần, nhớ mãi mãi.
               </h2>
               <p className="text-emerald-200 text-lg mb-8 max-w-lg mx-auto">
-                Đặt hàng ngay hôm nay và cảm nhận sự khác biệt của đặc sản thủ
-                công Bình Định.
+                Đặt hàng ngay hôm nay và cảm nhận sự khác biệt của tré thủ công
+                Bình Định chính gốc.
               </p>
-              <a
-                href={CONTACT_INFO.ZALO}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="lg"
-                  className="h-13 px-10 rounded-full bg-white text-[#0068FF] hover:bg-blue-50 font-bold shadow-xl hover:scale-105 transition-all gap-2"
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a
+                  href={CONTACT_INFO.ZALO}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  💬 Đặt mua qua Zalo
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </a>
+                  <Button
+                    size="lg"
+                    className="h-13 px-10 rounded-full bg-[#0068FF] text-white hover:bg-[#0055d4] font-bold shadow-xl hover:scale-105 transition-all gap-2 w-full sm:w-auto"
+                  >
+                    <ZaloIcon />
+                    Zalo
+                  </Button>
+                </a>
+                <a
+                  href={CONTACT_INFO.FACEBOOK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    size="lg"
+                    className="h-13 px-10 rounded-full bg-[#1877F2] text-white hover:bg-[#1466d8] font-bold shadow-xl hover:scale-105 transition-all gap-2 w-full sm:w-auto"
+                  >
+                    <Facebook className="h-5 w-5" />
+                    Facebook
+                  </Button>
+                </a>
+                <a href={`mailto:${CONTACT_INFO.EMAIL}`}>
+                  <Button
+                    size="lg"
+                    className="h-13 px-10 rounded-full bg-white/15 text-white hover:bg-white/25 border border-white/30 font-bold shadow-xl hover:scale-105 transition-all gap-2 w-full sm:w-auto"
+                  >
+                    <Mail className="h-5 w-5" />
+                    Email
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
         </div>

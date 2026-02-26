@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -116,7 +115,7 @@ export default async function Home() {
             {/* Social proof strip */}
             <div className="flex items-center gap-6 mt-12 pt-8 border-t border-slate-200/60 w-full">
               {[
-                { value: "Gia truyền", label: "3 thế hệ" },
+                { value: "Đam mê", label: "Từ tâm huyết" },
                 { value: "100%", label: "Thủ công" },
                 { value: "Toàn quốc", label: "Giao hỏa tốc" },
               ].map((stat) => (
@@ -272,11 +271,9 @@ export default async function Home() {
               {/* Floating stat card */}
               <div className="absolute -bottom-6 -left-4 md:-left-10 bg-linear-to-br from-amber-50 to-orange-100 border border-white/20 text-white p-5 rounded-3xl shadow-2xl w-[220px]">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="font-bold text-3xl text-amber-600">3</span>
+                  <span className="font-bold text-3xl text-amber-600">❤️</span>
                   <div>
-                    <p className="text-amber-600 font-semibold">
-                      Thế hệ gia truyền
-                    </p>
+                    <p className="text-amber-600 font-semibold">Từ tâm huyết</p>
                     <p className="text-amber-600 text-xs">
                       Chợ Huyện, Bình Định
                     </p>
@@ -502,7 +499,7 @@ export default async function Home() {
               <p className="text-amber-100/70 text-base leading-relaxed mb-8 max-w-md">
                 Lên men tự nhiên bằng{" "}
                 <strong className="text-amber-200">lá ổi, rơm rạ</strong> —
-                không hàn the, không chất bảo quản. Công thức 3 thế hệ giữ trọn
+                không hàn the, không chất bảo quản. Công thức tâm huyết giữ trọn
                 vị chua thanh, dai giòn đặc trưng của miền Trung.
               </p>
 
