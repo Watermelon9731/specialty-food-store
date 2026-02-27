@@ -1,4 +1,3 @@
-
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -63,9 +62,13 @@ export async function POST(request: Request) {
       origin,
       shelfLifeDays,
       categoryId,
+      slug,
+      isFeatured,
+      img,
+      note,
     } = body;
 
-    if (!name || !sku || !pricePerUnit || !unitType || !categoryId) {
+    if (!name || !sku || !slug || !pricePerUnit || !unitType || !categoryId) {
       return NextResponse.json(
         { success: false, error: "Thiếu thông tin bắt buộc" },
         { status: 400 },
@@ -84,6 +87,10 @@ export async function POST(request: Request) {
         origin: origin || "Việt Nam",
         shelfLifeDays: Number(shelfLifeDays) || 365,
         categoryId,
+        slug,
+        isFeatured: !!isFeatured,
+        img: img || null,
+        note: note || null,
       })
       .select("*, category:Category(id, name)")
       .single();
@@ -134,6 +141,11 @@ export async function PATCH(request: Request) {
       updateData.shelfLifeDays = Number(updates.shelfLifeDays);
     if (updates.categoryId !== undefined)
       updateData.categoryId = updates.categoryId;
+    if (updates.slug !== undefined) updateData.slug = updates.slug;
+    if (updates.isFeatured !== undefined)
+      updateData.isFeatured = updates.isFeatured;
+    if (updates.img !== undefined) updateData.img = updates.img;
+    if (updates.note !== undefined) updateData.note = updates.note;
 
     const { data: product, error } = await db
       .from("Product")

@@ -5,15 +5,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, Star, MapPin, Check } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { useState, useCallback } from "react";
+import Image from "next/image";
+import { PATH } from "@/constants/path";
 
 type ProductProps = {
   id: string;
+  slug: string;
   name: string;
   pricePerUnit: number;
   unitType: string;
   stockQuantity?: number;
   origin?: string | null;
   category?: { name: string };
+  img?: string | null;
+  note?: string | null;
 };
 
 function formatVND(amount: number) {
@@ -52,7 +57,7 @@ function ProductCard({
         price: product.pricePerUnit,
         quantity: 1,
         unitType: product.unitType,
-        image: `/images/products/${product.id}.jpg`,
+        image: product.img || `/images/products/${product.id}.jpg`,
         stock: product.stockQuantity ?? 999,
       });
 
@@ -77,26 +82,20 @@ function ProductCard({
       {/* ── Image area ── */}
       <div className="relative aspect-square bg-[#f5f3ef] overflow-hidden">
         <Link
-          href={`/products/${product.id}`}
+          href={PATH.PRODUCTS.DETAIL(product.slug)}
           className="absolute inset-0 z-10"
           aria-label={`Xem ${product.name}`}
         />
 
         {/* Placeholder / actual image */}
         <img
-          src={`/images/products/${product.id}.jpg`}
+          src={product?.img || undefined}
           alt={product.name}
           onError={(e) => {
-            // Fallback to an emoji-based placeholder bg if image missing
             (e.target as HTMLImageElement).style.display = "none";
           }}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
         />
-
-        {/* Fallback illustration when image is missing */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
-          <span className="text-7xl select-none">🥩</span>
-        </div>
 
         {/* Top badges row */}
         <div className="absolute top-3 left-3 right-3 z-20 flex items-start justify-between gap-2 pointer-events-none">
@@ -157,11 +156,16 @@ function ProductCard({
         )}
 
         {/* Name */}
-        <Link href={`/products/${product.id}`}>
-          <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-[#3a7851] transition-colors duration-200 line-clamp-2 mb-3">
+        <Link href={PATH.PRODUCTS.DETAIL(product.slug)}>
+          <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-[#3a7851] transition-colors duration-200 line-clamp-2 mb-1">
             {product.name}
           </h3>
         </Link>
+        {product.note && (
+          <p className="text-xs text-amber-600 font-medium italic mb-2">
+            {product.note}
+          </p>
+        )}
 
         {/* Rating row (decorative for now) */}
         <div className="flex items-center gap-1 mb-3">

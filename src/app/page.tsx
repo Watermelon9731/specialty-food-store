@@ -28,15 +28,20 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const products = await getProductsService();
 
-  const featuredProducts = products.slice(0, 4).map((p) => ({
-    id: p.id,
-    name: p.name,
-    pricePerUnit: Number(p.pricePerUnit),
-    unitType: p.unitType,
-    stockQuantity: p.stockQuantity,
-    origin: p.origin,
-    category: p.category ? { name: p.category.name } : undefined,
-  }));
+  const featuredProducts = products
+    .filter((p) => p.isFeatured)
+    .map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      name: p.name,
+      pricePerUnit: Number(p.pricePerUnit),
+      unitType: p.unitType,
+      stockQuantity: p.stockQuantity,
+      origin: p.origin,
+      category: p.category ? { name: p.category.name } : undefined,
+      note: p.note,
+      img: p.img,
+    }));
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f8f7f4] text-slate-800 overflow-hidden selection:bg-emerald-200">
@@ -92,7 +97,7 @@ export default async function Home() {
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <Link href={PATH.PRODUCTS}>
+              <Link href={PATH.PRODUCTS.ALL}>
                 <Button
                   size="lg"
                   className="h-14 px-8 rounded-full bg-[#3a7851] hover:bg-[#2f6342] text-white text-base font-semibold shadow-lg shadow-[#3a7851]/25 hover:-translate-y-0.5 transition-all duration-200"
@@ -415,7 +420,7 @@ export default async function Home() {
                 Đặc sản nổi bật
               </h2>
             </div>
-            <Link href={PATH.PRODUCTS}>
+            <Link href={PATH.PRODUCTS.ALL}>
               <Button
                 variant="outline"
                 className="rounded-full border-[#3a7851] text-[#3a7851] hover:bg-[#3a7851] hover:text-white px-7 h-11 font-semibold transition-all duration-200"

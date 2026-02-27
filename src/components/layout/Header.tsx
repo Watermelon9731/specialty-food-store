@@ -17,7 +17,7 @@ import BrandLogo from "../brand-logo/BrandLogo";
 import ZaloIcon from "../icons/ZaloIcon";
 
 const NAV_LINKS = [
-  { href: PATH.PRODUCTS, label: "Sản phẩm" },
+  { href: PATH.PRODUCTS.ALL, label: "Sản phẩm" },
   { href: PATH.CATEGORIES, label: "Danh mục" },
   { href: PATH.ABOUT, label: "Về chúng tôi" },
   { href: PATH.CONTACT, label: "Liên hệ" },

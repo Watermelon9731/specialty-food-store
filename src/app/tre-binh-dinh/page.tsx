@@ -965,7 +965,7 @@ export default function TrePage() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </a>
-                <Link href={PATH.PRODUCTS}>
+                <Link href={PATH.PRODUCTS.ALL}>
                   <Button
                     size="lg"
                     variant="outline"

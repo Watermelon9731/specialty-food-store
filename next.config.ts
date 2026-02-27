@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       { source: "/san-pham", destination: "/products" },
+      { source: "/san-pham/:slug", destination: "/products/:slug" },
       { source: "/danh-muc", destination: "/categories" },
       { source: "/gioi-thieu", destination: "/about" },
       { source: "/lien-he", destination: "/contact" },

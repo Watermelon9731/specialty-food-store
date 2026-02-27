@@ -78,6 +78,7 @@ export type ProductCategory = {
 export type Product = {
   id: string;
   sku: string;
+  slug: string;
   name: string;
   description?: string | null;
   pricePerUnit: number;
@@ -88,12 +89,16 @@ export type Product = {
   isDeleted: boolean;
   categoryId: string;
   category: ProductCategory;
+  isFeatured: boolean;
+  img: string | null;
+  note: string | null;
   createdAt: string;
   updatedAt: string;
 };
 
 export type CreateProductPayload = {
   sku: string;
+  slug: string;
   name: string;
   description?: string;
   pricePerUnit: number;
@@ -102,6 +107,9 @@ export type CreateProductPayload = {
   origin?: string;
   shelfLifeDays?: number;
   categoryId: string;
+  isFeatured?: boolean;
+  img?: string | null;
+  note?: string | null;
 };
 
 export type UpdateProductPayload = Partial<CreateProductPayload> & {

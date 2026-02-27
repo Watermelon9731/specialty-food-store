@@ -21,6 +21,16 @@ export const getProductBySku = async (sku: string) => {
   return data;
 };
 
+export const getProductBySlug = async (slug: string) => {
+  const { data, error } = await db
+    .from("Product")
+    .select("*, category:Category(*)")
+    .eq("slug", slug)
+    .single();
+  if (error) return null;
+  return data;
+};
+
 export const createProduct = async (data: ProductInput) => {
   const { data: product, error } = await db
     .from("Product")

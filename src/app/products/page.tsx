@@ -1,4 +1,3 @@
-
 import { getProductsService } from "@/server/products/service";
 import { getCategoriesService } from "@/server/categories/service";
 import { ProductGrid } from "@/components/product/ProductGrid";
@@ -33,12 +32,15 @@ export default async function ProductsPage({
 
   const formatted = filteredProducts.map((p) => ({
     id: p.id,
+    slug: p.slug,
     name: p.name,
     pricePerUnit: Number(p.pricePerUnit),
     unitType: p.unitType,
     stockQuantity: p.stockQuantity,
     origin: p.origin,
     category: p.category ? { name: p.category.name } : undefined,
+    note: p.note,
+    img: p.img,
   }));
 
   return (

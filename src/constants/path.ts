@@ -1,6 +1,9 @@
 export const PATH = {
   HOME: "/",
-  PRODUCTS: "/san-pham",
+  PRODUCTS: {
+    ALL: "/san-pham",
+    DETAIL: (slug: string) => `/san-pham/${slug}`,
+  },
   CATEGORIES: "/danh-muc",
   ABOUT: "/gioi-thieu",
   CONTACT: "/lien-he",

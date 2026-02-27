@@ -1,8 +1,17 @@
-import { createProduct, getProductBySku, getProducts } from "./repo";
+import {
+  createProduct,
+  getProductBySku,
+  getProductBySlug,
+  getProducts,
+} from "./repo";
 import { type ProductInput } from "./schemas";
 
 export const getProductsService = async () => {
   return await getProducts();
+};
+
+export const getProductBySlugService = async (slug: string) => {
+  return await getProductBySlug(slug);
 };
 
 export const getProductBySkuService = async (sku: string) => {

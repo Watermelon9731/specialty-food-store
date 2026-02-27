@@ -67,6 +67,7 @@ const PAGE_SIZE = 20;
 // ─── Blank form ───
 const BLANK: CreateProductPayload = {
   sku: "",
+  slug: "",
   name: "",
   description: "",
   pricePerUnit: 0,
@@ -75,6 +76,9 @@ const BLANK: CreateProductPayload = {
   origin: "Việt Nam",
   shelfLifeDays: 365,
   categoryId: "",
+  isFeatured: false,
+  img: "",
+  note: "",
 };
 
 export default function InventoryPage() {
@@ -147,6 +151,7 @@ export default function InventoryPage() {
     setEditProduct(product);
     setForm({
       sku: product.sku,
+      slug: product.slug,
       name: product.name,
       description: product.description ?? "",
       pricePerUnit: product.pricePerUnit,
@@ -155,6 +160,9 @@ export default function InventoryPage() {
       origin: product.origin,
       shelfLifeDays: product.shelfLifeDays,
       categoryId: product.categoryId,
+      isFeatured: !!product.isFeatured,
+      img: product.img ?? "",
+      note: product.note ?? "",
     });
     setFormError(null);
     setDialogOpen(true);
@@ -177,11 +185,14 @@ export default function InventoryPage() {
       >,
     ) => {
       const numberFields = ["pricePerUnit", "stockQuantity", "shelfLifeDays"];
+      const isCheckbox = e.target.type === "checkbox";
       setForm((prev) => ({
         ...prev,
-        [field]: numberFields.includes(field)
-          ? Number(e.target.value)
-          : e.target.value,
+        [field]: isCheckbox
+          ? (e.target as HTMLInputElement).checked
+          : numberFields.includes(field)
+            ? Number(e.target.value)
+            : e.target.value,
       }));
     };
 
@@ -248,6 +259,29 @@ export default function InventoryPage() {
                       required
                     />
                   </FormField>
+                  <FormField label="Đường dẫn (Slug)" required>
+                    <Input
+                      id="slug"
+                      value={form.slug}
+                      onChange={handleField("slug")}
+                      placeholder="mit-say-kho"
+                      className="h-10 rounded-xl"
+                      required
+                    />
+                  </FormField>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <FormField label="Tên sản phẩm" required>
+                    <Input
+                      id="name"
+                      value={form.name}
+                      onChange={handleField("name")}
+                      placeholder="Mít sấy khô"
+                      className="h-10 rounded-xl"
+                      required
+                    />
+                  </FormField>
                   <FormField label="Đơn vị" required>
                     <div className="flex gap-2">
                       {["g", "chiếc", "cây"].map((unit) => (
@@ -269,17 +303,6 @@ export default function InventoryPage() {
                   </FormField>
                 </div>
 
-                <FormField label="Tên sản phẩm" required>
-                  <Input
-                    id="name"
-                    value={form.name}
-                    onChange={handleField("name")}
-                    placeholder="Mít sấy khô"
-                    className="h-10 rounded-xl"
-                    required
-                  />
-                </FormField>
-
                 <FormField label="Mô tả">
                   <textarea
                     id="description"
@@ -288,6 +311,26 @@ export default function InventoryPage() {
                     placeholder="Mô tả ngắn về sản phẩm..."
                     rows={2}
                     className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm shadow-xs resize-none focus:outline-none focus:ring-1 focus:ring-ring"
+                  />
+                </FormField>
+
+                <FormField label="Ghi chú thẻ sản phẩm (Ví dụ: Best Seller)">
+                  <Input
+                    id="note"
+                    value={form.note || ""}
+                    onChange={handleField("note")}
+                    placeholder="Món bán chạy nhất..."
+                    className="h-10 rounded-xl"
+                  />
+                </FormField>
+
+                <FormField label="URL Hình ảnh">
+                  <Input
+                    id="img"
+                    value={form.img || ""}
+                    onChange={handleField("img")}
+                    placeholder="https://example.com/image.png"
+                    className="h-10 rounded-xl"
                   />
                 </FormField>
 
@@ -360,6 +403,23 @@ export default function InventoryPage() {
                     ))}
                   </select>
                 </FormField>
+
+                {/* isFeatured toggle */}
+                <div className="flex items-center gap-2 mt-2">
+                  <input
+                    type="checkbox"
+                    id="isFeatured"
+                    checked={form.isFeatured || false}
+                    onChange={handleField("isFeatured")}
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+                  />
+                  <Label
+                    htmlFor="isFeatured"
+                    className="text-sm cursor-pointer"
+                  >
+                    Sản phẩm nổi bật (Hiển thị trang chủ)
+                  </Label>
+                </div>
 
                 {formError && (
                   <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-2.5">

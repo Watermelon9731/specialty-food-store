@@ -13,6 +13,7 @@ export interface Database {
         Row: {
           id: string;
           sku: string;
+          slug: string;
           name: string;
           description: string | null;
           pricePerUnit: number;
@@ -24,10 +25,14 @@ export interface Database {
           createdAt: string;
           updatedAt: string;
           categoryId: string;
+          isFeatured: boolean;
+          img: string | null;
+          note: string | null;
         };
         Insert: {
           id?: string;
           sku: string;
+          slug: string;
           name: string;
           description?: string | null;
           pricePerUnit: number;
@@ -39,10 +44,14 @@ export interface Database {
           createdAt?: string;
           updatedAt?: string;
           categoryId: string;
+          isFeatured?: boolean;
+          img?: string | null;
+          note?: string | null;
         };
         Update: {
           id?: string;
           sku?: string;
+          slug?: string;
           name?: string;
           description?: string | null;
           pricePerUnit?: number;
@@ -53,6 +62,9 @@ export interface Database {
           isDeleted?: boolean;
           updatedAt?: string;
           categoryId?: string;
+          isFeatured?: boolean;
+          img?: string | null;
+          note?: string | null;
         };
         Relationships: [
           {
