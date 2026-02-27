@@ -28,10 +28,10 @@ export const PATH = {
 
 export const CONTACT_INFO = {
   PHONE_CODE: "+84",
-  PHONE: "359668896",
-  EMAIL: "lienhe@trebinhdinh.com",
+  PHONE: process.env.NEXT_PUBLIC_PHONE_NUMBER || "939062018",
+  EMAIL: process.env.NEXT_PUBLIC_EMAIL || "lienhe@trebinhdinh.com",
   ADDRESS: "Thành phố Quy Nhơn, Tỉnh Bình Định | Phường Quy Nhơn, Tỉnh Gia Lai",
   FACEBOOK: "https://www.facebook.com/profile.php?id=61587786952919",
   FACEBOOK_MESSENGER: "https://m.me/61587786952919",
-  ZALO: "https://zalo.me/359668896",
+  ZALO: process.env.NEXT_PUBLIC_ZALO_URL || "https://zalo.me/0939062018",
 };
