@@ -8,6 +8,7 @@ import { MapPin, ChefHat, ShieldCheck, Clock, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { PATH } from "@/constants/path";
 import { ProductGrid } from "@/components/product/ProductGrid";
+import { ProductGallery } from "./ProductGallery";
 
 export const dynamic = "force-dynamic";
 
@@ -67,18 +68,14 @@ export default async function ProductDetailPage({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start mb-24">
-          {/* Left: Image Container */}
-          <div className="relative aspect-square w-full bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-sm group">
-            <img
-              src={product.img || undefined}
-              alt={product.name}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          {/* Left: Image Gallery */}
+          <div className="w-full">
+            <ProductGallery
+              img={product.img}
+              images={product.images}
+              name={product.name}
+              note={product.note}
             />
-            {product.note && (
-              <span className="absolute top-6 left-6 z-10 bg-amber-500 text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-md">
-                {product.note}
-              </span>
-            )}
           </div>
 
           {/* Right: Product Details */}

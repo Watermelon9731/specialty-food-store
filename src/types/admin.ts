@@ -91,6 +91,7 @@ export type Product = {
   category: ProductCategory;
   isFeatured: boolean;
   img: string | null;
+  images: string[] | null;
   note: string | null;
   createdAt: string;
   updatedAt: string;
@@ -109,6 +110,7 @@ export type CreateProductPayload = {
   categoryId: string;
   isFeatured?: boolean;
   img?: string | null;
+  images?: string[] | null;
   note?: string | null;
 };
 

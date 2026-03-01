@@ -27,6 +27,7 @@ export interface Database {
           categoryId: string;
           isFeatured: boolean;
           img: string | null;
+          images: string[] | null;
           note: string | null;
         };
         Insert: {
@@ -46,6 +47,7 @@ export interface Database {
           categoryId: string;
           isFeatured?: boolean;
           img?: string | null;
+          images?: string[] | null;
           note?: string | null;
         };
         Update: {
@@ -64,6 +66,7 @@ export interface Database {
           categoryId?: string;
           isFeatured?: boolean;
           img?: string | null;
+          images?: string[] | null;
           note?: string | null;
         };
         Relationships: [

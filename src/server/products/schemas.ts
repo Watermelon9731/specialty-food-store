@@ -13,6 +13,10 @@ export const ProductSchema = z.object({
   categoryId: z.string().min(1, "Category is required"),
   isFeatured: z.boolean().default(false),
   img: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  images: z
+    .array(z.string().url("Must be a valid URL").or(z.literal("")))
+    .optional()
+    .default([]),
   note: z.string().optional().or(z.literal("")),
 });
 

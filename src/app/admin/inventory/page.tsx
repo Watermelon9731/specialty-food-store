@@ -78,6 +78,7 @@ const BLANK: CreateProductPayload = {
   categoryId: "",
   isFeatured: false,
   img: "",
+  images: [],
   note: "",
 };
 
@@ -162,6 +163,7 @@ export default function InventoryPage() {
       categoryId: product.categoryId,
       isFeatured: !!product.isFeatured,
       img: product.img ?? "",
+      images: product.images ?? [],
       note: product.note ?? "",
     });
     setFormError(null);
@@ -184,6 +186,17 @@ export default function InventoryPage() {
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
       >,
     ) => {
+      if (field === "images") {
+        setForm((prev) => ({
+          ...prev,
+          images: e.target.value
+            .split("\n")
+            .map((s) => s.trim())
+            .filter(Boolean),
+        }));
+        return;
+      }
+
       const numberFields = ["pricePerUnit", "stockQuantity", "shelfLifeDays"];
       const isCheckbox = e.target.type === "checkbox";
       setForm((prev) => ({
@@ -324,15 +337,27 @@ export default function InventoryPage() {
                   />
                 </FormField>
 
-                <FormField label="URL Hình ảnh">
-                  <Input
-                    id="img"
-                    value={form.img || ""}
-                    onChange={handleField("img")}
-                    placeholder="https://example.com/image.png"
-                    className="h-10 rounded-xl"
-                  />
-                </FormField>
+                <div className="grid grid-cols-2 gap-3">
+                  <FormField label="URL Hình ảnh chính (Thumbnail)">
+                    <Input
+                      id="img"
+                      value={form.img || ""}
+                      onChange={handleField("img")}
+                      placeholder="https://example.com/image.png"
+                      className="h-10 rounded-xl"
+                    />
+                  </FormField>
+                  <FormField label="URL Các hình ảnh phụ (Mỗi dòng 1 link)">
+                    <textarea
+                      id="images"
+                      value={form.images?.join("\n") || ""}
+                      onChange={handleField("images")}
+                      placeholder="https://example.com/image1.png&#10;https://example.com/image2.png"
+                      rows={2}
+                      className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm shadow-xs resize-none focus:outline-none focus:ring-1 focus:ring-ring"
+                    />
+                  </FormField>
+                </div>
 
                 {/* Row: Price + Stock */}
                 <div className="grid grid-cols-2 gap-3">

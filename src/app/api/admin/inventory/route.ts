@@ -65,6 +65,7 @@ export async function POST(request: Request) {
       slug,
       isFeatured,
       img,
+      images,
       note,
     } = body;
 
@@ -90,6 +91,7 @@ export async function POST(request: Request) {
         slug,
         isFeatured: !!isFeatured,
         img: img || null,
+        images: Array.isArray(images) ? images : [],
         note: note || null,
       })
       .select("*, category:Category(id, name)")
@@ -145,6 +147,7 @@ export async function PATCH(request: Request) {
     if (updates.isFeatured !== undefined)
       updateData.isFeatured = updates.isFeatured;
     if (updates.img !== undefined) updateData.img = updates.img;
+    if (updates.images !== undefined) updateData.images = updates.images;
     if (updates.note !== undefined) updateData.note = updates.note;
 
     const { data: product, error } = await db
