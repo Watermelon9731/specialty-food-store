@@ -1,4 +1,3 @@
-
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -14,9 +13,10 @@ export async function POST(request: Request) {
         customerName,
         customerPhone,
         customerAddress,
-        productName,
+        orderDescription,
         amount,
-        status,
+        deliveryStatus,
+        paymentStatus,
         isDeleted,
       } = body;
       const orderNumber = `#${Math.floor(1000 + Math.random() * 9000)}`;
@@ -24,14 +24,18 @@ export async function POST(request: Request) {
       const { data: order, error } = await db
         .from("Order")
         .insert({
+          id: crypto.randomUUID(),
           orderNumber,
           customerName: customerName || "Unknown Customer",
           customerPhone: customerPhone || "N/A",
           customerAddress: customerAddress || "N/A",
-          productName: productName || "",
+          orderDescription: orderDescription || "",
           amount: amount ? Number(amount) : 0,
-          status: status || "processing",
+          deliveryStatus: deliveryStatus || "processing",
+          paymentStatus: paymentStatus || "unpaid",
           isDeleted: isDeleted || false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
         })
         .select()
         .single();
@@ -61,8 +65,11 @@ export async function POST(request: Request) {
       .order("createdAt", { ascending: false })
       .range((page - 1) * pageSize, page * pageSize - 1);
 
-    if (body.statuses?.length > 0) {
-      query = query.in("status", body.statuses);
+    if (body.deliveryStatuses?.length > 0) {
+      query = query.in("deliveryStatus", body.deliveryStatuses);
+    }
+    if (body.paymentStatuses?.length > 0) {
+      query = query.in("paymentStatus", body.paymentStatuses);
     }
     if (body.customerPhone) {
       query = query.eq("customerPhone", body.customerPhone);
@@ -78,8 +85,9 @@ export async function POST(request: Request) {
       customerName: o.customerName,
       customerPhone: o.customerPhone,
       customerAddress: o.customerAddress,
-      productName: o.productName,
-      status: o.status,
+      orderDescription: o.orderDescription,
+      deliveryStatus: o.deliveryStatus,
+      paymentStatus: o.paymentStatus,
       rawAmount: Number(o.amount),
       date: new Date(o.createdAt).toLocaleDateString("vi-VN", {
         month: "long",
@@ -99,10 +107,14 @@ export async function POST(request: Request) {
         totalPages: Math.ceil(total / pageSize),
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Orders API Error:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to process orders request" },
+      {
+        success: false,
+        error: error?.message || "Failed to process orders request",
+        stack: error?.stack,
+      },
       { status: 500 },
     );
   }
@@ -116,9 +128,10 @@ export async function PATCH(request: Request) {
       customerName,
       customerPhone,
       customerAddress,
-      productName,
+      orderDescription,
       amount,
-      status,
+      deliveryStatus,
+      paymentStatus,
     } = body;
     if (!id)
       return NextResponse.json(
@@ -131,9 +144,13 @@ export async function PATCH(request: Request) {
     if (customerPhone !== undefined) updateData.customerPhone = customerPhone;
     if (customerAddress !== undefined)
       updateData.customerAddress = customerAddress;
-    if (productName !== undefined) updateData.productName = productName;
+    if (orderDescription !== undefined)
+      updateData.orderDescription = orderDescription;
     if (amount !== undefined) updateData.amount = Number(amount);
-    if (status !== undefined) updateData.status = status;
+    if (deliveryStatus !== undefined)
+      updateData.deliveryStatus = deliveryStatus;
+    if (paymentStatus !== undefined) updateData.paymentStatus = paymentStatus;
+    updateData.updatedAt = new Date().toISOString();
 
     const { data: order, error } = await db
       .from("Order")

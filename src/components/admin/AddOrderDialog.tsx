@@ -13,12 +13,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { QUERY_KEY } from "@/constants/query-key/query-key";
 import { createOrder } from "@/services/admin.service";
-import type { CreateOrderPayload, OrderStatus } from "@/types/admin";
+import type {
+  CreateOrderPayload,
+  DeliveryStatus,
+  PaymentStatus,
+} from "@/types/admin";
 import { useQueryClient } from "@tanstack/react-query";
 import { MapPin, Package, Phone, User, Wallet } from "lucide-react";
 import { useState } from "react";
 
-const STATUS_OPTIONS: { value: OrderStatus; label: string; color: string }[] = [
+const DELIVERY_STATUS_OPTIONS: {
+  value: DeliveryStatus;
+  label: string;
+  color: string;
+}[] = [
   {
     value: "processing",
     label: "Đang xử lý",
@@ -26,14 +34,51 @@ const STATUS_OPTIONS: { value: OrderStatus; label: string; color: string }[] = [
       "border-slate-300 bg-slate-50 text-slate-700 data-[selected=true]:border-slate-600 data-[selected=true]:bg-slate-100 data-[selected=true]:ring-2 data-[selected=true]:ring-slate-400",
   },
   {
-    value: "paid",
-    label: "Đã thanh toán",
+    value: "delivering",
+    label: "Đang giao",
+    color:
+      "border-blue-300 bg-blue-50 text-blue-700 data-[selected=true]:border-blue-600 data-[selected=true]:bg-blue-100 data-[selected=true]:ring-2 data-[selected=true]:ring-blue-400",
+  },
+  {
+    value: "delivered",
+    label: "Đã giao",
     color:
       "border-green-300 bg-green-50 text-green-700 data-[selected=true]:border-green-600 data-[selected=true]:bg-green-100 data-[selected=true]:ring-2 data-[selected=true]:ring-green-400",
   },
   {
-    value: "unfulfilled",
-    label: "Chưa giao",
+    value: "returned",
+    label: "Hoàn trả",
+    color:
+      "border-orange-300 bg-orange-50 text-orange-700 data-[selected=true]:border-orange-500 data-[selected=true]:bg-orange-100 data-[selected=true]:ring-2 data-[selected=true]:ring-orange-400",
+  },
+  {
+    value: "cancelled",
+    label: "Đã hủy",
+    color:
+      "border-red-300 bg-red-50 text-red-700 data-[selected=true]:border-red-400 data-[selected=true]:bg-red-100 data-[selected=true]:ring-2 data-[selected=true]:ring-red-400",
+  },
+];
+
+const PAYMENT_STATUS_OPTIONS: {
+  value: PaymentStatus;
+  label: string;
+  color: string;
+}[] = [
+  {
+    value: "unpaid",
+    label: "Chưa thanh toán",
+    color:
+      "border-slate-300 bg-slate-50 text-slate-700 data-[selected=true]:border-slate-600 data-[selected=true]:bg-slate-100 data-[selected=true]:ring-2 data-[selected=true]:ring-slate-400",
+  },
+  {
+    value: "paid",
+    label: "Đã thanh toán",
+    color:
+      "border-emerald-300 bg-emerald-50 text-emerald-700 data-[selected=true]:border-emerald-600 data-[selected=true]:bg-emerald-100 data-[selected=true]:ring-2 data-[selected=true]:ring-emerald-400",
+  },
+  {
+    value: "refunded",
+    label: "Hoàn tiền",
     color:
       "border-orange-300 bg-orange-50 text-orange-700 data-[selected=true]:border-orange-500 data-[selected=true]:bg-orange-100 data-[selected=true]:ring-2 data-[selected=true]:ring-orange-400",
   },
@@ -43,9 +88,10 @@ const INITIAL_FORM: CreateOrderPayload = {
   customerName: "",
   customerPhone: "",
   customerAddress: "",
-  productName: "",
+  orderDescription: "",
   amount: 0,
-  status: "processing",
+  deliveryStatus: "processing",
+  paymentStatus: "unpaid",
 };
 
 export function AddOrderDialog({
@@ -188,20 +234,20 @@ export function AddOrderDialog({
                 Chi tiết đơn hàng
               </legend>
 
-              {/* Product */}
+              {/* Order Description */}
               <div className="flex flex-col gap-1.5">
                 <Label
-                  htmlFor="product-name"
+                  htmlFor="order-description"
                   className="text-sm font-medium flex items-center gap-1.5"
                 >
                   <Package className="h-3.5 w-3.5 text-muted-foreground" />
-                  Sản phẩm <span className="text-red-500">*</span>
+                  Sản phẩm/Mô tả <span className="text-red-500">*</span>
                 </Label>
                 <Input
-                  id="product-name"
-                  value={form.productName}
-                  onChange={handleChange("productName")}
-                  placeholder="Mít sấy khô 500g"
+                  id="order-description"
+                  value={form.orderDescription}
+                  onChange={handleChange("orderDescription")}
+                  placeholder="Mít sấy khô 500g, Xoài sấy 200g, v.v..."
                   className="h-11 rounded-xl"
                   required
                 />
@@ -245,15 +291,38 @@ export function AddOrderDialog({
 
               {/* Status pill selector */}
               <div className="flex flex-col gap-2">
-                <Label className="text-sm font-medium">Trạng thái</Label>
+                <Label className="text-sm font-medium">
+                  Trạng thái Giao hàng
+                </Label>
                 <div className="flex gap-2 flex-wrap">
-                  {STATUS_OPTIONS.map(({ value, label, color }) => (
+                  {DELIVERY_STATUS_OPTIONS.map(({ value, label, color }) => (
                     <button
                       key={value}
                       type="button"
-                      data-selected={form.status === value}
+                      data-selected={form.deliveryStatus === value}
                       onClick={() =>
-                        setForm((prev) => ({ ...prev, status: value }))
+                        setForm((prev) => ({ ...prev, deliveryStatus: value }))
+                      }
+                      className={`flex-1 min-w-[90px] rounded-xl border px-3 py-2 text-sm font-medium transition-all cursor-pointer ${color}`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Label className="text-sm font-medium">
+                  Trạng thái Thanh toán
+                </Label>
+                <div className="flex gap-2 flex-wrap">
+                  {PAYMENT_STATUS_OPTIONS.map(({ value, label, color }) => (
+                    <button
+                      key={value}
+                      type="button"
+                      data-selected={form.paymentStatus === value}
+                      onClick={() =>
+                        setForm((prev) => ({ ...prev, paymentStatus: value }))
                       }
                       className={`flex-1 min-w-[90px] rounded-xl border px-3 py-2 text-sm font-medium transition-all cursor-pointer ${color}`}
                     >

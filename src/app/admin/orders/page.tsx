@@ -37,7 +37,12 @@ import {
 } from "@/components/ui/table";
 import { QUERY_KEY } from "@/constants/query-key/query-key";
 import { deleteOrder, getOrders, updateOrder } from "@/services/admin.service";
-import type { Order, OrderStatus, UpdateOrderPayload } from "@/types/admin";
+import type {
+  Order,
+  DeliveryStatus,
+  PaymentStatus,
+  UpdateOrderPayload,
+} from "@/types/admin";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ChevronLeft,
@@ -62,20 +67,29 @@ function todayString() {
   return new Date().toISOString().split("T")[0];
 }
 
-const STATUS_OPTIONS: { value: OrderStatus; label: string }[] = [
+const DELIVERY_STATUS_OPTIONS: { value: DeliveryStatus; label: string }[] = [
   { value: "processing", label: "Đang xử lý" },
+  { value: "delivering", label: "Đang giao" },
+  { value: "delivered", label: "Đã giao" },
+  { value: "returned", label: "Hoàn trả" },
+  { value: "cancelled", label: "Đã hủy" },
+];
+
+const PAYMENT_STATUS_OPTIONS: { value: PaymentStatus; label: string }[] = [
+  { value: "unpaid", label: "Chưa thanh toán" },
   { value: "paid", label: "Đã thanh toán" },
-  { value: "unfulfilled", label: "Chưa giao" },
+  { value: "refunded", label: "Hoàn tiền" },
 ];
 
 export default function OrdersPage() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
-  const [activeFilters, setActiveFilters] = useState<OrderStatus[]>([
-    "paid",
-    "processing",
-    "unfulfilled",
-  ]);
+  const [activeDeliveryFilters, setActiveDeliveryFilters] = useState<
+    DeliveryStatus[]
+  >(["processing", "delivering"]);
+  const [activePaymentFilters, setActivePaymentFilters] = useState<
+    PaymentStatus[]
+  >(["paid", "unpaid"]);
   const [dateFrom, setDateFrom] = useState(defaultDateFrom());
   const [dateTo, setDateTo] = useState(todayString());
 
@@ -88,7 +102,8 @@ export default function OrdersPage() {
     queryKey: [
       ...QUERY_KEY.ADMIN.ORDERS,
       page,
-      activeFilters,
+      activeDeliveryFilters,
+      activePaymentFilters,
       dateFrom,
       dateTo,
     ],
@@ -96,7 +111,8 @@ export default function OrdersPage() {
       getOrders({
         page,
         pageSize: PAGE_SIZE,
-        statuses: activeFilters,
+        deliveryStatuses: activeDeliveryFilters,
+        paymentStatuses: activePaymentFilters,
         dateFrom,
         dateTo,
       }),
@@ -123,11 +139,20 @@ export default function OrdersPage() {
     onSuccess: () => invalidate(),
   });
 
-  const toggleFilter = (status: OrderStatus) => {
+  const toggleDeliveryFilter = (status: DeliveryStatus) => {
     setPage(1);
-    setActiveFilters((prev) =>
+    setActiveDeliveryFilters((prev) =>
       prev.includes(status)
-        ? (prev.filter((s) => s !== status) as OrderStatus[])
+        ? (prev.filter((s) => s !== status) as DeliveryStatus[])
+        : [...prev, status],
+    );
+  };
+
+  const togglePaymentFilter = (status: PaymentStatus) => {
+    setPage(1);
+    setActivePaymentFilters((prev) =>
+      prev.includes(status)
+        ? (prev.filter((s) => s !== status) as PaymentStatus[])
         : [...prev, status],
     );
   };
@@ -144,9 +169,10 @@ export default function OrdersPage() {
       customerName: order.customerName,
       customerPhone: order.customerPhone ?? "",
       customerAddress: order.customerAddress ?? "",
-      productName: order.productName ?? "",
+      orderDescription: order.orderDescription ?? "",
       amount: order.rawAmount ?? 0,
-      status: order.status,
+      deliveryStatus: order.deliveryStatus,
+      paymentStatus: order.paymentStatus,
     });
     setEditError(null);
   };
@@ -212,18 +238,30 @@ export default function OrdersPage() {
               <Button variant="outline" size="sm" className="h-8 gap-1">
                 <ListFilter className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Lọc
+                  Lọc trạng thái
                 </span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Lọc trạng thái</DropdownMenuLabel>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuLabel>Trạng thái Giao hàng</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {STATUS_OPTIONS.map(({ value, label }) => (
+              {DELIVERY_STATUS_OPTIONS.map(({ value, label }) => (
                 <DropdownMenuCheckboxItem
                   key={value}
-                  checked={activeFilters.includes(value)}
-                  onCheckedChange={() => toggleFilter(value)}
+                  checked={activeDeliveryFilters.includes(value)}
+                  onCheckedChange={() => toggleDeliveryFilter(value)}
+                >
+                  {label}
+                </DropdownMenuCheckboxItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Trạng thái Thanh toán</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {PAYMENT_STATUS_OPTIONS.map(({ value, label }) => (
+                <DropdownMenuCheckboxItem
+                  key={value}
+                  checked={activePaymentFilters.includes(value)}
+                  onCheckedChange={() => togglePaymentFilter(value)}
                 >
                   {label}
                 </DropdownMenuCheckboxItem>
@@ -295,10 +333,10 @@ export default function OrdersPage() {
                   className="h-10 rounded-xl"
                 />
               </EField>
-              <EField label="Sản phẩm">
+              <EField label="Sản phẩm/Mô tả">
                 <Input
-                  value={editForm.productName ?? ""}
-                  onChange={field("productName")}
+                  value={editForm.orderDescription ?? ""}
+                  onChange={field("orderDescription")}
                   placeholder="Mít sấy 500g"
                   className="h-10 rounded-xl"
                 />
@@ -319,13 +357,26 @@ export default function OrdersPage() {
                   </span>
                 </div>
               </EField>
-              <EField label="Trạng thái">
+              <EField label="Trạng thái Giao hàng">
                 <select
-                  value={editForm.status ?? "processing"}
-                  onChange={field("status")}
+                  value={editForm.deliveryStatus ?? "processing"}
+                  onChange={field("deliveryStatus")}
                   className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
                 >
-                  {STATUS_OPTIONS.map(({ value, label }) => (
+                  {DELIVERY_STATUS_OPTIONS.map(({ value, label }) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </EField>
+              <EField label="Trạng thái Thanh toán">
+                <select
+                  value={editForm.paymentStatus ?? "unpaid"}
+                  onChange={field("paymentStatus")}
+                  className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+                >
+                  {PAYMENT_STATUS_OPTIONS.map(({ value, label }) => (
                     <option key={value} value={value}>
                       {label}
                     </option>
@@ -387,7 +438,8 @@ export default function OrdersPage() {
                 <TableRow>
                   <TableHead className="w-[130px]">Đơn hàng</TableHead>
                   <TableHead>Khách hàng</TableHead>
-                  <TableHead>Trạng thái</TableHead>
+                  <TableHead>Giao hàng</TableHead>
+                  <TableHead>Thanh toán</TableHead>
                   <TableHead>Ngày</TableHead>
                   <TableHead className="text-right">Số tiền</TableHead>
                   <TableHead className="w-[50px]" />
@@ -408,7 +460,10 @@ export default function OrdersPage() {
                       )}
                     </TableCell>
                     <TableCell>
-                      <StatusBadge status={order.status} />
+                      <StatusBadge status={order.deliveryStatus} />
+                    </TableCell>
+                    <TableCell>
+                      <StatusBadge status={order.paymentStatus} />
                     </TableCell>
                     <TableCell>{order.date}</TableCell>
                     <TableCell className="text-right">{order.amount}</TableCell>
@@ -484,7 +539,10 @@ export default function OrdersPage() {
                     <span className="text-xs font-semibold tracking-widest text-slate-600 dark:text-slate-400">
                       {order.customerPhone}
                     </span>
-                    <StatusBadge status={order.status} small />
+                    <div className="flex gap-2">
+                      <StatusBadge status={order.deliveryStatus} small />
+                      <StatusBadge status={order.paymentStatus} small />
+                    </div>
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="pb-4">

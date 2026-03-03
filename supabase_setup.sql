@@ -6,7 +6,13 @@ ADD COLUMN IF NOT EXISTS "images" TEXT[] DEFAULT '{}',
 ADD COLUMN IF NOT EXISTS "note" TEXT,
 ADD COLUMN IF NOT EXISTS "slug" TEXT;
 
--- 2. Enable Row Level Security (RLS) for all relevant tables
+-- 2. Update Order table schema
+ALTER TABLE "Order" DROP COLUMN IF EXISTS "productId";
+ALTER TABLE "Order" RENAME COLUMN "productName" TO "orderDescription";
+ALTER TABLE "Order" RENAME COLUMN "status" TO "deliveryStatus";
+ALTER TABLE "Order" ADD COLUMN IF NOT EXISTS "paymentStatus" TEXT DEFAULT 'unpaid';
+
+-- 3. Enable Row Level Security (RLS) for all relevant tables
 ALTER TABLE "Product" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Category" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Order" ENABLE ROW LEVEL SECURITY;

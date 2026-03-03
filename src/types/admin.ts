@@ -1,6 +1,12 @@
 // Shared types for the admin domain
 
-export type OrderStatus = "paid" | "processing" | "unfulfilled";
+export type DeliveryStatus =
+  | "processing"
+  | "delivering"
+  | "delivered"
+  | "returned"
+  | "cancelled";
+export type PaymentStatus = "unpaid" | "paid" | "refunded";
 
 export type Order = {
   id: string;
@@ -8,8 +14,9 @@ export type Order = {
   customerName: string;
   customerPhone?: string;
   customerAddress?: string;
-  productName?: string;
-  status: OrderStatus;
+  orderDescription?: string;
+  deliveryStatus: DeliveryStatus;
+  paymentStatus: PaymentStatus;
   date: string;
   amount: string; // formatted string e.g. "85.000 VNĐ"
   rawAmount?: number; // raw number for edit form
@@ -20,22 +27,25 @@ export type UpdateOrderPayload = {
   customerName?: string;
   customerPhone?: string;
   customerAddress?: string;
-  productName?: string;
+  orderDescription?: string;
   amount?: number;
-  status?: OrderStatus;
+  deliveryStatus?: DeliveryStatus;
+  paymentStatus?: PaymentStatus;
 };
 
 export type CreateOrderPayload = {
   customerName: string;
   customerPhone: string;
   customerAddress?: string;
-  productName?: string;
+  orderDescription?: string;
   amount: number;
-  status?: OrderStatus;
+  deliveryStatus?: DeliveryStatus;
+  paymentStatus?: PaymentStatus;
 };
 
 export type GetOrdersParams = {
-  statuses?: OrderStatus[];
+  deliveryStatuses?: DeliveryStatus[];
+  paymentStatuses?: PaymentStatus[];
   page?: number;
   pageSize?: number;
   /** ISO date string, defaults to 6 months ago */

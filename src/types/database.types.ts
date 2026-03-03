@@ -141,10 +141,10 @@ export interface Database {
           customerName: string;
           customerPhone: string;
           customerAddress: string | null;
-          productName: string | null;
-          productId: string | null;
+          orderDescription: string | null;
           amount: number;
-          status: string;
+          deliveryStatus: string;
+          paymentStatus: string;
           isDeleted: boolean;
           createdAt: string;
           updatedAt: string;
@@ -155,10 +155,10 @@ export interface Database {
           customerName: string;
           customerPhone: string;
           customerAddress?: string | null;
-          productName?: string | null;
-          productId?: string | null;
+          orderDescription?: string | null;
           amount: number;
-          status?: string;
+          deliveryStatus?: string;
+          paymentStatus?: string;
           isDeleted?: boolean;
           createdAt?: string;
           updatedAt?: string;
@@ -168,22 +168,14 @@ export interface Database {
           customerName?: string;
           customerPhone?: string;
           customerAddress?: string | null;
-          productName?: string | null;
-          productId?: string | null;
+          orderDescription?: string | null;
           amount?: number;
-          status?: string;
+          deliveryStatus?: string;
+          paymentStatus?: string;
           isDeleted?: boolean;
           updatedAt?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: "Order_productId_fkey";
-            columns: ["productId"];
-            isOneToOne: false;
-            referencedRelation: "Product";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
     };
     Views: Record<string, never>;

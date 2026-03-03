@@ -290,7 +290,8 @@ function CustomerRow({
                   <TableRow className="bg-muted/30">
                     <TableHead className="text-xs">Mã ĐH</TableHead>
                     <TableHead className="text-xs">Sản phẩm</TableHead>
-                    <TableHead className="text-xs">Trạng thái</TableHead>
+                    <TableHead className="text-xs">Giao hàng</TableHead>
+                    <TableHead className="text-xs">Thanh toán</TableHead>
                     <TableHead className="text-xs">Ngày</TableHead>
                     <TableHead className="text-xs text-right">
                       Số tiền
@@ -303,11 +304,17 @@ function CustomerRow({
                       <TableCell className="font-mono font-medium text-xs">
                         {order.orderNumber}
                       </TableCell>
-                      <TableCell className="max-w-[180px] truncate">
-                        {order.productName || "—"}
+                      <TableCell
+                        className="max-w-[150px] truncate"
+                        title={order.orderDescription || ""}
+                      >
+                        {order.orderDescription || "—"}
                       </TableCell>
                       <TableCell>
-                        <StatusBadge status={order.status} small />
+                        <StatusBadge status={order.deliveryStatus} small />
+                      </TableCell>
+                      <TableCell>
+                        <StatusBadge status={order.paymentStatus} small />
                       </TableCell>
                       <TableCell className="text-muted-foreground">
                         {order.date}
@@ -333,13 +340,20 @@ function CustomerRow({
                       <span className="font-mono text-xs font-bold text-muted-foreground">
                         {order.orderNumber}
                       </span>
-                      <StatusBadge status={order.status} small />
+                      <div className="flex gap-1.5 ml-1">
+                        <StatusBadge status={order.deliveryStatus} small />
+                        <StatusBadge status={order.paymentStatus} small />
+                      </div>
                     </div>
-                    {order.productName && (
-                      <p className="text-xs text-muted-foreground flex items-center gap-1 truncate">
-                        <Package className="h-3 w-3 shrink-0" />{" "}
-                        {order.productName}
-                      </p>
+                    {order.orderDescription && (
+                      <div className="flex justify-between items-center bg-white dark:bg-slate-950 p-2.5 rounded-lg border">
+                        <span className="text-xs text-muted-foreground mr-2 whitespace-nowrap">
+                          Sp:
+                        </span>
+                        <span className="font-medium text-sm text-right leading-snug line-clamp-2">
+                          {order.orderDescription}
+                        </span>
+                      </div>
                     )}
                     <p className="text-xs text-muted-foreground">
                       {order.date}
