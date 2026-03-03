@@ -7,7 +7,7 @@ import {
   ShoppingCart,
   Plus,
   Package,
-  Settings,
+  Home,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AddOrderDialog } from "./AddOrderDialog";
@@ -16,17 +16,16 @@ export function MobileBottomNav() {
   const pathname = usePathname();
 
   const navItems = [
-    { href: "/admin", icon: LayoutDashboard, label: "Home" },
-    { href: "/admin/orders", icon: ShoppingCart, label: "Orders" },
+    { href: "/admin", icon: LayoutDashboard, label: "Tổng quan" },
+    { href: "/admin/orders", icon: ShoppingCart, label: "Đơn hàng" },
   ];
 
   const trailingNavItems = [
-    { href: "/admin/inventory", icon: Package, label: "Inventory" },
+    { href: "/admin/inventory", icon: Package, label: "Sản phẩm" },
     {
-      href: "/admin/settings",
-      icon: Settings,
-      label: "Settings",
-      disabled: true,
+      href: "/",
+      icon: Home,
+      label: "Cửa hàng",
     },
   ];
 
@@ -74,13 +73,12 @@ export function MobileBottomNav() {
           return (
             <Link
               key={item.href}
-              href={item.disabled ? "#" : item.href}
+              href={item.href}
               className={cn(
                 "flex flex-col items-center justify-center gap-1 min-w-12 transition-colors",
                 isActive
                   ? "text-blue-600"
                   : "text-gray-500 hover:text-gray-900",
-                item.disabled && "opacity-50 cursor-not-allowed",
               )}
             >
               <item.icon

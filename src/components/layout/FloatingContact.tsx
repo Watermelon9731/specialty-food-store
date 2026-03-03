@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Facebook, Mail } from "lucide-react";
 import { CONTACT_INFO } from "@/constants/path";
 import ZaloIcon from "../icons/ZaloIcon";
+import { usePathname } from "next/navigation";
 
 const CONTACT_CHANNELS = [
   {
@@ -37,6 +38,7 @@ const CONTACT_CHANNELS = [
 ];
 
 export function FloatingContact() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -66,6 +68,10 @@ export function FloatingContact() {
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
   }, []);
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <>

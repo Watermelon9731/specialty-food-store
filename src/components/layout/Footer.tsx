@@ -1,3 +1,6 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { CONTACT_INFO, PATH } from "@/constants/path";
 import { formatPhoneNumber } from "@/lib/utils";
 import {
@@ -34,6 +37,12 @@ const INFO_LINKS = [
 ];
 
 export function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <footer className="bg-[#1a3d2b] text-white">
       {/* ── Top strip — CTA ── */}

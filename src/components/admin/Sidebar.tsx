@@ -89,7 +89,7 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
         </div>
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-xs font-semibold tracking-tight text-muted-foreground uppercase">
-            Links
+            Liên kết
           </h2>
           <div className="space-y-1">
             <Link
@@ -97,7 +97,7 @@ export function AdminSidebar({ className }: AdminSidebarProps) {
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted"
             >
               <Store className="h-4 w-4" />
-              Storefront
+              Cửa hàng
             </Link>
           </div>
         </div>

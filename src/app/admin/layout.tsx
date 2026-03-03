@@ -3,7 +3,8 @@
 import { usePathname, useRouter } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/Sidebar";
 import { MobileBottomNav } from "@/components/admin/MobileBottomNav";
-import { LogOut } from "lucide-react";
+import { LogOut, Home } from "lucide-react";
+import Link from "next/link";
 import { PATH } from "@/constants/path";
 import { API_ROUTES } from "@/constants/api/api";
 
@@ -37,10 +38,18 @@ export default function AdminLayout({
           </div>
           <div className="hidden md:flex" />
           <div className="ml-auto flex items-center gap-4">
+            <Link
+              href="/"
+              className="text-stone-500 hover:text-stone-900 p-2 transition-colors flex items-center gap-2 text-sm font-medium"
+              title="Về trang chủ"
+            >
+              <Home className="h-4 w-4" />
+              <span className="hidden sm:inline">Trang chủ</span>
+            </Link>
             <button
               onClick={handleLogout}
               className="text-stone-500 hover:text-stone-900 p-2 transition-colors flex items-center gap-2 text-sm font-medium"
-              title="Logout"
+              title="Thoát"
             >
               <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline">Thoát</span>

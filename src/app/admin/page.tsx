@@ -13,6 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { getOrders } from "@/services/admin.service";
 
 export default function AdminPage() {
   const { data: stats } = useQuery({
@@ -25,6 +26,13 @@ export default function AdminPage() {
 
   const totalOrders =
     stats?.monthlyRevenue.reduce((acc, month) => acc + month.count, 0) || 0;
+
+  const { data: ordersData } = useQuery({
+    queryKey: [...QUERY_KEY.ADMIN.ORDERS, { page: 1, pageSize: 10 }],
+    queryFn: () => getOrders({ page: 1, pageSize: 10 }),
+  });
+
+  const recentOrders = ordersData?.orders || [];
 
   const renderIncreaseTrend = (
     currentValue: number,
@@ -171,54 +179,61 @@ export default function AdminPage() {
           </CardHeader>
           <CardContent className="pl-2 md:pl-6">
             <div className="space-y-8">
-              <div className="flex items-center">
-                <div className="hidden md:flex h-9 w-9 rounded-full bg-secondary items-center justify-center font-bold text-xs text-secondary-foreground">
-                  OM
+              {recentOrders.length === 0 ? (
+                <div className="text-sm text-center text-muted-foreground py-4">
+                  Chưa có đơn hàng nào
                 </div>
-                <div className="ml-4 space-y-1 overflow-hidden">
-                  <p className="text-sm font-medium leading-none truncate">
-                    Olivia Martin
-                  </p>
-                  <p className="text-xs sm:text-sm text-muted-foreground truncate">
-                    olivia.martin@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium text-xs sm:text-base whitespace-nowrap pl-2">
-                  +47,976,000 VNĐ
-                </div>
-              </div>
-              <div className="flex items-center">
-                <div className="hidden md:flex h-9 w-9 rounded-full bg-secondary items-center justify-center font-bold text-xs text-secondary-foreground">
-                  JL
-                </div>
-                <div className="ml-4 space-y-1 overflow-hidden">
-                  <p className="text-sm font-medium leading-none truncate">
-                    Jackson Lee
-                  </p>
-                  <p className="text-xs sm:text-sm text-muted-foreground truncate">
-                    jackson.lee@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium text-xs sm:text-base whitespace-nowrap pl-2">
-                  +936,000 VNĐ
-                </div>
-              </div>
-              <div className="flex items-center">
-                <div className="hidden md:flex h-9 w-9 rounded-full bg-secondary items-center justify-center font-bold text-xs text-secondary-foreground">
-                  IN
-                </div>
-                <div className="ml-4 space-y-1 overflow-hidden">
-                  <p className="text-sm font-medium leading-none truncate">
-                    Isabella Nguyen
-                  </p>
-                  <p className="text-xs sm:text-sm text-muted-foreground truncate">
-                    isabella.nguyen@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium text-xs sm:text-base whitespace-nowrap pl-2">
-                  +7,176,000 VNĐ
-                </div>
-              </div>
+              ) : (
+                recentOrders.map((order) => {
+                  const initials =
+                    order.customerName
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .substring(0, 2)
+                      .toUpperCase() || "NN";
+
+                  return (
+                    <div
+                      key={order.id}
+                      className="flex flex-col sm:flex-row gap-2 sm:items-center"
+                    >
+                      <div className="flex items-center flex-1 min-w-0">
+                        <div className="hidden md:flex h-9 w-9 shrink-0 rounded-full bg-secondary items-center justify-center font-bold text-xs text-secondary-foreground">
+                          {initials}
+                        </div>
+                        <div className="ml-0 md:ml-4 space-y-1 overflow-hidden">
+                          <p className="text-sm font-medium leading-none truncate">
+                            {order.customerName || "Khách hàng"}
+                            <span className="ml-2 text-xs text-muted-foreground">
+                              #{order.orderNumber}
+                            </span>
+                          </p>
+                          <p className="text-xs sm:text-sm text-muted-foreground truncate flex items-center gap-2">
+                            {order.customerPhone && (
+                              <span>{order.customerPhone}</span>
+                            )}
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                                order.paymentStatus === "paid"
+                                  ? "bg-emerald-100 text-emerald-800"
+                                  : "bg-amber-100 text-amber-800"
+                              }`}
+                            >
+                              {order.paymentStatus === "paid"
+                                ? "Đã TT"
+                                : "Chưa TT"}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="sm:ml-auto font-medium text-sm whitespace-nowrap text-right">
+                        +{order.amount}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </CardContent>
         </Card>
