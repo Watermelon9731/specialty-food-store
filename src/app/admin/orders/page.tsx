@@ -53,6 +53,7 @@ import {
   Pencil,
   PlusCircle,
   Trash2,
+  Package,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -86,10 +87,10 @@ export default function OrdersPage() {
   const [page, setPage] = useState(1);
   const [activeDeliveryFilters, setActiveDeliveryFilters] = useState<
     DeliveryStatus[]
-  >(["processing", "delivering"]);
+  >([]);
   const [activePaymentFilters, setActivePaymentFilters] = useState<
     PaymentStatus[]
-  >(["paid", "unpaid"]);
+  >([]);
   const [dateFrom, setDateFrom] = useState(defaultDateFrom());
   const [dateTo, setDateTo] = useState(todayString());
 
@@ -139,8 +140,12 @@ export default function OrdersPage() {
     onSuccess: () => invalidate(),
   });
 
-  const toggleDeliveryFilter = (status: DeliveryStatus) => {
+  const toggleDeliveryFilter = (status: DeliveryStatus | "all") => {
     setPage(1);
+    if (status === "all") {
+      setActiveDeliveryFilters([]);
+      return;
+    }
     setActiveDeliveryFilters((prev) =>
       prev.includes(status)
         ? (prev.filter((s) => s !== status) as DeliveryStatus[])
@@ -148,8 +153,12 @@ export default function OrdersPage() {
     );
   };
 
-  const togglePaymentFilter = (status: PaymentStatus) => {
+  const togglePaymentFilter = (status: PaymentStatus | "all") => {
     setPage(1);
+    if (status === "all") {
+      setActivePaymentFilters([]);
+      return;
+    }
     setActivePaymentFilters((prev) =>
       prev.includes(status)
         ? (prev.filter((s) => s !== status) as PaymentStatus[])
@@ -203,24 +212,24 @@ export default function OrdersPage() {
       }));
 
   return (
-    <div className="grid flex-1 items-start gap-4 p-2 sm:px-6 sm:py-0 md:gap-8">
+    <div className="grid flex-1 items-start gap-3 p-3 sm:gap-6 sm:p-6 pb-24 md:pb-6">
       {/* ── Header ── */}
-      <div className="flex items-center flex-wrap gap-3">
-        <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h1 className="text-xl md:text-2xl font-bold tracking-tight px-1">
           Đơn hàng
         </h1>
-        <div className="ml-auto flex items-center gap-2 flex-wrap">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-2 overflow-x-auto pb-1 -mx-2 px-2 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0">
           {/* Date range */}
-          <div className="flex items-center gap-1 text-sm">
+          <div className="flex items-center gap-1.5 shrink-0">
             <Input
               id="date-from"
               type="date"
               value={dateFrom}
               max={dateTo}
               onChange={(e) => handleDateChange("dateFrom", e.target.value)}
-              className="h-8 w-36 text-xs"
+              className="h-10 sm:h-9 w-32 sm:w-36 text-xs bg-white dark:bg-slate-950 shadow-xs"
             />
-            <span className="text-muted-foreground">→</span>
+            <span className="text-muted-foreground/60">→</span>
             <Input
               id="date-to"
               type="date"
@@ -228,40 +237,68 @@ export default function OrdersPage() {
               min={dateFrom}
               max={todayString()}
               onChange={(e) => handleDateChange("dateTo", e.target.value)}
-              className="h-8 w-36 text-xs"
+              className="h-10 sm:h-9 w-32 sm:w-36 text-xs bg-white dark:bg-slate-950 shadow-xs"
             />
           </div>
 
           {/* Status filter */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 gap-1">
-                <ListFilter className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Lọc trạng thái
-                </span>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-10 sm:h-9 gap-1.5 shrink-0 bg-white dark:bg-slate-950 shadow-xs px-3 w-full md:w-auto"
+              >
+                <ListFilter className="h-4 w-4" />
+                <span className="text-sm font-medium">Lọc theo trạng thái</span>
+                {(activeDeliveryFilters.length > 0 ||
+                  activePaymentFilters.length > 0) && (
+                  <span className="ml-1 rounded-full bg-blue-100 text-blue-700 px-1.5 py-0.5 text-[10px] font-bold">
+                    {activeDeliveryFilters.length + activePaymentFilters.length}
+                  </span>
+                )}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuLabel>Trạng thái Giao hàng</DropdownMenuLabel>
+            <DropdownMenuContent align="end" className="w-56 mt-1">
+              <DropdownMenuLabel className="text-xs uppercase text-muted-foreground tracking-wider">
+                Giao hàng
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuCheckboxItem
+                checked={activeDeliveryFilters.length === 0}
+                onCheckedChange={() => toggleDeliveryFilter("all")}
+                className="py-2.5"
+              >
+                Tất cả giao hàng
+              </DropdownMenuCheckboxItem>
               {DELIVERY_STATUS_OPTIONS.map(({ value, label }) => (
                 <DropdownMenuCheckboxItem
                   key={value}
                   checked={activeDeliveryFilters.includes(value)}
                   onCheckedChange={() => toggleDeliveryFilter(value)}
+                  className="py-2.5"
                 >
                   {label}
                 </DropdownMenuCheckboxItem>
               ))}
               <DropdownMenuSeparator />
-              <DropdownMenuLabel>Trạng thái Thanh toán</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-xs uppercase text-muted-foreground tracking-wider">
+                Thanh toán
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuCheckboxItem
+                checked={activePaymentFilters.length === 0}
+                onCheckedChange={() => togglePaymentFilter("all")}
+                className="py-2.5"
+              >
+                Tất cả thanh toán
+              </DropdownMenuCheckboxItem>
               {PAYMENT_STATUS_OPTIONS.map(({ value, label }) => (
                 <DropdownMenuCheckboxItem
                   key={value}
                   checked={activePaymentFilters.includes(value)}
                   onCheckedChange={() => togglePaymentFilter(value)}
+                  className="py-2.5"
                 >
                   {label}
                 </DropdownMenuCheckboxItem>
@@ -272,24 +309,24 @@ export default function OrdersPage() {
           <Button
             size="sm"
             variant="outline"
-            className="h-8 gap-2 hidden sm:flex"
+            className="h-10 sm:h-9 gap-2 shrink-0 hidden md:flex shadow-xs"
           >
             <File className="h-4 w-4" />
-            <span>Xuất</span>
+            <span>Xuất file</span>
           </Button>
         </div>
       </div>
 
-      {/* ── Add order ── */}
-      <div>
+      {/* ── Add order (Desktop only, mobile has FAB) ── */}
+      <div className="hidden md:block">
         <AddOrderDialog>
           <Button
             size="default"
-            className="h-11 gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-md rounded-full px-5 transition-transform hover:scale-105 active:scale-95"
+            className="h-10 gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-md rounded-lg px-5 transition-transform hover:scale-105 active:scale-95"
           >
-            <PlusCircle className="h-5 w-5" />
-            <span className="whitespace-nowrap font-medium text-base">
-              Thêm đơn hàng
+            <PlusCircle className="h-4 w-4" />
+            <span className="whitespace-nowrap font-medium text-sm">
+              Thêm đơn hàng mới
             </span>
           </Button>
         </AddOrderDialog>
@@ -511,86 +548,102 @@ export default function OrdersPage() {
 
       {/* ── Mobile Accordion ── */}
       {isLoading ? (
-        <div className="md:hidden flex items-center justify-center py-10">
+        <div className="md:hidden flex items-center justify-center py-12">
           <Spinner />
-          <span className="ml-2 text-muted-foreground">
-            Đang tải đơn hàng...
+          <span className="ml-3 text-sm font-medium text-muted-foreground">
+            Đang tải dữ liệu...
           </span>
         </div>
       ) : orders.length === 0 ? (
-        <div className="md:hidden text-center py-10 text-muted-foreground">
-          Không tìm thấy đơn hàng.
+        <div className="md:hidden flex flex-col items-center justify-center py-16 text-muted-foreground bg-white dark:bg-slate-900/50 rounded-2xl border border-dashed border-slate-200">
+          <Package className="h-10 w-10 text-slate-300 mb-3" />
+          <p className="font-medium text-sm">Không tìm thấy đơn hàng</p>
+          <p className="text-xs opacity-70 mt-1">
+            Thử thay đổi bộ lọc hoặc ngày
+          </p>
         </div>
       ) : (
-        <div className="md:hidden">
-          <Accordion type="single" collapsible className="w-full">
+        <div className="md:hidden space-y-3 pb-4">
+          <Accordion type="single" collapsible className="w-full space-y-3">
             {orders.map((order) => (
               <AccordionItem
                 key={order.id}
                 value={order.id}
-                className="border-b-0 mb-3 bg-slate-50 dark:bg-slate-900 rounded-xl shadow-sm border px-4"
+                className="border-b-0 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden"
               >
-                <AccordionTrigger className="hover:no-underline py-4">
-                  <div className="flex flex-col items-start gap-2 w-full text-left pr-2">
-                    <p className="font-semibold">{order.customerName}</p>
-                    <span className="text-xs text-muted-foreground">
-                      {order.date}
-                    </span>
-                    <span className="text-xs font-semibold tracking-widest text-slate-600 dark:text-slate-400">
-                      {order.customerPhone}
-                    </span>
-                    <div className="flex gap-2">
-                      <StatusBadge status={order.deliveryStatus} small />
-                      <StatusBadge status={order.paymentStatus} small />
+                <AccordionTrigger className="hover:no-underline px-3.5 py-3.5 w-full">
+                  <div className="flex flex-col gap-2 w-full text-left pr-1">
+                    <div className="flex flex-col items-start justify-between gap-2">
+                      <span className="text-[11px] font-medium text-muted-foreground whitespace-nowrap">
+                        {order.date}
+                      </span>
+                      <div className="flex items-center gap-1.5 min-w-0 shrink">
+                        <p className="font-bold text-[14px] leading-tight truncate text-slate-900 dark:text-slate-100">
+                          {order.customerName}
+                        </p>
+                        <span className="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-xs font-bold shrink-0">
+                          {order.orderNumber}
+                        </span>
+                      </div>
+                      <p className="font-bold text-[14px] leading-tight text-blue-600 shrink-0">
+                        {order.amount}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between mt-0.5">
+                      <div className="flex flex-wrap gap-1.5">
+                        <StatusBadge status={order.deliveryStatus} small />
+                        <StatusBadge status={order.paymentStatus} small />
+                      </div>
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="pb-4">
-                  <div className="flex flex-col gap-3 pt-3 mt-1 border-t text-sm">
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground text-xs">
-                        Mã ĐH:
+                <AccordionContent className="px-4 pb-4 pt-0">
+                  <div className="bg-slate-50 dark:bg-slate-950/50 rounded-xl p-3.5 space-y-3 mt-1 border border-slate-100">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        Thông tin liên lạc
                       </span>
-                      <span className="font-medium bg-slate-100 dark:bg-slate-800 px-2 flex items-center h-6 rounded border text-xs">
-                        {order.orderNumber}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground text-xs">
-                        Tổng tiền:
-                      </span>
-                      <span className="font-bold text-blue-600 dark:text-blue-400">
-                        {order.amount}
+                      <span className="text-sm font-medium">
+                        {order.customerPhone || "Chưa cập nhật SĐT"}
                       </span>
                     </div>
-                    <div className="flex flex-col mt-0.5">
-                      <span className="text-muted-foreground mb-1.5 text-xs">
-                        Địa chỉ:
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        Địa chỉ giao hàng
                       </span>
-                      <span className="font-medium bg-white dark:bg-slate-950 p-2.5 rounded-lg border leading-relaxed">
-                        {order.customerAddress || "Chưa cung cấp địa chỉ"}
+                      <span className="text-sm leading-relaxed">
+                        {order.customerAddress || "Nhận tại cửa hàng"}
                       </span>
                     </div>
-                    <div className="flex gap-2 justify-end mt-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-9 w-full"
-                        onClick={() => openEdit(order)}
-                      >
-                        <Pencil className="h-3.5 w-3.5 mr-1.5" />
-                        Chỉnh sửa
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        className="h-9 w-full"
-                        onClick={() => handleDelete(order)}
-                      >
-                        <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                        Xóa
-                      </Button>
-                    </div>
+                    {order.orderDescription && (
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                          Ghi chú
+                        </span>
+                        <span className="text-sm leading-relaxed italic text-slate-700">
+                          {order.orderDescription}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex gap-2 justify-end mt-3 border-t pt-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-10 px-4 rounded-xl flex-1 border-slate-200"
+                      onClick={() => openEdit(order)}
+                    >
+                      <Pencil className="h-4 w-4 mr-1.5 text-blue-600" />
+                      Chỉnh sửa
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-10 px-4 rounded-xl text-red-600 hover:text-red-700 hover:bg-red-50 border-red-100"
+                      onClick={() => handleDelete(order)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </AccordionContent>
               </AccordionItem>
@@ -601,7 +654,7 @@ export default function OrdersPage() {
 
       {/* ── Pagination ── */}
       {pagination && pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between gap-4 py-2">
+        <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-4 py-2">
           <p className="text-sm text-muted-foreground">
             {(pagination.page - 1) * pagination.pageSize + 1}–
             {Math.min(pagination.page * pagination.pageSize, pagination.total)}{" "}

@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/Sidebar";
 import { MobileBottomNav } from "@/components/admin/MobileBottomNav";
-import { LogOut, Home } from "lucide-react";
+import { LogOut, Home, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { PATH } from "@/constants/path";
 import { API_ROUTES } from "@/constants/api/api";
@@ -33,8 +33,16 @@ export default function AdminLayout({
       </div>
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
         <header className="flex h-16 items-center border-b px-4 md:px-6 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shrink-0 justify-between">
-          <div className="flex items-center gap-2 md:hidden">
-            <span className="font-bold">Quản trị</span>
+          <div className="flex items-center gap-3 md:hidden">
+            {pathname !== "/admin" && (
+              <Link
+                href="/admin"
+                className="flex items-center justify-center h-8 w-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Link>
+            )}
+            <span className="font-bold text-lg text-slate-800">Quản trị</span>
           </div>
           <div className="hidden md:flex" />
           <div className="ml-auto flex items-center gap-4">

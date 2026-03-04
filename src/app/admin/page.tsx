@@ -171,16 +171,16 @@ export default function AdminPage() {
           </CardContent>
         </Card>
         <Card className="col-span-1 lg:col-span-3">
-          <CardHeader>
+          <CardHeader className="px-4">
             <CardTitle>Đơn hàng gần đây</CardTitle>
             <div className="text-sm text-muted-foreground">
               Tổng đơn tháng này.
             </div>
           </CardHeader>
-          <CardContent className="pl-2 md:pl-6">
-            <div className="space-y-8">
+          <CardContent className="px-4 pb-4 md:px-6">
+            <div className="space-y-0 divide-y divide-slate-100 dark:divide-slate-800">
               {recentOrders.length === 0 ? (
-                <div className="text-sm text-center text-muted-foreground py-4">
+                <div className="text-sm text-center text-muted-foreground py-8">
                   Chưa có đơn hàng nào
                 </div>
               ) : (
@@ -196,38 +196,43 @@ export default function AdminPage() {
                   return (
                     <div
                       key={order.id}
-                      className="flex flex-col sm:flex-row gap-2 sm:items-center"
+                      className="flex flex-col md:flex-row items-start md:items-center justify-between py-3.5 first:pt-0 last:pb-0"
                     >
-                      <div className="flex items-center flex-1 min-w-0">
-                        <div className="hidden md:flex h-9 w-9 shrink-0 rounded-full bg-secondary items-center justify-center font-bold text-xs text-secondary-foreground">
+                      <div className="flex items-center flex-1 min-w-0 pr-3 w-full">
+                        <div className="hidden sm:flex h-9 w-9 shrink-0 rounded-full bg-blue-50 text-blue-700 items-center justify-center font-bold text-xs">
                           {initials}
                         </div>
-                        <div className="ml-0 md:ml-4 space-y-1 overflow-hidden">
-                          <p className="text-sm font-medium leading-none truncate">
-                            {order.customerName || "Khách hàng"}
-                            <span className="ml-2 text-xs text-muted-foreground">
-                              #{order.orderNumber}
+                        <div className="ml-0 sm:ml-3 flex flex-col gap-1 w-full md:w-auto overflow-hidden">
+                          <div className="flex w-full md:w-auto items-center gap-2">
+                            <p className="text-[14px] font-bold leading-none w-full truncate text-slate-800 dark:text-slate-200">
+                              {order.customerName || "Khách hàng"}
+                            </p>
+                            <span className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded text-[10px] font-bold shrink-0">
+                              {order.orderNumber}
                             </span>
-                          </p>
-                          <p className="text-xs sm:text-sm text-muted-foreground truncate flex items-center gap-2">
+                          </div>
+                          <div className="flex items-center justify-between md:justify-start gap-1.5 text-xs text-muted-foreground truncate w-full">
                             {order.customerPhone && (
-                              <span>{order.customerPhone}</span>
+                              <span className="truncate">
+                                {order.customerPhone}
+                              </span>
                             )}
+                            {order.customerPhone && <span>•</span>}
                             <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                              className={`px-1.5 py-0.5 rounded text-[10px] font-bold shrink-0 ${
                                 order.paymentStatus === "paid"
-                                  ? "bg-emerald-100 text-emerald-800"
-                                  : "bg-amber-100 text-amber-800"
+                                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                                  : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
                               }`}
                             >
                               {order.paymentStatus === "paid"
-                                ? "Đã TT"
-                                : "Chưa TT"}
+                                ? "Đã Thanh Toán"
+                                : "Chưa Thanh Toán"}
                             </span>
-                          </p>
+                          </div>
                         </div>
                       </div>
-                      <div className="sm:ml-auto font-medium text-sm whitespace-nowrap text-right">
+                      <div className="font-bold text-[14px] text-blue-600 shrink-0 text-right">
                         +{order.amount}
                       </div>
                     </div>
