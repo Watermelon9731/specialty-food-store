@@ -60,7 +60,7 @@ export default function CustomersPage() {
   const pagination = data?.pagination;
 
   return (
-    <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+    <div className="grid flex-1 items-start gap-4 md:p-4 sm:px-6 sm:py-0 md:gap-8">
       {/* ── Header ── */}
       <div className="flex items-center gap-3">
         <h1 className="text-2xl font-bold tracking-tight">Khách hàng</h1>
@@ -85,7 +85,7 @@ export default function CustomersPage() {
       </div>
 
       {/* ── Table ── */}
-      <Card>
+      <Card className="w-full p-0">
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
@@ -219,13 +219,8 @@ function CustomerRow({
       value={customer.customerPhone}
       className="border-b last:border-b-0 px-0"
     >
-      <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-muted/40 transition-colors data-[state=open]:bg-muted/50">
+      <AccordionTrigger className="hover:no-underline px-2 md:px-4 py-4 hover:bg-muted/40 transition-colors data-[state=open]:bg-sky-100">
         <div className="flex items-center gap-4 w-full text-left pr-4">
-          {/* Avatar */}
-          <div className="shrink-0 h-10 w-10 rounded-full bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
-            {customer.customerName.charAt(0).toUpperCase()}
-          </div>
-
           {/* Info */}
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-sm truncate">
@@ -251,16 +246,16 @@ function CustomerRow({
           </div>
 
           {/* Mobile: just order count badge */}
-          <div className="sm:hidden flex items-center gap-1 text-xs font-medium bg-blue-50 text-blue-700 px-2 py-1 rounded-full mr-2">
+          <div className="sm:hidden flex items-center gap-1 text-xs font-medium bg-blue-50 text-blue-700 px-2 py-1 rounded-full">
             <ShoppingBag className="h-3 w-3" />
             {customer.orderCount}
           </div>
         </div>
       </AccordionTrigger>
 
-      <AccordionContent className="px-4 pb-4 pt-0">
+      <AccordionContent className="px-2 md:px-4 pb-4 pt-0">
         {/* Mobile stats */}
-        <div className="sm:hidden grid grid-cols-2 gap-3 mb-4 mt-2">
+        <div className="sm:hidden grid grid-cols-1 gap-3 mb-4 mt-2">
           <StatCard
             icon={<ShoppingBag className="h-4 w-4 text-blue-500" />}
             label="Đơn hàng"
@@ -329,11 +324,11 @@ function CustomerRow({
             </div>
 
             {/* Mobile cards */}
-            <div className="md:hidden flex flex-col gap-2 mt-2">
+            <div className="md:hidden flex flex-col gap-5 mt-2">
               {orders.map((order) => (
                 <div
                   key={order.id}
-                  className="rounded-xl border bg-background p-3 flex items-start justify-between gap-3"
+                  className="rounded-xl border bg-background p-3 flex flex-col items-start justify-between gap-3"
                 >
                   <div className="flex flex-col gap-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -347,21 +342,20 @@ function CustomerRow({
                     </div>
                     {order.orderDescription && (
                       <div className="flex justify-between items-center bg-white dark:bg-slate-950 p-2.5 rounded-lg border">
-                        <span className="text-xs text-muted-foreground mr-2 whitespace-nowrap">
-                          Sp:
-                        </span>
-                        <span className="font-medium text-sm text-right leading-snug line-clamp-2">
+                        <span className="font-medium text-sm leading-snug">
                           {order.orderDescription}
                         </span>
                       </div>
                     )}
+                  </div>
+                  <div className="flex flex-col justify-between w-full">
+                    <span className="font-bold text-sm text-blue-600 shrink-0">
+                      {order.amount}
+                    </span>
                     <p className="text-xs text-muted-foreground">
                       {order.date}
                     </p>
                   </div>
-                  <span className="font-bold text-sm text-blue-600 shrink-0">
-                    {order.amount}
-                  </span>
                 </div>
               ))}
             </div>
