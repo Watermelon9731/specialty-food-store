@@ -2,9 +2,7 @@ import type { MetadataRoute } from "next";
 import { getProductsService } from "@/server/products/service";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL ??
-    "https://funny-marzipan-fc5122.netlify.app";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://trebinhdinh.com";
 
   // Static public routes
   const staticRoutes: MetadataRoute.Sitemap = [
