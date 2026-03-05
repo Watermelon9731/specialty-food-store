@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
+import { getProductsService } from "@/server/products/service";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL ??
-    "https://specialty-food-store.vercel.app";
+    "https://funny-marzipan-fc5122.netlify.app";
 
   // Static public routes
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -48,5 +49,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // NOTE: Admin routes (/admin, /admin/orders, /admin/login, etc.)
   // are intentionally excluded — they are blocked in robots.ts as well.
 
-  return staticRoutes;
+  try {
+    const products = await getProductsService();
+
+    const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({
+      url: `${baseUrl}/products/${product.slug}`,
+      lastModified: new Date(
+        product.updatedAt || product.createdAt || new Date(),
+      ),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }));
+
+    return [...staticRoutes, ...productRoutes];
+  } catch (error) {
+    console.error("Error generating sitemap:", error);
+    return staticRoutes;
+  }
 }
