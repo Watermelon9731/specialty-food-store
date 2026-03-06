@@ -18,6 +18,9 @@ export const metadata = {
   title: "Về Chúng Tôi | Tré Bà Liên — Đặc Sản Bình Định",
   description:
     "Câu chuyện gia đình ba thế hệ giữ lửa nghề làm tré rơm truyền thống tại Chợ Huyện, Phù Cát, Bình Định.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {

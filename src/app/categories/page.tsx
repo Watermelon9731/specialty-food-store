@@ -1,10 +1,18 @@
-
 import Link from "next/link";
 import { getCategoriesService } from "@/server/categories/service";
 import { ArrowRight, Fish, ChefHat, Beef, Leaf, Package2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
+
+export const metadata = {
+  title: "Danh mục sản phẩm | Tré Bà Liên",
+  description:
+    "Từ đặc sản Tré, Nem, Chả đến hải sản biển Quy Nhơn tìm thứ bạn cần theo từng danh mục đặc sản.",
+  alternates: {
+    canonical: "/categories",
+  },
+};
 
 // Map category names to icons and colours (extend as needed)
 const CATEGORY_META: Record<

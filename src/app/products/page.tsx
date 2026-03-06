@@ -6,7 +6,16 @@ import { Suspense } from "react";
 import { ChefHat, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
+
+export const metadata = {
+  title: "Tất cả sản phẩm | Tré Bà Liên",
+  description:
+    "Khám phá đầy đủ bộ sưu tập đặc sản thủ công từ vùng đất Xứ Nẫu — tré rơm, mực khô, nem chả và gia vị truyền thống.",
+  alternates: {
+    canonical: "/products",
+  },
+};
 
 export default async function ProductsPage({
   searchParams,

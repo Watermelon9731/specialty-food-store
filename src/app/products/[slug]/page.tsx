@@ -10,13 +10,39 @@ import { PATH } from "@/constants/path";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ProductGallery } from "./ProductGallery";
 
-export const dynamic = "force-dynamic";
+import type { Metadata } from "next";
+
+export const revalidate = 60;
 
 function formatVND(amount: number) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
   }).format(amount);
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const resolvedParams = await params;
+  const product = await getProductBySlugService(resolvedParams.slug);
+
+  if (!product) {
+    return {
+      title: "Sản phẩm không tìm thấy | Tré Bà Liên",
+    };
+  }
+
+  return {
+    title: `${product.name} | Tré Bà Liên`,
+    description:
+      product.description || "Đặc sản mang đậm hương vị truyền thống Xứ Nẫu.",
+    alternates: {
+      canonical: `/products/${resolvedParams.slug}`,
+    },
+  };
 }
 
 export default async function ProductDetailPage({

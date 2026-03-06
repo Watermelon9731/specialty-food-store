@@ -23,7 +23,7 @@ import { PATH, CONTACT_INFO } from "@/constants/path";
 import Image from "next/image";
 import ZaloIcon from "@/components/icons/ZaloIcon";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function Home() {
   const products = await getProductsService();

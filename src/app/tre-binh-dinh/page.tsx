@@ -24,6 +24,9 @@ export const metadata = {
   title: "Tré Rơm Gia Truyền Bình Định | Đặc Sản Xứ Nẫu",
   description:
     "Tré rơm Bình Định chính gốc — lên men tự nhiên bằng lá ổi, không hàn the, không chất bảo quản. Giao hỏa tốc toàn quốc.",
+  alternates: {
+    canonical: "/tre-binh-dinh",
+  },
 };
 
 // ─── Product variants ─────────────────────────────────────────────────────────
