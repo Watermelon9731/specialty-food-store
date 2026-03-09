@@ -83,6 +83,8 @@ export type DashboardStats = {
 export type ProductCategory = {
   id: string;
   name: string;
+  description?: string | null;
+  image?: string | null;
 };
 
 export type Product = {
@@ -97,12 +99,12 @@ export type Product = {
   origin: string;
   shelfLifeDays: number;
   isDeleted: boolean;
-  categoryId: string;
-  category: ProductCategory;
+  categories: ProductCategory[];
   isFeatured: boolean;
   img: string | null;
   images: string[] | null;
   note: string | null;
+  isMarketPrice: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -117,11 +119,12 @@ export type CreateProductPayload = {
   stockQuantity?: number;
   origin?: string;
   shelfLifeDays?: number;
-  categoryId: string;
+  categoryIds: string[];
   isFeatured?: boolean;
   img?: string | null;
   images?: string[] | null;
   note?: string | null;
+  isMarketPrice?: boolean;
 };
 
 export type UpdateProductPayload = Partial<CreateProductPayload> & {

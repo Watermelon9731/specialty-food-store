@@ -19,6 +19,7 @@ type ProductProps = {
   category?: { name: string };
   img?: string | null;
   note?: string | null;
+  isMarketPrice?: boolean | null;
 };
 
 function formatVND(amount: number) {
@@ -117,7 +118,7 @@ function ProductCard({
         </div>
 
         {/* Quick-add button — slides up on hover */}
-        {!isOutOfStock && (
+        {!isOutOfStock && !product.isMarketPrice && (
           <div className="absolute bottom-0 left-0 right-0 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out pointer-events-none group-hover:pointer-events-auto">
             <div className="p-3">
               <button
@@ -181,14 +182,20 @@ function ProductCard({
         {/* Price + unit */}
         <div className="mt-auto flex items-end justify-between gap-2">
           <div>
-            <span className="text-xl font-bold text-[#3a7851]">
-              {formatVND(product.pricePerUnit)}
-            </span>
-            <span className="text-slate-400 text-sm ml-1">
-              / {product.unitType}
-            </span>
+            {product.isMarketPrice ? (
+              <span className="text-lg font-bold text-amber-600">Liên hệ</span>
+            ) : (
+              <>
+                <span className="text-lg font-bold text-[#3a7851]">
+                  {formatVND(product.pricePerUnit)}
+                </span>
+                <span className="text-slate-400 text-sm ml-1">
+                  / {product.unitType}
+                </span>
+              </>
+            )}
           </div>
-          {!isOutOfStock && (
+          {!isOutOfStock && !product.isMarketPrice && (
             <button
               onClick={handleAddToCart}
               aria-label={`Thêm ${product.name} vào giỏ`}

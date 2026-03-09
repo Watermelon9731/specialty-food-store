@@ -10,7 +10,7 @@ export const ProductSchema = z.object({
   stockQuantity: z.coerce.number().int().min(0, "Stock must be non-negative"),
   origin: z.string().min(1, "Origin is required"),
   shelfLifeDays: z.coerce.number().int().min(1, "Shelf life must be positive"),
-  categoryId: z.string().min(1, "Category is required"),
+  categoryIds: z.array(z.string()).min(1, "At least one category is required"),
   isFeatured: z.boolean().default(false),
   img: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   images: z
@@ -18,6 +18,7 @@ export const ProductSchema = z.object({
     .optional()
     .default([]),
   note: z.string().optional().or(z.literal("")),
+  isMarketPrice: z.boolean().default(false).optional(),
 });
 
 export type ProductInput = z.infer<typeof ProductSchema>;

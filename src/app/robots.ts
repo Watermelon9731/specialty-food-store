@@ -10,10 +10,11 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: [
           "/",
-          "/products",
-          "/categories",
-          "/about",
-          "/contact",
+          "/san-pham",
+          "/danh-muc",
+          "/gioi-thieu",
+          "/lien-he",
+          "/chinh-sach-bao-mat",
           "/tre-binh-dinh",
         ],
         // Block admin panel and all API routes

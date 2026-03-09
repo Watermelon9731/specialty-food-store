@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Chúng tôi luôn sẵn sàng tư vấn, giải đáp mọi thắc mắc về sản phẩm và đơn hàng của bạn.",
   alternates: {
-    canonical: "/contact",
+    canonical: "/lien-he",
   },
 };
 

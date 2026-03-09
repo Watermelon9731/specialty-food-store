@@ -4,31 +4,61 @@ ADD COLUMN IF NOT EXISTS "isFeatured" BOOLEAN NOT NULL DEFAULT false,
 ADD COLUMN IF NOT EXISTS "img" TEXT,
 ADD COLUMN IF NOT EXISTS "images" TEXT[] DEFAULT '{}',
 ADD COLUMN IF NOT EXISTS "note" TEXT,
-ADD COLUMN IF NOT EXISTS "slug" TEXT;
+ADD COLUMN IF NOT EXISTS "slug" TEXT,
+ADD COLUMN IF NOT EXISTS "isMarketPrice" BOOLEAN DEFAULT FALSE;
 
--- 2. Update Order table schema
+-- 2. Add columns to the Category table
+ALTER TABLE "Category" 
+ADD COLUMN IF NOT EXISTS "description" TEXT,
+ADD COLUMN IF NOT EXISTS "image" TEXT;
+
+-- 3. Create junction table for Product and Category
+CREATE TABLE IF NOT EXISTS "ProductCategory" (
+    "productId" TEXT REFERENCES "Product" (id) ON DELETE CASCADE,
+    "categoryId" TEXT REFERENCES "Category" (id) ON DELETE CASCADE,
+    PRIMARY KEY ("productId", "categoryId")
+);
+
+-- 4. Migrate existing category data (if dropping categoryId from Product)
+-- NOTE: If you are setting up a fresh DB, this INSERT may not do anything or you can ignore it.
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Product' AND column_name='categoryId') THEN
+    INSERT INTO "ProductCategory" ("productId", "categoryId")
+    SELECT id, "categoryId" FROM "Product" WHERE "categoryId" IS NOT NULL
+    ON CONFLICT DO NOTHING;
+    
+    ALTER TABLE "Product" DROP COLUMN "categoryId";
+  END IF;
+END $$;
+
+-- 5. Update Order table schema
 ALTER TABLE "Order" DROP COLUMN IF EXISTS "productId";
 ALTER TABLE "Order" RENAME COLUMN "productName" TO "orderDescription";
 ALTER TABLE "Order" RENAME COLUMN "status" TO "deliveryStatus";
 ALTER TABLE "Order" ADD COLUMN IF NOT EXISTS "paymentStatus" TEXT DEFAULT 'unpaid';
 
--- 3. Enable Row Level Security (RLS) for all relevant tables
+-- 6. Enable Row Level Security (RLS) for all relevant tables
 ALTER TABLE "Product" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Category" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "ProductCategory" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Order" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "InventoryLog" ENABLE ROW LEVEL SECURITY;
 
--- 3. Create RLS Policies
+-- 7. Create RLS Policies
 -- Note: Your Next.js app uses the SERVICE_ROLE key which bypasses RLS,
 -- but adding these ensures your DB is secure if you ever use the ANON key
 -- on the frontend.
 
--- Product & Category: Public can READ (select)
+-- Product & Category & ProductCategory: Public can READ (select)
 CREATE POLICY "Public profiles are viewable by everyone." 
 ON "Product" FOR SELECT USING (true);
 
 CREATE POLICY "Categories are viewable by everyone." 
 ON "Category" FOR SELECT USING (true);
+
+CREATE POLICY "ProductCategories are viewable by everyone." 
+ON "ProductCategory" FOR SELECT USING (true);
 
 -- Product & Category: Only authenticated users/roles can INSERT, UPDATE, DELETE
 -- Or just leave it out so only SERVICE_ROLE can modify them

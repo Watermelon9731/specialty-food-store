@@ -10,7 +10,7 @@ export const metadata = {
   description:
     "Từ đặc sản Tré, Nem, Chả đến hải sản biển Quy Nhơn tìm thứ bạn cần theo từng danh mục đặc sản.",
   alternates: {
-    canonical: "/categories",
+    canonical: "/danh-muc",
   },
 };
 
@@ -125,15 +125,25 @@ export default async function CategoriesPage() {
                     className={`aspect-4/3 bg-linear-to-br ${meta.gradient} flex items-center justify-center relative overflow-hidden`}
                   >
                     {/* Decorative large icon behind */}
-                    <div className="absolute opacity-10 scale-[3] pointer-events-none">
-                      {meta.icon}
-                    </div>
-                    {/* Centered icon pill */}
-                    <div
-                      className={`${meta.bg} ${meta.textColor} rounded-2xl p-5 shadow-sm border border-white/60 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      {meta.icon}
-                    </div>
+                    {category.image ? (
+                      <img
+                        src={category.image}
+                        alt={category.name}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                      />
+                    ) : (
+                      <>
+                        <div className="absolute opacity-10 scale-[3] pointer-events-none">
+                          {meta.icon}
+                        </div>
+                        {/* Centered icon pill */}
+                        <div
+                          className={`${meta.bg} ${meta.textColor} rounded-2xl p-5 shadow-sm border border-white/60 group-hover:scale-110 transition-transform duration-300`}
+                        >
+                          {meta.icon}
+                        </div>
+                      </>
+                    )}
 
                     {/* Number badge */}
                     <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm rounded-full px-2.5 py-1 text-xs font-bold text-slate-700 shadow-sm">

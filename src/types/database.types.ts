@@ -24,11 +24,11 @@ export interface Database {
           isDeleted: boolean;
           createdAt: string;
           updatedAt: string;
-          categoryId: string;
           isFeatured: boolean;
           img: string | null;
           images: string[] | null;
           note: string | null;
+          isMarketPrice: boolean | null;
         };
         Insert: {
           id?: string;
@@ -44,11 +44,11 @@ export interface Database {
           isDeleted?: boolean;
           createdAt?: string;
           updatedAt?: string;
-          categoryId: string;
           isFeatured?: boolean;
           img?: string | null;
           images?: string[] | null;
           note?: string | null;
+          isMarketPrice?: boolean | null;
         };
         Update: {
           id?: string;
@@ -63,41 +63,69 @@ export interface Database {
           shelfLifeDays?: number;
           isDeleted?: boolean;
           updatedAt?: string;
-          categoryId?: string;
           isFeatured?: boolean;
           img?: string | null;
           images?: string[] | null;
           note?: string | null;
+          isMarketPrice?: boolean | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: "Product_categoryId_fkey";
-            columns: ["categoryId"];
-            isOneToOne: false;
-            referencedRelation: "Category";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
       Category: {
         Row: {
           id: string;
           name: string;
+          description: string | null;
+          image: string | null;
           createdAt: string;
           updatedAt: string;
         };
         Insert: {
           id?: string;
           name: string;
+          description?: string | null;
+          image?: string | null;
           createdAt?: string;
           updatedAt?: string;
         };
         Update: {
           id?: string;
           name?: string;
+          description?: string | null;
+          image?: string | null;
           updatedAt?: string;
         };
         Relationships: [];
+      };
+      ProductCategory: {
+        Row: {
+          productId: string;
+          categoryId: string;
+        };
+        Insert: {
+          productId: string;
+          categoryId: string;
+        };
+        Update: {
+          productId?: string;
+          categoryId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "ProductCategory_productId_fkey";
+            columns: ["productId"];
+            isOneToOne: false;
+            referencedRelation: "Product";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "ProductCategory_categoryId_fkey";
+            columns: ["categoryId"];
+            isOneToOne: false;
+            referencedRelation: "Category";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       InventoryLog: {
         Row: {

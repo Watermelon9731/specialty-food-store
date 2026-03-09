@@ -1,4 +1,3 @@
-
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -6,7 +5,7 @@ export async function GET() {
   try {
     const { data: categories, error } = await db
       .from("Category")
-      .select("id, name")
+      .select("id, name, image, description")
       .order("name", { ascending: true });
 
     if (error) throw error;

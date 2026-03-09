@@ -14,6 +14,7 @@ type ProductActionsProps = {
     unitType: string;
     stockQuantity: number;
     img: string | null;
+    isMarketPrice?: boolean | null;
   };
 };
 
@@ -44,6 +45,19 @@ export function ProductActions({ product }: ProductActionsProps) {
   };
 
   const isOutOfStock = product.stockQuantity === 0;
+
+  if (product.isMarketPrice) {
+    return (
+      <div className="flex flex-col gap-4 mt-2">
+        <a
+          href="/lien-he"
+          className="flex-1 h-14 rounded-full text-lg font-bold shadow-lg transition-all duration-300 bg-amber-500 hover:bg-amber-600 shadow-amber-500/25 flex items-center justify-center text-white"
+        >
+          <span className="flex items-center gap-2">Liên hệ đặt hàng ngay</span>
+        </a>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4">

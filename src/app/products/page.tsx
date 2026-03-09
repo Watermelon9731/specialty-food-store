@@ -13,15 +13,14 @@ export const metadata = {
   description:
     "Khám phá đầy đủ bộ sưu tập đặc sản thủ công từ vùng đất Xứ Nẫu — tré rơm, mực khô, nem chả và gia vị truyền thống.",
   alternates: {
-    canonical: "/products",
+    canonical: "/san-pham",
   },
 };
 
-export default async function ProductsPage({
-  searchParams,
-}: {
-  searchParams: { category?: string; q?: string };
+export default async function ProductsPage(props: {
+  searchParams: Promise<{ category?: string; q?: string }>;
 }) {
+  const searchParams = await props.searchParams;
   const [allProducts, categories] = await Promise.all([
     getProductsService(),
     getCategoriesService(),
@@ -34,7 +33,8 @@ export default async function ProductsPage({
   const filteredProducts = allProducts.filter((p) => {
     const matchCat =
       activeCategory === "all" ||
-      p.category?.name.toLowerCase() === activeCategory.toLowerCase();
+      p.ProductCategory?.[0]?.Category?.name?.toLowerCase() ===
+        activeCategory.toLowerCase();
     const matchQ = !searchQuery || p.name.toLowerCase().includes(searchQuery);
     return matchCat && matchQ;
   });
@@ -47,7 +47,9 @@ export default async function ProductsPage({
     unitType: p.unitType,
     stockQuantity: p.stockQuantity,
     origin: p.origin,
-    category: p.category ? { name: p.category.name } : undefined,
+    category: p.ProductCategory?.[0]?.Category
+      ? { name: p.ProductCategory[0].Category.name }
+      : undefined,
     note: p.note,
     img: p.img,
   }));

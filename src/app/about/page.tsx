@@ -19,7 +19,7 @@ export const metadata = {
   description:
     "Câu chuyện gia đình ba thế hệ giữ lửa nghề làm tré rơm truyền thống tại Chợ Huyện, Phù Cát, Bình Định.",
   alternates: {
-    canonical: "/about",
+    canonical: "/gioi-thieu",
   },
 };
 

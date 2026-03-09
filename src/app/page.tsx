@@ -38,7 +38,9 @@ export default async function Home() {
       unitType: p.unitType,
       stockQuantity: p.stockQuantity,
       origin: p.origin,
-      category: p.category ? { name: p.category.name } : undefined,
+      category: p.ProductCategory?.[0]?.Category
+        ? { name: p.ProductCategory[0].Category.name }
+        : undefined,
       note: p.note,
       img: p.img,
     }));

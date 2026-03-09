@@ -4,7 +4,7 @@ import { type ProductInput } from "./schemas";
 export const getProducts = async () => {
   const { data, error } = await db
     .from("Product")
-    .select("*, category:Category(*)")
+    .select("*, ProductCategory(Category(*))")
     .eq("isDeleted", false)
     .order("createdAt", { ascending: false });
   if (error) throw error;
@@ -14,7 +14,7 @@ export const getProducts = async () => {
 export const getProductBySku = async (sku: string) => {
   const { data, error } = await db
     .from("Product")
-    .select("*, category:Category(*)")
+    .select("*, ProductCategory(Category(*))")
     .eq("sku", sku)
     .single();
   if (error) return null;
@@ -24,7 +24,7 @@ export const getProductBySku = async (sku: string) => {
 export const getProductBySlug = async (slug: string) => {
   const { data, error } = await db
     .from("Product")
-    .select("*, category:Category(*)")
+    .select("*, ProductCategory(Category(*))")
     .eq("slug", slug)
     .single();
   if (error) return null;
@@ -32,15 +32,34 @@ export const getProductBySlug = async (slug: string) => {
 };
 
 export const createProduct = async (data: ProductInput) => {
+  const { categoryIds, ...productData } = data;
+
   const { data: product, error } = await db
     .from("Product")
     .insert({
-      ...data,
-      stockQuantity: data.stockQuantity ?? 0,
-      shelfLifeDays: data.shelfLifeDays ?? 0,
+      ...productData,
+      stockQuantity: productData.stockQuantity ?? 0,
+      shelfLifeDays: productData.shelfLifeDays ?? 0,
     })
     .select()
     .single();
+
   if (error) throw error;
+
+  if (categoryIds && categoryIds.length > 0) {
+    const categoryInserts = categoryIds.map((categoryId) => ({
+      productId: product.id,
+      categoryId,
+    }));
+
+    const { error: categoryError } = await db
+      .from("ProductCategory")
+      .insert(categoryInserts);
+
+    if (categoryError) {
+      console.error("Failed to associate categories:", categoryError);
+    }
+  }
+
   return product;
 };

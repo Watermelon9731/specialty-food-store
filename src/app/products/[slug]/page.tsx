@@ -40,7 +40,7 @@ export async function generateMetadata({
     description:
       product.description || "Đặc sản mang đậm hương vị truyền thống Xứ Nẫu.",
     alternates: {
-      canonical: `/products/${resolvedParams.slug}`,
+      canonical: `/san-pham/${resolvedParams.slug}`,
     },
   };
 }
@@ -55,8 +55,14 @@ export default async function ProductDetailPage({
 
   // Fetch related products (e.g., from the same category)
   const allProducts = await getProductsService();
+  const firstCategoryId = product.ProductCategory?.[0]?.Category?.id;
   const related = allProducts
-    .filter((p) => p.categoryId === product.categoryId && p.id !== product.id)
+    .filter(
+      (p) =>
+        p.ProductCategory?.some(
+          (c: any) => c.Category?.id === firstCategoryId,
+        ) && p.id !== product.id,
+    )
     .slice(0, 4)
     .map((p) => ({
       id: p.id,
@@ -68,7 +74,9 @@ export default async function ProductDetailPage({
       origin: p.origin,
       img: p.img,
       note: p.note,
-      category: p.category ? { name: p.category.name } : undefined,
+      category: p.ProductCategory?.[0]?.Category
+        ? { name: p.ProductCategory[0].Category.name }
+        : undefined,
     }));
 
   return (
@@ -106,10 +114,10 @@ export default async function ProductDetailPage({
 
           {/* Right: Product Details */}
           <div className="flex flex-col">
-            {product.category && (
+            {product.ProductCategory?.[0]?.Category && (
               <div className="flex items-center gap-2 text-emerald-600 text-sm font-bold uppercase tracking-widest mb-4">
                 <Bookmark className="w-4 h-4" />
-                {product.category.name}
+                {product.ProductCategory[0].Category.name}
               </div>
             )}
 
@@ -117,14 +125,34 @@ export default async function ProductDetailPage({
               {product.name}
             </h1>
 
-            <div className="flex items-end gap-3 mb-8">
-              <span className="text-4xl font-extrabold text-[#3a7851]">
-                {formatVND(Number(product.pricePerUnit))}
-              </span>
-              <span className="text-slate-500 text-lg mb-1 font-medium">
-                / {product.unitType}
-              </span>
+            <div className="flex items-end gap-3 mb-4">
+              {product.isMarketPrice ? (
+                <span className="text-4xl font-extrabold text-amber-600">
+                  Liên hệ để có giá tốt nhất
+                </span>
+              ) : (
+                <>
+                  <span className="text-4xl font-extrabold text-[#3a7851]">
+                    {formatVND(Number(product.pricePerUnit))}
+                  </span>
+                  <span className="text-slate-500 text-lg mb-1 font-medium">
+                    / {product.unitType}
+                  </span>
+                </>
+              )}
             </div>
+
+            {product.isMarketPrice && (
+              <div className="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 mb-8 flex items-start gap-3">
+                <span className="text-xl">💡</span>
+                <p className="text-sm text-amber-800 leading-relaxed font-medium">
+                  Sản phẩm này đang được bán theo thời giá. Xin vui lòng liên hệ
+                  trực tiếp để có giá tốt nhất. Chúng tôi cam kết hải sản tươi
+                  mới mỗi ngày, không bán hàng cấp đông dài ngày nhằm đảm bảo
+                  chất lượng tuyệt đối cho bữa ăn của bạn!
+                </p>
+              </div>
+            )}
 
             <p className="text-slate-600 text-lg leading-relaxed mb-10 w-[90%]">
               {product.description ||

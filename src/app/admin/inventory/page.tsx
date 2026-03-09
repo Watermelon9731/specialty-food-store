@@ -75,8 +75,9 @@ const BLANK: CreateProductPayload = {
   stockQuantity: 0,
   origin: "Việt Nam",
   shelfLifeDays: 365,
-  categoryId: "",
+  categoryIds: [],
   isFeatured: false,
+  isMarketPrice: false,
   img: "",
   images: [],
   note: "",
@@ -160,8 +161,9 @@ export default function InventoryPage() {
       stockQuantity: product.stockQuantity,
       origin: product.origin,
       shelfLifeDays: product.shelfLifeDays,
-      categoryId: product.categoryId,
+      categoryIds: product.categories?.map((c: any) => c.id) || [],
       isFeatured: !!product.isFeatured,
+      isMarketPrice: !!product.isMarketPrice,
       img: product.img ?? "",
       images: product.images ?? [],
       note: product.note ?? "",
@@ -361,7 +363,7 @@ export default function InventoryPage() {
 
                 {/* Row: Price + Stock */}
                 <div className="grid grid-cols-2 gap-3">
-                  <FormField label="Giá (VNĐ)" required>
+                  <FormField label="Giá (VNĐ)">
                     <Input
                       id="pricePerUnit"
                       type="number"
@@ -371,7 +373,7 @@ export default function InventoryPage() {
                       onChange={handleField("pricePerUnit")}
                       placeholder="85000"
                       className="h-10 rounded-xl"
-                      required
+                      disabled={form.isMarketPrice}
                     />
                   </FormField>
                   <FormField label="Tồn kho">
@@ -385,6 +387,23 @@ export default function InventoryPage() {
                       className="h-10 rounded-xl"
                     />
                   </FormField>
+                </div>
+
+                {/* Giá liên hệ toggle */}
+                <div className="flex items-center gap-2 mt-[-4px] mb-2">
+                  <input
+                    type="checkbox"
+                    id="isMarketPrice"
+                    checked={form.isMarketPrice || false}
+                    onChange={handleField("isMarketPrice")}
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+                  />
+                  <Label
+                    htmlFor="isMarketPrice"
+                    className="text-sm cursor-pointer"
+                  >
+                    Giá liên hệ (Theo thời giá)
+                  </Label>
                 </div>
 
                 {/* Row: Origin + Shelf life */}
@@ -411,22 +430,40 @@ export default function InventoryPage() {
                   </FormField>
                 </div>
 
-                {/* Category */}
                 <FormField label="Danh mục" required>
-                  <select
-                    id="categoryId"
-                    value={form.categoryId}
-                    onChange={handleField("categoryId")}
-                    required
-                    className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
-                  >
-                    <option value="">Chọn danh mục...</option>
+                  <div className="flex flex-wrap gap-2 rounded-xl border border-input bg-background px-3 py-3 text-sm shadow-xs min-h-[40px]">
+                    {categories.length === 0 && (
+                      <span className="text-muted-foreground text-sm">
+                        Chưa có danh mục
+                      </span>
+                    )}
                     {categories.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
+                      <label
+                        key={c.id}
+                        className="flex items-center gap-2 cursor-pointer bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={form.categoryIds?.includes(c.id) || false}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setForm((prev) => ({
+                              ...prev,
+                              categoryIds: checked
+                                ? [...(prev.categoryIds || []), c.id]
+                                : (prev.categoryIds || []).filter(
+                                    (id) => id !== c.id,
+                                  ),
+                            }));
+                          }}
+                          className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+                        />
+                        <span className="text-sm font-medium text-slate-700">
+                          {c.name}
+                        </span>
+                      </label>
                     ))}
-                  </select>
+                  </div>
                 </FormField>
 
                 {/* isFeatured toggle */}
@@ -550,16 +587,24 @@ export default function InventoryPage() {
                       </div>
                     </TableCell>
                     <TableCell className="hidden md:table-cell text-sm">
-                      {product.category.name}
+                      {product.categories?.map((c) => c.name).join(", ") || "—"}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
                       {product.stockQuantity}
                     </TableCell>
                     <TableCell className="hidden md:table-cell text-sm">
-                      {new Intl.NumberFormat("vi-VN").format(
-                        Number(product.pricePerUnit),
-                      )}{" "}
-                      VNĐ
+                      {product.isMarketPrice ? (
+                        <span className="text-amber-600 font-medium text-xs">
+                          Liên hệ
+                        </span>
+                      ) : (
+                        <>
+                          {new Intl.NumberFormat("vi-VN").format(
+                            Number(product.pricePerUnit),
+                          )}{" "}
+                          VNĐ
+                        </>
+                      )}
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-sm text-muted-foreground">
                       {product.origin}

@@ -14,7 +14,9 @@ export async function GET(request: Request) {
 
     let query = db
       .from("Product")
-      .select("*, category:Category(id, name)", { count: "exact" })
+      .select("*, ProductCategory(categoryId, Category(id, name))", {
+        count: "exact",
+      })
       .eq("isDeleted", false)
       .order("createdAt", { ascending: false })
       .range((page - 1) * pageSize, page * pageSize - 1);
@@ -23,16 +25,24 @@ export async function GET(request: Request) {
       query = query.or(`name.ilike.%${search}%,sku.ilike.%${search}%`);
     }
     if (categoryId) {
-      query = query.eq("categoryId", categoryId);
+      query = query.eq("ProductCategory.categoryId", categoryId);
     }
 
     const { data: products, count, error } = await query;
     if (error) throw error;
 
     const total = count ?? 0;
+    const formattedProducts = products?.map((p: any) => {
+      const { ProductCategory, ...rest } = p;
+      return {
+        ...rest,
+        categories: ProductCategory?.map((pc: any) => pc.Category) || [],
+      };
+    });
+
     return NextResponse.json({
       success: true,
-      products,
+      products: formattedProducts,
       pagination: {
         total,
         page,
@@ -61,15 +71,24 @@ export async function POST(request: Request) {
       stockQuantity,
       origin,
       shelfLifeDays,
-      categoryId,
+      categoryIds,
       slug,
       isFeatured,
       img,
       images,
       note,
+      isMarketPrice,
     } = body;
 
-    if (!name || !sku || !slug || !pricePerUnit || !unitType || !categoryId) {
+    if (
+      !name ||
+      !sku ||
+      !slug ||
+      (!isMarketPrice && !pricePerUnit) ||
+      !unitType ||
+      !categoryIds ||
+      categoryIds.length === 0
+    ) {
       return NextResponse.json(
         { success: false, error: "Thiếu thông tin bắt buộc" },
         { status: 400 },
@@ -87,14 +106,14 @@ export async function POST(request: Request) {
         stockQuantity: Number(stockQuantity) || 0,
         origin: origin || "Việt Nam",
         shelfLifeDays: Number(shelfLifeDays) || 365,
-        categoryId,
         slug,
         isFeatured: !!isFeatured,
         img: img || null,
         images: Array.isArray(images) ? images : [],
         note: note || null,
+        isMarketPrice: !!isMarketPrice,
       })
-      .select("*, category:Category(id, name)")
+      .select()
       .single();
 
     if (error) {
@@ -108,7 +127,31 @@ export async function POST(request: Request) {
       throw error;
     }
 
-    return NextResponse.json({ success: true, product }, { status: 201 });
+    if (categoryIds && categoryIds.length > 0) {
+      const categoryInserts = categoryIds.map((cId: string) => ({
+        productId: product.id,
+        categoryId: cId,
+      }));
+      await db.from("ProductCategory").insert(categoryInserts);
+    }
+
+    // Refetch to get the joined data
+    const { data: completeProduct } = await db
+      .from("Product")
+      .select("*, ProductCategory(categoryId, Category(id, name))")
+      .eq("id", product.id)
+      .single();
+
+    const { ProductCategory, ...restProduct } = completeProduct as any;
+    const formattedProduct = {
+      ...restProduct,
+      categories: ProductCategory?.map((pc: any) => pc.Category) || [],
+    };
+
+    return NextResponse.json(
+      { success: true, product: formattedProduct },
+      { status: 201 },
+    );
   } catch (error) {
     console.error("Inventory POST Error:", error);
     return NextResponse.json(
@@ -141,24 +184,55 @@ export async function PATCH(request: Request) {
     if (updates.origin !== undefined) updateData.origin = updates.origin;
     if (updates.shelfLifeDays !== undefined)
       updateData.shelfLifeDays = Number(updates.shelfLifeDays);
-    if (updates.categoryId !== undefined)
-      updateData.categoryId = updates.categoryId;
     if (updates.slug !== undefined) updateData.slug = updates.slug;
     if (updates.isFeatured !== undefined)
       updateData.isFeatured = updates.isFeatured;
     if (updates.img !== undefined) updateData.img = updates.img;
     if (updates.images !== undefined) updateData.images = updates.images;
     if (updates.note !== undefined) updateData.note = updates.note;
+    if (updates.isMarketPrice !== undefined)
+      updateData.isMarketPrice = updates.isMarketPrice;
 
     const { data: product, error } = await db
       .from("Product")
       .update(updateData)
       .eq("id", id)
-      .select("*, category:Category(id, name)")
+      .select()
       .single();
 
     if (error) throw error;
-    return NextResponse.json({ success: true, product });
+
+    if (updates.categoryIds !== undefined) {
+      // Delete old mappings
+      await db.from("ProductCategory").delete().eq("productId", id);
+
+      // Insert new mappings
+      if (
+        Array.isArray(updates.categoryIds) &&
+        updates.categoryIds.length > 0
+      ) {
+        const categoryInserts = updates.categoryIds.map((cId: string) => ({
+          productId: id,
+          categoryId: cId,
+        }));
+        await db.from("ProductCategory").insert(categoryInserts);
+      }
+    }
+
+    // Refetch to get the joined data
+    const { data: completeProduct } = await db
+      .from("Product")
+      .select("*, ProductCategory(categoryId, Category(id, name))")
+      .eq("id", id)
+      .single();
+
+    const { ProductCategory, ...restProduct } = completeProduct as any;
+    const formattedProduct = {
+      ...restProduct,
+      categories: ProductCategory?.map((pc: any) => pc.Category) || [],
+    };
+
+    return NextResponse.json({ success: true, product: formattedProduct });
   } catch (error) {
     console.error("Inventory PATCH Error:", error);
     return NextResponse.json(
