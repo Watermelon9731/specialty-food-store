@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 type ProductGalleryProps = {
   img: string | null;
@@ -27,11 +28,14 @@ export function ProductGallery({
       {/* Main Image Container */}
       <div className="relative aspect-square w-full bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-sm group">
         {mainImage ? (
-          <img
+          <Image
             key={mainImage} // triggers re-render animation if we want, or just let it swap normally
             src={mainImage}
             alt={name}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+            fill
+            sizes="(max-width: 768px) 100vw, 600px"
+            priority /* Main image should load fast */
+            className="object-cover transition-opacity duration-300"
           />
         ) : (
           <div className="absolute inset-0 bg-[#f5f3ef] flex items-center justify-center">
@@ -59,10 +63,12 @@ export function ProductGallery({
                   : "border-transparent opacity-60 hover:opacity-100",
               )}
             >
-              <img
+              <Image
                 src={image}
                 alt={`${name} thumbnail ${idx + 1}`}
-                className="w-full h-full object-cover"
+                fill
+                sizes="96px"
+                className="object-cover"
               />
             </button>
           ))}

@@ -3,6 +3,7 @@ export const PATH = {
   PRODUCTS: {
     ALL: "/san-pham",
     DETAIL: (slug: string) => `/san-pham/${slug}`,
+    CATEGORY: (category: string) => `/san-pham?category=${category}`,
   },
   CATEGORIES: "/danh-muc",
   ABOUT: "/gioi-thieu",

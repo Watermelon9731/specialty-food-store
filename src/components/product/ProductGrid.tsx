@@ -89,14 +89,15 @@ function ProductCard({
         />
 
         {/* Placeholder / actual image */}
-        <img
-          src={product?.img || undefined}
-          alt={product.name}
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = "none";
-          }}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
-        />
+        {product.img && (
+          <Image
+            src={product.img}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 300px"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+          />
+        )}
 
         {/* Top badges row */}
         <div className="absolute top-3 left-3 right-3 z-20 flex items-start justify-between gap-2 pointer-events-none">
@@ -183,7 +184,9 @@ function ProductCard({
         <div className="mt-auto flex items-end justify-between gap-2">
           <div>
             {product.isMarketPrice ? (
-              <span className="text-lg font-bold text-amber-600">Liên hệ</span>
+              <span className="text-sm font-bold text-amber-600">
+                Giá theo thời điểm
+              </span>
             ) : (
               <>
                 <span className="text-lg font-bold text-[#3a7851]">

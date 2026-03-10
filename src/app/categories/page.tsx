@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getCategoriesService } from "@/server/categories/service";
 import { ArrowRight, Fish, ChefHat, Beef, Leaf, Package2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { PATH } from "@/constants/path";
+import Image from "next/image";
 
 export const revalidate = 60;
 
@@ -94,7 +96,7 @@ export default async function CategoriesPage() {
             </h2>
           </div>
           <Link
-            href="/products"
+            href={PATH.PRODUCTS.ALL}
             className="hidden sm:flex items-center gap-2 text-sm font-semibold text-[#3a7851] hover:text-[#1a3d2b] transition-colors group"
           >
             Xem tất cả sản phẩm
@@ -117,7 +119,7 @@ export default async function CategoriesPage() {
               return (
                 <Link
                   key={category.id}
-                  href={`/products?category=${category.name.toLowerCase()}`}
+                  href={PATH.PRODUCTS.CATEGORY(category.name.toLowerCase())}
                   className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-white border border-slate-100 hover:border-emerald-200 shadow-sm hover:shadow-xl hover:shadow-emerald-900/8 transition-all duration-300 hover:-translate-y-1"
                 >
                   {/* Card image / color block */}
@@ -126,10 +128,12 @@ export default async function CategoriesPage() {
                   >
                     {/* Decorative large icon behind */}
                     {category.image ? (
-                      <img
+                      <Image
                         src={category.image}
                         alt={category.name}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                        fill
+                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                       />
                     ) : (
                       <>
@@ -173,7 +177,7 @@ export default async function CategoriesPage() {
 
             {/* Promo card — "Xem tất cả" */}
             <Link
-              href="/products"
+              href={PATH.PRODUCTS.ALL}
               className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-[#1a3d2b] border border-transparent hover:border-emerald-500/30 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
             >
               <div className="aspect-4/3 flex items-center justify-center relative overflow-hidden">

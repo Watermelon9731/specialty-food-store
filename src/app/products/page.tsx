@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Suspense } from "react";
 import { ChefHat, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
+import { PATH } from "@/constants/path";
 
 export const revalidate = 60;
 
@@ -52,6 +53,7 @@ export default async function ProductsPage(props: {
       : undefined,
     note: p.note,
     img: p.img,
+    isMarketPrice: p.isMarketPrice,
   }));
 
   return (
@@ -80,7 +82,7 @@ export default async function ProductsPage(props: {
         <div className="container mx-auto max-w-7xl px-4 md:px-6 py-3 flex items-center gap-3 overflow-x-auto no-scrollbar">
           <SlidersHorizontal className="w-4 h-4 text-slate-500 shrink-0" />
           <Link
-            href="/products"
+            href={PATH.PRODUCTS.ALL}
             className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-150 ${
               activeCategory === "all"
                 ? "bg-[#1a3d2b] text-white shadow-sm"
@@ -92,7 +94,7 @@ export default async function ProductsPage(props: {
           {categories.map((cat) => (
             <Link
               key={cat.id}
-              href={`/products?category=${cat.name.toLowerCase()}`}
+              href={PATH.PRODUCTS.CATEGORY(cat.name.toLowerCase())}
               className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-150 ${
                 activeCategory === cat.name.toLowerCase()
                   ? "bg-[#1a3d2b] text-white shadow-sm"

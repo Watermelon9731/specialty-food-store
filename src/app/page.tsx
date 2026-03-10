@@ -147,6 +147,8 @@ export default async function Home() {
                   "https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/tre-ruot.jpg"
                 }
                 fill
+                sizes="(max-width: 768px) 100vw, 340px"
+                priority
                 alt="Tré Bà Liên"
                 className="object-cover"
               />
@@ -159,6 +161,8 @@ export default async function Home() {
                   "https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/cha-ram-tom-dat.jpg"
                 }
                 fill
+                sizes="(max-width: 768px) 100vw, 180px"
+                priority
                 alt="Chả ram tôm đất"
                 className="object-cover"
               />
@@ -190,21 +194,18 @@ export default async function Home() {
           ═══════════════════════════════════════ */}
       <section className="py-24 bg-white px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
             <div>
               <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 mb-4 rounded-full px-4 py-1.5">
                 <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                Triết lý của chúng tôi
+                Phương châm của tôi
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
-                Cam kết khắt khe,
-                <br />
-                không thỏa hiệp.
+              <h2 className="text-3xl md:text-5xl font-bold text-slate-900 leading-tight">
+                Ăn sao, bán vậy
               </h2>
             </div>
-            <p className="text-slate-500 max-w-sm text-base md:text-right leading-relaxed">
-              Sức khoẻ của gia đình bạn là tiêu chuẩn không thể đánh đổi tại lò
-              của chúng tôi.
+            <p className="text-[#3a7851] font-semibold max-w-sm text-lg md:text-right leading-relaxed">
+              Từ bếp của tôi, đến tay của bạn.
             </p>
           </div>
 

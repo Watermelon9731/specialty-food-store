@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCart, type CartItem } from "@/hooks/use-cart";
-import { CONTACT_INFO } from "@/constants/path";
+import { CONTACT_INFO, PATH } from "@/constants/path";
 import {
   Trash2,
   Plus,
@@ -23,6 +23,7 @@ import {
   Mail,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 function formatVND(amount: number) {
   return new Intl.NumberFormat("vi-VN", {
@@ -155,7 +156,7 @@ export function CartDrawer() {
                 asChild
                 className="rounded-full bg-[#1a3d2b] hover:bg-[#3a7851] text-white px-7 h-11 font-semibold"
               >
-                <Link href="/products">Khám phá sản phẩm →</Link>
+                <Link href={PATH.PRODUCTS.ALL}>Khám phá sản phẩm →</Link>
               </Button>
             </div>
           ) : (
@@ -168,10 +169,12 @@ export function CartDrawer() {
                   {/* Thumbnail */}
                   <div className="relative h-18 w-18 min-w-[72px] rounded-xl bg-[#f5f3ef] border border-slate-100 overflow-hidden flex items-center justify-center shrink-0">
                     {item.image ? (
-                      <img
+                      <Image
                         src={item.image}
                         alt={item.name}
-                        className="w-full h-full object-cover"
+                        fill
+                        sizes="72px"
+                        className="object-cover"
                       />
                     ) : (
                       <span className="text-2xl select-none">🥩</span>

@@ -954,7 +954,7 @@ export default function TrePage() {
                   </Button>
                 </a>
                 <a
-                  href={CONTACT_INFO.ZALO}
+                  href={CONTACT_INFO.FACEBOOK}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
