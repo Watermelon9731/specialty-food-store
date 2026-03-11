@@ -19,6 +19,7 @@ import ZaloIcon from "../icons/ZaloIcon";
 const NAV_LINKS = [
   { href: PATH.PRODUCTS.ALL, label: "Sản phẩm" },
   { href: PATH.CATEGORIES, label: "Danh mục" },
+  { href: PATH.BLOG.ALL, label: "Tin tức" },
   { href: PATH.ABOUT, label: "Về chúng tôi" },
   { href: PATH.CONTACT, label: "Liên hệ" },
 ];

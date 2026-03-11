@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getProductsService } from "@/server/products/service";
+import { client } from "@/sanity/client";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://trebinhdinh.com";
@@ -42,6 +43,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    {
+      url: `${baseUrl}/tin-tuc`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.7,
+    },
   ];
 
   // NOTE: Admin routes (/admin, /admin/orders, /admin/login, etc.)
@@ -59,7 +66,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-    return [...staticRoutes, ...productRoutes];
+    // Fetch Blog Posts from Sanity
+    const query = `*[_type == "post"] { slug, publishedAt, _updatedAt }`;
+    const posts = await client.fetch(query);
+    const postRoutes: MetadataRoute.Sitemap = posts.map((post: any) => ({
+      url: `${baseUrl}/tin-tuc/${post.slug.current}`,
+      lastModified: new Date(post._updatedAt || post.publishedAt || new Date()),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }));
+
+    return [...staticRoutes, ...productRoutes, ...postRoutes];
   } catch (error) {
     console.error("Error generating sitemap:", error);
     return staticRoutes;

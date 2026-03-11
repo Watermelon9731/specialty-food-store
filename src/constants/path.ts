@@ -15,6 +15,10 @@ export const PATH = {
   PRODUCTS_NEM_CHA: "/san-pham?category=nem-cha-dac-san",
   PRODUCTS_SPICES: "/san-pham?category=gia-vi-truyen-thong",
   TRE: "/tre-binh-dinh",
+  BLOG: {
+    ALL: "/tin-tuc",
+    DETAIL: (slug: string) => `/tin-tuc/${slug}`,
+  },
   ADMIN: {
     LOGIN: "/admin/login",
     DASHBOARD: "/admin",
