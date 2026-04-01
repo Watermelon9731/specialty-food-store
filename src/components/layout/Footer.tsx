@@ -47,29 +47,29 @@ export function Footer() {
     <footer className="bg-[#1a3d2b] text-white">
       {/* ── Top strip — CTA ── */}
       <div className="border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-6 py-12 max-w-7xl flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+        <div className="container mx-auto px-4 max-[375px]:px-3 md:px-6 py-10 max-[375px]:py-8 md:py-12 max-w-7xl flex flex-col md:flex-row items-center md:items-center justify-between gap-6 max-[375px]:gap-5 md:gap-8 text-center md:text-left">
           <div className="max-w-xl">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-400 mb-2">
               🥩 Đặc sản bán chạy nhất
             </p>
-            <h2 className="text-2xl md:text-3xl font-bold text-white leading-snug mb-2">
+            <h2 className="text-2xl max-[375px]:text-xl md:text-3xl font-bold text-white leading-snug mb-2">
               Tré Gia Truyền Bình Định
             </h2>
-            <p className="text-emerald-200/70 text-sm leading-relaxed">
+            <p className="text-emerald-200/70 text-sm max-[375px]:text-xs leading-relaxed">
               Lên men tự nhiên bằng lá ổi · Không hàn the · Làm bằng tâm huyết
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+          <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full md:w-auto">
             <Link
               href={PATH.TRE}
-              className="flex items-center justify-center gap-2 bg-amber-300 hover:bg-amber-400 text-amber-950 hover:text-amber-100 font-bold px-7 h-12 rounded-full text-sm transition-all duration-200 shadow-lg hover:scale-105 group"
+              className="flex items-center justify-center gap-2 bg-amber-300 hover:bg-amber-400 text-amber-950 hover:text-amber-100 font-bold px-7 max-[375px]:px-5 h-12 max-[375px]:h-11 rounded-full text-sm max-[375px]:text-xs transition-all duration-200 shadow-lg hover:scale-105 group w-full sm:w-auto"
             >
               Khám phá Tré Ngay
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href={PATH.PRODUCTS.ALL}
-              className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 h-12 rounded-full text-sm transition-all duration-200 border border-white/20"
+              className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 max-[375px]:px-4 h-12 max-[375px]:h-11 rounded-full text-sm max-[375px]:text-xs transition-all duration-200 border border-white/20 w-full sm:w-auto"
             >
               Xem tất cả sản phẩm
             </Link>
@@ -78,31 +78,31 @@ export function Footer() {
       </div>
 
       {/* ── Main grid ── */}
-      <div className="container mx-auto px-4 md:px-6 py-16 max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="container mx-auto px-4 max-[375px]:px-3 md:px-6 py-12 max-[375px]:py-10 md:py-16 max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-[375px]:gap-6 md:gap-12">
         {/* Brand column */}
         <div className="sm:col-span-2 lg:col-span-1 space-y-6">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="bg-white/15 group-hover:bg-[#3a7851] p-2.5 rounded-xl transition-all duration-200">
-              <ChefHat className="h-5 w-5 text-white" />
+          <Link href="/" className="flex items-center gap-3 max-[375px]:gap-2.5 group">
+            <div className="bg-white/15 group-hover:bg-[#3a7851] p-2.5 max-[375px]:p-2 rounded-xl transition-all duration-200">
+              <ChefHat className="h-5 w-5 max-[375px]:h-4 max-[375px]:w-4 text-white" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-bold text-xl tracking-tight">
+              <span className="font-bold text-xl max-[375px]:text-lg tracking-tight">
                 Tré Bà Liên
               </span>
-              <span className="text-[10px] text-emerald-400 font-semibold tracking-[0.15em] uppercase">
+              <span className="text-[10px] max-[375px]:text-[9px] text-emerald-400 font-semibold tracking-[0.15em] uppercase">
                 Tré & Chả Nem Bình Định
               </span>
             </div>
           </Link>
 
-          <p className="text-emerald-100/70 text-sm leading-relaxed max-w-xs">
+          <p className="text-emerald-100/70 text-sm max-[375px]:text-xs leading-relaxed max-w-xs">
             Tré Bà Liên — tên gọi của sự kiên nhẫn. Tré rơm lên men tự nhiên,
             làm thủ công từ tâm huyết. Gìn giữ hương vị chính gốc của vùng đất
             Xứ Nẫu.
           </p>
 
           {/* Contact info */}
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-sm max-[375px]:text-xs">
             <a
               href={`tel:${CONTACT_INFO.PHONE_CODE}${CONTACT_INFO.PHONE}`}
               className="flex items-center gap-2.5 text-emerald-200/80 hover:text-emerald-300 transition-colors group"
@@ -155,7 +155,7 @@ export function Footer() {
 
         {/* Cửa hàng */}
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-400 mb-6">
+          <h3 className="text-xs max-[375px]:text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-400 mb-6 max-[375px]:mb-4">
             Cửa Hàng
           </h3>
           <ul className="space-y-3">
@@ -163,7 +163,7 @@ export function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className={`text-sm transition-colors flex items-center gap-1.5 group ${
+                  className={`text-sm max-[375px]:text-xs transition-colors flex items-center gap-1.5 group ${
                     link.highlight
                       ? "text-amber-300 hover:text-amber-200 font-semibold"
                       : "text-emerald-100/70 hover:text-white"
@@ -181,7 +181,7 @@ export function Footer() {
 
         {/* Thông tin */}
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-400 mb-6">
+          <h3 className="text-xs max-[375px]:text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-400 mb-6 max-[375px]:mb-4">
             Thông Tin
           </h3>
           <ul className="space-y-3">
@@ -189,7 +189,7 @@ export function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-sm text-emerald-100/70 hover:text-white transition-colors flex items-center gap-1.5 group"
+                  className="text-sm max-[375px]:text-xs text-emerald-100/70 hover:text-white transition-colors flex items-center gap-1.5 group"
                 >
                   <span className="opacity-0 group-hover:opacity-100 transition-opacity text-emerald-400">
                     →
@@ -203,7 +203,7 @@ export function Footer() {
 
         {/* Cam kết */}
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-400 mb-6">
+          <h3 className="text-xs max-[375px]:text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-400 mb-6 max-[375px]:mb-4">
             Cam Kết
           </h3>
           <div className="space-y-4">
@@ -229,7 +229,7 @@ export function Footer() {
                 <span className="text-base leading-none mt-0.5 shrink-0">
                   {item.emoji}
                 </span>
-                <p className="text-sm text-emerald-100/70 leading-relaxed">
+                <p className="text-sm max-[375px]:text-xs text-emerald-100/70 leading-relaxed">
                   {item.text}
                 </p>
               </div>
@@ -240,7 +240,7 @@ export function Footer() {
 
       {/* ── Bottom bar ── */}
       <div className="border-t border-white/10">
-        <div className="container mx-auto px-4 md:px-6 py-5 max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-emerald-400/60">
+        <div className="container mx-auto px-4 max-[375px]:px-3 md:px-6 py-5 max-[375px]:py-4 max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs max-[375px]:text-[11px] text-emerald-400/60 text-center sm:text-left">
           <p>
             © {new Date().getFullYear()} Tré Bà Liên · Bình Định, Việt Nam. Mọi
             quyền được bảo lưu.

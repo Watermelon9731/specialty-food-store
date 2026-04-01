@@ -59,7 +59,7 @@ export default async function ProductsPage(props: {
   return (
     <div className="min-h-screen bg-[#f8f7f4]">
       {/* ── Page hero ── */}
-      <div className="bg-[#1a3d2b] text-white py-16 px-4 md:px-6 relative overflow-hidden">
+      <div className="bg-[#1a3d2b] text-white py-16 max-[375px]:py-12 px-4 max-[375px]:px-3 md:px-6 relative overflow-hidden">
         {/* Dot texture */}
         <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none" />
         <div className="container mx-auto max-w-7xl relative z-10">
@@ -67,10 +67,10 @@ export default async function ProductsPage(props: {
             <ChefHat className="w-4 h-4" />
             Tré Bà Liên
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+          <h1 className="text-4xl max-[375px]:text-3xl md:text-5xl font-bold mb-4 max-[375px]:mb-3 leading-tight">
             Tất cả sản phẩm
           </h1>
-          <p className="text-emerald-200/80 text-lg max-w-xl">
+          <p className="text-emerald-200/80 text-lg max-[375px]:text-sm max-w-xl">
             Khám phá đầy đủ bộ sưu tập đặc sản thủ công từ vùng đất Xứ Nẫu — tré
             rơm, mực khô, nem chả và gia vị truyền thống.
           </p>
@@ -78,12 +78,12 @@ export default async function ProductsPage(props: {
       </div>
 
       {/* ── Sticky filter bar ── */}
-      <div className="sticky top-[68px] z-40 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6 py-3 flex items-center gap-3 overflow-x-auto no-scrollbar">
-          <SlidersHorizontal className="w-4 h-4 text-slate-500 shrink-0" />
+      <div className="sticky top-16 max-[375px]:top-[58px] md:top-[68px] z-40 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
+        <div className="container mx-auto max-w-7xl px-4 max-[375px]:px-3 md:px-6 py-3 max-[375px]:py-2.5 flex items-center gap-3 max-[375px]:gap-2 overflow-x-auto no-scrollbar">
+          <SlidersHorizontal className="w-4 h-4 max-[375px]:w-3.5 max-[375px]:h-3.5 text-slate-500 shrink-0" />
           <Link
             href={PATH.PRODUCTS.ALL}
-            className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-150 ${
+            className={`shrink-0 px-4 max-[375px]:px-3 py-1.5 max-[375px]:py-1 rounded-full text-sm max-[375px]:text-xs font-semibold transition-all duration-150 ${
               activeCategory === "all"
                 ? "bg-[#1a3d2b] text-white shadow-sm"
                 : "bg-slate-100 text-slate-600 hover:bg-emerald-50 hover:text-[#1a3d2b]"
@@ -95,7 +95,7 @@ export default async function ProductsPage(props: {
             <Link
               key={cat.id}
               href={PATH.PRODUCTS.CATEGORY(cat.name.toLowerCase())}
-              className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-150 ${
+              className={`shrink-0 px-4 max-[375px]:px-3 py-1.5 max-[375px]:py-1 rounded-full text-sm max-[375px]:text-xs font-semibold transition-all duration-150 ${
                 activeCategory === cat.name.toLowerCase()
                   ? "bg-[#1a3d2b] text-white shadow-sm"
                   : "bg-slate-100 text-slate-600 hover:bg-emerald-50 hover:text-[#1a3d2b]"
@@ -108,10 +108,10 @@ export default async function ProductsPage(props: {
       </div>
 
       {/* ── Results ── */}
-      <div className="container mx-auto max-w-7xl px-4 md:px-6 py-10">
-        <div className="flex items-center justify-between mb-8">
+      <div className="container mx-auto max-w-7xl px-4 max-[375px]:px-3 md:px-6 py-10 max-[375px]:py-7">
+        <div className="flex items-center justify-between mb-8 max-[375px]:mb-6">
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-slate-900">
+            <h2 className="text-lg max-[375px]:text-base font-bold text-slate-900">
               {activeCategory === "all" ? "Tất cả sản phẩm" : activeCategory}
             </h2>
             <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 rounded-full font-semibold">
@@ -122,7 +122,7 @@ export default async function ProductsPage(props: {
 
         <Suspense
           fallback={
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 min-[420px]:grid-cols-2 lg:grid-cols-4 gap-4 max-[375px]:gap-3 md:gap-6">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div
                   key={i}

@@ -17,7 +17,7 @@ import ZaloIcon from "@/components/icons/ZaloIcon";
 export const metadata = {
   title: "Về Chúng Tôi | Tré Bà Liên — Đặc Sản Bình Định",
   description:
-    "Câu chuyện gia đình ba thế hệ giữ lửa nghề làm tré rơm truyền thống tại Chợ Huyện, Phù Cát, Bình Định.",
+    "Câu chuyện bếp nhỏ giữ trọn nghề làm tré rơm thủ công tại Chợ Huyện, Phù Cát, Bình Định.",
   alternates: {
     canonical: "/gioi-thieu",
   },
@@ -43,7 +43,7 @@ export default function AboutPage() {
             </h1>
             <p className="text-emerald-100/80 text-lg leading-relaxed max-w-lg">
               Từ góc bếp nhỏ ở Chợ Huyện, Phù Cát, Bình Định — bà Liên cần mẫn
-              giữ gìn công thức tré rơm gia truyền, không vì lợi nhuận mà đánh
+              giữ trọn cách làm tré rơm thủ công, không vì lợi nhuận mà đánh
               đổi chất lượng.
             </p>
           </div>
@@ -64,8 +64,12 @@ export default function AboutPage() {
                 key={s.label}
                 className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-5"
               >
-                <p className="text-2xl mb-1">{s.icon}</p>
-                <p className="text-3xl font-bold text-emerald-300">{s.num}</p>
+                <div className="flex items-center gap-3">
+                  <p className="text-2xl mb-1">{s.icon}</p>
+                  <p className="text-lg md:text-2xl font-bold text-emerald-300">
+                    {s.num}
+                  </p>
+                </div>
                 <p className="text-emerald-100/70 text-sm font-medium">
                   {s.label}
                 </p>
@@ -86,6 +90,8 @@ export default function AboutPage() {
                   src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/chen-tre.jpg"
                   alt="Tré Bà Liên"
                   fill
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                  loading="lazy"
                   className="object-cover"
                 />
               </div>
@@ -132,7 +138,7 @@ export default function AboutPage() {
                   Đoàn Thị Bích Liên
                 </p>
                 <p className="text-slate-500 text-sm mt-1 font-medium">
-                  Người sáng lập Tré Bà Liên
+                  Tré Bà Liên
                 </p>
               </div>
             </div>

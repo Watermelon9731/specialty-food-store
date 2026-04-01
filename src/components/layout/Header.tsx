@@ -26,30 +26,18 @@ const NAV_LINKS = [
 
 export function Header() {
   const { items, setOpen } = useCart();
-  const [isMounted, setIsMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
 
   const pathName = usePathname();
+  const isDisabled = pathName.includes("/admin");
 
   useEffect(() => {
-    setIsMounted(true);
     const onScroll = () => setScrolled(window.scrollY > 16);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    if (pathName.includes("/admin")) {
-      setIsDisabled(true);
-    } else {
-      setIsDisabled(false);
-    }
-  }, [pathName]);
-
-  const itemCount = isMounted
-    ? items.reduce((acc, item) => acc + item.quantity, 0)
-    : 0;
+  const itemCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <header
@@ -61,7 +49,7 @@ export function Header() {
         }` + (isDisabled ? " hidden" : "")
       }
     >
-      <div className="container mx-auto flex h-[68px] items-center justify-between px-4 md:px-6 max-w-7xl">
+      <div className="container mx-auto flex h-[64px] max-[375px]:h-[58px] md:h-[68px] items-center justify-between px-3 max-[375px]:px-2.5 sm:px-4 md:px-6 max-w-7xl">
         {/* ── Logo ── */}
         <Link href="/">
           <BrandLogo />
@@ -89,17 +77,17 @@ export function Header() {
         </nav>
 
         {/* ── Right actions ── */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 max-[375px]:gap-1 sm:gap-2">
           {/* Cart */}
           <button
             onClick={() => setOpen(true)}
             aria-label="Mở giỏ hàng"
-            className="relative flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 hover:border-[#3a7851] text-slate-700 hover:text-[#1a3d2b] rounded-full h-10 px-4 transition-all duration-200 shadow-sm text-sm font-semibold"
+            className="relative flex items-center gap-1.5 sm:gap-2 bg-white hover:bg-slate-50 border border-slate-200 hover:border-[#3a7851] text-slate-700 hover:text-[#1a3d2b] rounded-full h-9 max-[375px]:h-8 sm:h-10 px-3 max-[375px]:px-2.5 sm:px-4 transition-all duration-200 shadow-sm text-xs sm:text-sm font-semibold"
           >
-            <ShoppingBag className="h-4 w-4" />
-            <span className="hidden sm:inline">Giỏ hàng</span>
+            <ShoppingBag className="h-4 w-4 max-[375px]:h-3.5 max-[375px]:w-3.5" />
+            <span className="hidden min-[420px]:inline">Giỏ hàng</span>
             {itemCount > 0 && (
-              <span className="flex items-center justify-center h-5 w-5 rounded-full bg-[#3a7851] text-white text-[10px] font-bold shadow-sm">
+              <span className="flex items-center justify-center h-5 w-5 max-[375px]:h-[18px] max-[375px]:w-[18px] rounded-full bg-[#3a7851] text-white text-[10px] max-[375px]:text-[9px] font-bold shadow-sm">
                 {itemCount}
               </span>
             )}
@@ -127,41 +115,41 @@ export function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden h-10 w-10 rounded-full hover:bg-white"
+                className="md:hidden h-9 w-9 max-[375px]:h-8 max-[375px]:w-8 sm:h-10 sm:w-10 rounded-full hover:bg-white"
                 aria-label="Mở menu"
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-5 w-5 max-[375px]:h-[18px] max-[375px]:w-[18px]" />
               </Button>
             </SheetTrigger>
 
             <SheetContent
               side="left"
-              className="w-[300px] p-0 border-r-0 bg-[#f8f7f4]"
+              className="w-[90vw] max-w-[320px] max-[375px]:max-w-[300px] p-0 border-r-0 bg-[#f8f7f4]"
             >
               <SheetTitle className="sr-only">Menu điều hướng</SheetTitle>
 
               {/* Sidebar header */}
-              <div className="flex items-center gap-2.5 p-6 border-b border-slate-200/60">
-                <div className="bg-[#1a3d2b] p-2 rounded-xl text-white">
-                  <ChefHat className="h-5 w-5" />
+              <div className="flex items-center gap-2.5 max-[375px]:gap-2 p-6 max-[375px]:p-5 border-b border-slate-200/60">
+                <div className="bg-[#1a3d2b] p-2 max-[375px]:p-1.5 rounded-xl text-white">
+                  <ChefHat className="h-5 w-5 max-[375px]:h-4 max-[375px]:w-4" />
                 </div>
                 <div className="flex flex-col leading-none">
-                  <span className="font-bold text-[17px] tracking-tight text-slate-900">
+                  <span className="font-bold text-[17px] max-[375px]:text-[15px] tracking-tight text-slate-900">
                     Tré Bà Liên
                   </span>
-                  <span className="text-[10px] text-[#3a7851] font-semibold tracking-[0.12em] uppercase">
+                  <span className="text-[10px] max-[375px]:text-[9px] text-[#3a7851] font-semibold tracking-[0.12em] uppercase">
                     Tré & Chả Nem Bình Định
                   </span>
                 </div>
               </div>
 
               {/* Sidebar nav */}
-              <nav className="flex flex-col p-4 gap-1">
+              <nav className="flex flex-col p-4 max-[375px]:p-3.5 gap-1">
                 {NAV_LINKS.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="flex items-center px-4 py-3.5 text-base font-semibold text-slate-700 hover:text-[#1a3d2b] hover:bg-white rounded-2xl transition-all duration-150"
+                    className="flex items-center px-4 max-[375px]:px-3.5 py-3.5 max-[375px]:py-3 text-base max-[375px]:text-[15px] font-semibold text-slate-700 hover:text-[#1a3d2b] hover:bg-white rounded-2xl transition-all duration-150"
                   >
                     {link.label}
                   </Link>
@@ -169,11 +157,11 @@ export function Header() {
               </nav>
 
               {/* Tré featured card — mobile */}
-              <div className="mx-4 mb-2 rounded-2xl bg-amber-50 border border-amber-200 p-4">
+              <div className="mx-4 max-[375px]:mx-3.5 mb-2 rounded-2xl bg-amber-50 border border-amber-200 p-4 max-[375px]:p-3.5">
                 <p className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-1">
                   Đặc sản nổi bật
                 </p>
-                <p className="font-bold text-slate-900 text-base mb-0.5">
+                <p className="font-bold text-slate-900 text-base max-[375px]:text-sm mb-0.5">
                   🥩 Tré Rơm Gia Truyền
                 </p>
                 <p className="text-xs text-slate-500 mb-3">
@@ -187,15 +175,15 @@ export function Header() {
               </div>
 
               {/* Sidebar CTA */}
-              <div className="p-4 mt-4 border-t border-slate-200/60">
+              <div className="p-4 max-[375px]:p-3.5 mt-4 border-t border-slate-200/60">
                 <a
                   href={CONTACT_INFO.ZALO}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block"
                 >
-                  <Button className="w-full rounded-full bg-[#0068FF] hover:bg-[#0055d4] text-white h-12 font-semibold text-base gap-2">
-                    <MessageCircle className="h-5 w-5" />
+                  <Button className="w-full rounded-full bg-[#0068FF] hover:bg-[#0055d4] text-white h-12 max-[375px]:h-11 font-semibold text-base max-[375px]:text-sm gap-2">
+                    <MessageCircle className="h-5 w-5 max-[375px]:h-[18px] max-[375px]:w-[18px]" />
                     Đặt mua qua Zalo
                   </Button>
                 </a>

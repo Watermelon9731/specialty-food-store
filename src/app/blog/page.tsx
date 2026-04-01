@@ -61,7 +61,7 @@ export default async function BlogIndexPage() {
             <span className="text-emerald-300">Nhịp Sống Quê Mình.</span>
           </h1>
           <p className="text-emerald-50/70 text-lg max-w-2xl leading-relaxed">
-            Mẹo vặt gia truyền, văn hóa ẩm thực và những mẩu chuyện mộc mạc làm
+            Mẹo bếp thủ công, văn hóa ẩm thực và những mẩu chuyện mộc mạc làm
             nên thương hiệu Tré Bà Liên.
           </p>
         </div>

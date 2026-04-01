@@ -1,12 +1,57 @@
 import { db } from "@/lib/db";
 import { type ProductInput } from "./schemas";
 
+const PUBLIC_PRODUCT_SELECT = `
+  id,
+  slug,
+  name,
+  pricePerUnit,
+  unitType,
+  stockQuantity,
+  origin,
+  note,
+  img,
+  isMarketPrice,
+  ProductCategory(Category(id, name))
+`;
+
 export const getProducts = async () => {
   const { data, error } = await db
     .from("Product")
     .select("*, ProductCategory(Category(*))")
     .eq("isDeleted", false)
     .order("createdAt", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+};
+
+export const getFeaturedProducts = async (limit = 8) => {
+  const { data, error } = await db
+    .from("Product")
+    .select(PUBLIC_PRODUCT_SELECT)
+    .eq("isDeleted", false)
+    .eq("isFeatured", true)
+    .order("createdAt", { ascending: false })
+    .limit(limit);
+
+  if (error) throw error;
+  return data ?? [];
+};
+
+export const getRelatedProductsByCategory = async (
+  categoryId: string,
+  currentProductId: string,
+  limit = 4,
+) => {
+  const { data, error } = await db
+    .from("Product")
+    .select(PUBLIC_PRODUCT_SELECT)
+    .eq("isDeleted", false)
+    .eq("ProductCategory.categoryId", categoryId)
+    .neq("id", currentProductId)
+    .order("createdAt", { ascending: false })
+    .limit(limit);
+
   if (error) throw error;
   return data ?? [];
 };

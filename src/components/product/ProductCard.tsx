@@ -4,7 +4,6 @@ import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Plus, Check } from "lucide-react";
 import { useState } from "react";
-import { motion } from "framer-motion";
 
 export interface ProductCardProps {
   product: {
@@ -36,10 +35,7 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <motion.div
-      whileHover={{ y: -5 }} // Subtle lift
-      className="group relative flex flex-col overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md"
-    >
+    <div className="group relative flex flex-col overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
       <div className="aspect-square relative overflow-hidden bg-muted flex items-center justify-center">
         <span className="text-4xl opacity-50">🥜</span>
       </div>
@@ -80,6 +76,6 @@ export function ProductCard({ product }: ProductCardProps) {
           </Button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

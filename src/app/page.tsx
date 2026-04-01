@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProductGrid } from "@/components/product/ProductGrid";
-import { getProductsService } from "@/server/products/service";
+import { getFeaturedProductsService } from "@/server/products/service";
 import {
   Leaf,
   ArrowRight,
@@ -26,31 +26,28 @@ import ZaloIcon from "@/components/icons/ZaloIcon";
 export const revalidate = 60;
 
 export default async function Home() {
-  const products = await getProductsService();
-
-  const featuredProducts = products
-    .filter((p) => p.isFeatured)
-    .map((p) => ({
-      id: p.id,
-      slug: p.slug,
-      name: p.name,
-      pricePerUnit: Number(p.pricePerUnit),
-      unitType: p.unitType,
-      stockQuantity: p.stockQuantity,
-      origin: p.origin,
-      category: p.ProductCategory?.[0]?.Category
-        ? { name: p.ProductCategory[0].Category.name }
-        : undefined,
-      note: p.note,
-      img: p.img,
-    }));
+  const featuredProducts = (await getFeaturedProductsService(8)).map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    name: p.name,
+    pricePerUnit: Number(p.pricePerUnit),
+    unitType: p.unitType,
+    stockQuantity: p.stockQuantity,
+    origin: p.origin,
+    category: p.ProductCategory?.[0]?.Category
+      ? { name: p.ProductCategory[0].Category.name }
+      : undefined,
+    note: p.note,
+    img: p.img,
+    isMarketPrice: p.isMarketPrice,
+  }));
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f8f7f4] text-slate-800 overflow-hidden selection:bg-emerald-200">
       {/* ═══════════════════════════════════════
           1. HERO — Full-width, editorial style
           ═══════════════════════════════════════ */}
-      <section className="relative min-h-[92vh] flex items-center px-4 md:px-6 overflow-hidden bg-[#f8f7f4]">
+      <section className="relative min-h-[78vh] max-[375px]:min-h-[72vh] md:min-h-[92vh] flex items-center px-4 max-[375px]:px-3 md:px-6 overflow-hidden bg-[#f8f7f4]">
         {/* Warm dot-grid texture */}
         <div className="absolute inset-0 bg-[radial-gradient(#d6d3c8_1px,transparent_1px)] bg-size-[28px_28px] opacity-60 pointer-events-none" />
 
@@ -58,17 +55,17 @@ export default async function Home() {
         <div className="absolute top-1/4 right-0 w-[720px] h-[720px] bg-emerald-100/50 rounded-full blur-[120px] translate-x-1/2 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-teal-50/60 rounded-full blur-[100px] -translate-x-1/3 translate-y-1/3 pointer-events-none" />
 
-        <div className="container mx-auto max-w-7xl relative z-10 grid md:grid-cols-2 gap-12 items-center py-24 md:py-0">
+        <div className="container mx-auto max-w-7xl relative z-10 grid md:grid-cols-2 gap-8 max-[375px]:gap-6 md:gap-12 items-center py-20 max-[375px]:py-14 md:py-0">
           {/* Left — copy */}
           <div className="flex flex-col items-start">
-            <div className="flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-emerald-200/60 rounded-full px-4 py-2 mb-8 shadow-sm">
-              <MapPin className="w-4 h-4 text-[#3a7851]" />
-              <span className="text-sm font-semibold text-[#3a7851]">
+            <div className="flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-emerald-200/60 rounded-full px-4 max-[375px]:px-3 py-2 max-[375px]:py-1.5 mb-8 max-[375px]:mb-6 shadow-sm">
+              <MapPin className="w-4 h-4 max-[375px]:w-3.5 max-[375px]:h-3.5 text-[#3a7851]" />
+              <span className="text-sm max-[375px]:text-xs font-semibold text-[#3a7851]">
                 Đặc sản Bình Định · Xứ Nẫu
               </span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.08] mb-6">
+            <h1 className="text-4xl max-[375px]:text-[2rem] sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.08] max-[375px]:leading-[1.12] mb-6 max-[375px]:mb-5">
               Vị ngon{" "}
               <span className="relative inline-block">
                 <span className="relative z-10 text-[#3a7851]">quê nhà</span>
@@ -91,28 +88,28 @@ export default async function Home() {
               theo từng mùa.
             </h1>
 
-            <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-lg leading-relaxed">
+            <p className="text-base max-[375px]:text-sm sm:text-lg md:text-xl text-slate-600 mb-10 max-[375px]:mb-7 max-w-lg leading-relaxed">
               Tré rơm, nem chả, mực một nắng — mỗi thức quà đều được làm thủ
               công, không chất bảo quản, giữ trọn tinh túy của vùng đất{" "}
               <strong className="text-slate-800 font-semibold">Xứ Nẫu</strong>{" "}
-              qua bao thế hệ.
+              qua từng mẻ làm thủ công.
             </p>
 
-            <div className="flex flex-wrap gap-4">
-              <Link href={PATH.PRODUCTS.ALL}>
+            <div className="flex flex-wrap gap-4 max-[375px]:gap-3">
+              <Link href={PATH.PRODUCTS.ALL} className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="h-14 px-8 rounded-full bg-[#3a7851] hover:bg-[#2f6342] text-white text-base font-semibold shadow-lg shadow-[#3a7851]/25 hover:-translate-y-0.5 transition-all duration-200"
+                  className="h-14 max-[375px]:h-12 px-8 max-[375px]:px-5 rounded-full bg-[#3a7851] hover:bg-[#2f6342] text-white text-base max-[375px]:text-sm font-semibold shadow-lg shadow-[#3a7851]/25 hover:-translate-y-0.5 transition-all duration-200 w-full sm:w-auto"
                 >
                   Khám phá sản phẩm
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href={PATH.ABOUT}>
+              <Link href={PATH.ABOUT} className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="h-14 px-8 rounded-full border-slate-300 text-slate-700 hover:bg-white hover:border-[#3a7851] hover:text-[#3a7851] text-base font-semibold transition-all duration-200 bg-white/60 backdrop-blur-sm"
+                  className="h-14 max-[375px]:h-12 px-8 max-[375px]:px-5 rounded-full border-slate-300 text-slate-700 hover:bg-white hover:border-[#3a7851] hover:text-[#3a7851] text-base max-[375px]:text-sm font-semibold transition-all duration-200 bg-white/60 backdrop-blur-sm w-full sm:w-auto"
                 >
                   Câu chuyện bếp nhà
                 </Button>
@@ -120,17 +117,17 @@ export default async function Home() {
             </div>
 
             {/* Social proof strip */}
-            <div className="flex items-center gap-6 mt-12 pt-8 border-t border-slate-200/60 w-full">
+            <div className="flex flex-wrap items-center gap-4 max-[375px]:gap-3 sm:gap-6 mt-10 max-[375px]:mt-7 sm:mt-12 pt-6 max-[375px]:pt-4 sm:pt-8 border-t border-slate-200/60 w-full">
               {[
                 { value: "Đam mê", label: "Từ tâm huyết" },
                 { value: "100%", label: "Thủ công" },
                 { value: "Toàn quốc", label: "Giao hỏa tốc" },
               ].map((stat) => (
                 <div key={stat.label}>
-                  <p className="text-2xl font-bold text-[#3a7851]">
+                  <p className="text-2xl max-[375px]:text-xl font-bold text-[#3a7851]">
                     {stat.value}
                   </p>
-                  <p className="text-sm text-slate-500 font-medium">
+                  <p className="text-sm max-[375px]:text-xs text-slate-500 font-medium">
                     {stat.label}
                   </p>
                 </div>
@@ -162,7 +159,6 @@ export default async function Home() {
                 }
                 fill
                 sizes="(max-width: 768px) 100vw, 180px"
-                priority
                 alt="Chả ram tôm đất"
                 className="object-cover"
               />
@@ -192,24 +188,54 @@ export default async function Home() {
       {/* ═══════════════════════════════════════
           2. COMMITMENTS — Icon cards, staggered
           ═══════════════════════════════════════ */}
-      <section className="py-24 bg-white px-4">
+      <section className="py-16 max-[375px]:py-12 md:py-20 bg-white px-4 max-[375px]:px-3">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-            <div>
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-8 max-[375px]:mb-6 md:mb-10 gap-4">
+            <div className="flex flex-col items-center md:items-start">
               <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 mb-4 rounded-full px-4 py-1.5">
                 <Sparkles className="w-3.5 h-3.5 mr-1.5" />
                 Phương châm của tôi
               </Badge>
-              <h2 className="text-3xl md:text-5xl font-bold text-slate-900 leading-tight">
+              <h2 className="text-3xl max-[375px]:text-2xl md:text-5xl font-bold text-slate-900 leading-tight">
                 Ăn sao, bán vậy
               </h2>
             </div>
-            <p className="text-[#3a7851] font-semibold max-w-sm text-lg md:text-right leading-relaxed">
+            <p className="text-[#3a7851] font-semibold max-w-sm text-lg max-[375px]:text-base md:text-right leading-relaxed">
               Từ bếp của tôi, đến tay của bạn.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Mobile visual for "Ăn sao, bán vậy" */}
+          <div className="md:hidden grid grid-cols-2 gap-3 max-[375px]:gap-2.5 mb-6 sm:mb-8">
+            <div className="relative aspect-4/3 rounded-[1.5rem] max-[375px]:rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
+              <Image
+                src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/bep-tong-hop.jpg"
+                alt="Bếp nhà Tré Bà Liên"
+                fill
+                sizes="(max-width: 768px) 50vw, 0px"
+                loading="lazy"
+                className="object-cover"
+              />
+              <span className="absolute left-2.5 bottom-2.5 bg-white/85 backdrop-blur-sm text-[#1a3d2b] text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-sm">
+                Bếp nhà mỗi sáng
+              </span>
+            </div>
+            <div className="relative aspect-4/3 rounded-[1.5rem] max-[375px]:rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
+              <Image
+                src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/tre-ruot.jpg"
+                alt="Tré thủ công Bình Định"
+                fill
+                sizes="(max-width: 768px) 50vw, 0px"
+                loading="lazy"
+                className="object-cover"
+              />
+              <span className="absolute left-2.5 bottom-2.5 bg-white/85 backdrop-blur-sm text-[#1a3d2b] text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-sm">
+                Tré cuộn thủ công
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 max-[375px]:gap-2.5 sm:grid-cols-2 md:grid-cols-3 md:gap-6">
             {[
               {
                 icon: <Leaf className="h-6 w-6" />,
@@ -229,25 +255,31 @@ export default async function Home() {
                 icon: <HeartHandshake className="h-6 w-6" />,
                 color: "emerald",
                 title: "Tôn Vinh Nghề Cũ",
-                desc: "Giữ gìn công thức gia truyền và đôi bàn tay khéo léo của các nghệ nhân, đặt tình yêu nghề lên hàng đầu.",
+                desc: "Giữ trọn kỹ thuật thủ công và đôi bàn tay khéo léo của các nghệ nhân, đặt tình yêu nghề lên hàng đầu.",
                 offset: false,
               },
             ].map((item) => (
               <div
                 key={item.title}
-                className={`group bg-slate-50 hover:bg-white border border-slate-100 hover:border-emerald-200 rounded-[2rem] p-8 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-900/5 hover:-translate-y-1 ${item.offset ? "md:mt-8" : ""}`}
+                className={`group bg-slate-50 hover:bg-white border border-slate-100 hover:border-emerald-200 rounded-2xl max-[375px]:rounded-xl md:rounded-[2rem] p-4 max-[375px]:p-3.5 md:p-8 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-900/5 hover:-translate-y-0.5 md:hover:-translate-y-1 ${
+                  item.offset ? "md:mt-8" : ""
+                }`}
               >
-                <div
-                  className={`h-14 w-14 rounded-2xl flex items-center justify-center mb-6 text-${item.color}-600 bg-${item.color}-50 border border-${item.color}-100 group-hover:bg-${item.color}-600 group-hover:text-white group-hover:border-transparent transition-all duration-300`}
-                >
-                  {item.icon}
+                <div className="flex items-start gap-3 max-[375px]:gap-2.5 md:block">
+                  <div
+                    className={`h-11 w-11 max-[375px]:h-10 max-[375px]:w-10 md:h-14 md:w-14 rounded-xl md:rounded-2xl shrink-0 flex items-center justify-center mb-0 md:mb-6 max-[375px]:mb-0 text-${item.color}-600 bg-${item.color}-50 border border-${item.color}-100 group-hover:bg-${item.color}-600 group-hover:text-white group-hover:border-transparent transition-all duration-300`}
+                  >
+                    {item.icon}
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-base max-[375px]:text-[15px] md:text-xl font-bold text-slate-900 mb-1.5 md:mb-3">
+                      {item.title}
+                    </h3>
+                    <p className="text-slate-500 text-xs md:text-sm leading-snug md:leading-relaxed line-clamp-3 md:line-clamp-none">
+                      {item.desc}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">
-                  {item.title}
-                </h3>
-                <p className="text-slate-500 leading-relaxed text-sm">
-                  {item.desc}
-                </p>
               </div>
             ))}
           </div>
@@ -257,7 +289,7 @@ export default async function Home() {
       {/* ═══════════════════════════════════════
           3. STORY — Dark green editorial block
           ═══════════════════════════════════════ */}
-      <section className="bg-[#1a3d2b] text-white py-24 overflow-hidden relative">
+      <section className="bg-[#1a3d2b] text-white py-20 md:py-24 overflow-hidden relative">
         {/* Decorative large leaf outline */}
         <div className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 opacity-5 pointer-events-none">
           <Leaf className="w-[500px] h-[500px]" />
@@ -273,16 +305,22 @@ export default async function Home() {
                   src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/bep-tong-hop.jpg"
                   alt="Tré Đặc Sản Bình Định"
                   fill
+                  sizes="(max-width: 768px) 100vw, 45vw"
+                  loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover rounded-2xl"
                 />
               </div>
               {/* Floating stat card */}
-              <div className="absolute -bottom-6 -left-4 md:-left-10 bg-linear-to-br from-amber-50 to-orange-100 border border-white/20 text-white p-5 rounded-3xl shadow-2xl w-[220px]">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="font-bold text-3xl text-amber-600">❤️</span>
-                  <div>
-                    <p className="text-amber-600 font-semibold">Từ tâm huyết</p>
-                    <p className="text-amber-600 text-xs">
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-3 max-[375px]:bottom-2 md:left-auto md:translate-x-0 md:-bottom-6 bg-linear-to-br from-amber-50 to-orange-100 border border-white/20 p-3.5 max-[375px]:p-3 md:p-5 rounded-2xl md:rounded-3xl shadow-xl md:shadow-2xl w-[86%] max-w-[260px] md:w-[220px]">
+                <div className="flex items-center gap-2.5 max-[375px]:gap-2 md:gap-3">
+                  <span className="font-bold text-2xl max-[375px]:text-xl md:text-3xl text-amber-600">
+                    ❤️
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-amber-700 font-semibold text-sm max-[375px]:text-xs md:text-base leading-tight">
+                      Từ tâm huyết
+                    </p>
+                    <p className="text-amber-700/80 text-[11px] max-[375px]:text-[10px] md:text-xs leading-snug">
                       Chợ Huyện, Bình Định
                     </p>
                   </div>
@@ -291,7 +329,7 @@ export default async function Home() {
             </div>
 
             {/* Text side */}
-            <div className="pt-8 md:pt-0">
+            <div className="pt-0">
               <Badge className="bg-white/10 text-emerald-300 border-white/10 mb-6 px-4 py-1.5 rounded-full text-xs tracking-widest uppercase font-semibold">
                 Chuyện của bếp
               </Badge>
@@ -306,7 +344,7 @@ export default async function Home() {
               <div className="space-y-5 text-emerald-50/80 text-base leading-relaxed">
                 <p>
                   Mỗi phần tré, nem tại đây đều được làm thủ công tỉ mỉ. Đó là
-                  sự kết hợp giữa kinh nghiệm gia truyền và nguyên liệu tươi
+                  sự kết hợp giữa kỹ thuật thủ công và nguyên liệu tươi
                   ngon được tuyển chọn kỹ lưỡng.
                 </p>
                 <p>
@@ -342,21 +380,21 @@ export default async function Home() {
       {/* ═══════════════════════════════════════
           4. PROCESS — Horizontal timeline
           ═══════════════════════════════════════ */}
-      <section className="py-24 bg-[#f8f7f4] px-4 md:px-6 border-b border-slate-200/60">
+      <section className="py-16 max-[375px]:py-12 md:py-24 bg-[#f8f7f4] px-4 max-[375px]:px-3 md:px-6 border-b border-slate-200/60">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-20">
+          <div className="text-center mb-10 max-[375px]:mb-8 md:mb-20">
             <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 mb-4 rounded-full px-4 py-1.5">
               Quy trình
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-3xl max-[375px]:text-2xl md:text-4xl font-bold text-slate-900 mb-3 md:mb-4">
               4 bước · 1 cam kết
             </h2>
-            <p className="text-slate-500 text-lg">
+            <p className="text-slate-500 text-base max-[375px]:text-sm md:text-lg">
               Minh bạch từ lò bếp đến bàn ăn của bạn.
             </p>
           </div>
 
-          <div className="relative grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-4">
+          <div className="relative grid grid-cols-1 gap-3 max-[375px]:gap-2.5 md:grid-cols-4 md:gap-4">
             {/* Connector line */}
             <div className="hidden md:block absolute top-13 left-[15%] right-[15%] border-t-2 border-dashed border-slate-300" />
 
@@ -371,7 +409,7 @@ export default async function Home() {
                 num: "02",
                 icon: <ChefHat className="w-6 h-6" />,
                 title: "Chế Biến",
-                desc: "Giã tay truyền thống, gia vị gia truyền, không dùng phụ gia.",
+                desc: "Giã tay thủ công, phối vị chuẩn nhà làm, không dùng phụ gia.",
               },
               {
                 num: "03",
@@ -388,20 +426,26 @@ export default async function Home() {
             ].map((step, idx) => (
               <div
                 key={idx}
-                className="relative flex flex-col items-center text-center group z-10"
+                className="relative group z-10 bg-white md:bg-transparent rounded-2xl max-[375px]:rounded-xl md:rounded-none border border-slate-100 md:border-0 p-3.5 max-[375px]:p-3 md:p-0 shadow-sm md:shadow-none"
               >
-                <div className="w-26 h-26 bg-white border-2 border-slate-200 group-hover:border-[#3a7851] rounded-3xl flex flex-col items-center justify-center mb-5 shadow-sm group-hover:shadow-lg group-hover:shadow-emerald-900/10 transition-all duration-300">
-                  <span className="text-[#3a7851] mb-1">{step.icon}</span>
-                  <span className="text-xs font-bold text-slate-400 tracking-widest">
-                    {step.num}
-                  </span>
+                <div className="flex items-start gap-3 max-[375px]:gap-2.5 md:flex-col md:items-center md:text-center">
+                  <div className="w-14 h-14 max-[375px]:w-12 max-[375px]:h-12 md:w-26 md:h-26 bg-white border-2 border-slate-200 group-hover:border-[#3a7851] rounded-2xl md:rounded-3xl flex flex-col items-center justify-center mb-0 md:mb-5 shadow-sm group-hover:shadow-lg group-hover:shadow-emerald-900/10 transition-all duration-300 shrink-0">
+                    <span className="text-[#3a7851] mb-0.5 md:mb-1">
+                      {step.icon}
+                    </span>
+                    <span className="text-[10px] max-[375px]:text-[9px] md:text-xs font-bold text-slate-400 tracking-widest">
+                      {step.num}
+                    </span>
+                  </div>
+                  <div className="min-w-0 pt-0.5 md:pt-0">
+                    <h3 className="text-base max-[375px]:text-[15px] md:text-lg font-bold text-slate-900 mb-1 md:mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-slate-500 text-xs md:text-sm leading-snug md:leading-relaxed max-w-none md:max-w-[180px]">
+                      {step.desc}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">
-                  {step.title}
-                </h3>
-                <p className="text-slate-500 text-sm leading-relaxed max-w-[180px]">
-                  {step.desc}
-                </p>
               </div>
             ))}
           </div>
@@ -459,6 +503,8 @@ export default async function Home() {
                   src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/chen-tre.jpg"
                   alt="Tré Rơm Cổ Điển"
                   fill
+                  sizes="(max-width: 768px) 85vw, 340px"
+                  loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="text-center relative z-10">
@@ -531,7 +577,7 @@ export default async function Home() {
               {/* Trust stats */}
               <div className="flex gap-8 mb-10 pb-10 border-b border-white/10">
                 {[
-                  { value: "3 đời", label: "Gia truyền" },
+                  { value: "100%", label: "Làm thủ công" },
                   { value: "200+", label: "Khách hài lòng" },
                   { value: "4.9★", label: "Đánh giá trung bình" },
                 ].map((s) => (

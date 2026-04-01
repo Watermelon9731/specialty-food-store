@@ -76,7 +76,7 @@ const PROCESS = [
     num: "02",
     icon: <ChefHat className="w-6 h-6" />,
     title: "Giã & Trộn",
-    desc: "Giã tay với sả, riềng, tỏi và mè rang. Hương vị gia truyền.",
+    desc: "Giã tay với sả, riềng, tỏi và mè rang. Hương vị thủ công.",
   },
   {
     num: "03",
@@ -120,7 +120,7 @@ export default function TrePage() {
       {/* ══════════════════════════════════════════════════
           1. HERO — Split editorial layout
       ══════════════════════════════════════════════════ */}
-      <section className="relative min-h-[90vh] flex items-center px-4 md:px-6 overflow-hidden bg-[#f8f7f4]">
+      <section className="relative min-h-[80vh] md:min-h-[90vh] flex items-center px-4 md:px-6 overflow-hidden bg-[#f8f7f4]">
         {/* Texture */}
         <div className="absolute inset-0 bg-[radial-gradient(#d6d3c8_1px,transparent_1px)] bg-size-[28px_28px] opacity-50 pointer-events-none" />
         {/* Blobs */}
@@ -137,7 +137,7 @@ export default function TrePage() {
               </span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.06] mb-6">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.06] mb-6">
               Tré Rơm{" "}
               <span className="relative inline-block">
                 <span className="relative z-10 text-[#3a7851]">Gia Truyền</span>
@@ -159,7 +159,7 @@ export default function TrePage() {
               Bình Định.
             </h1>
 
-            <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-lg leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-10 max-w-lg leading-relaxed">
               Lên men tự nhiên bằng{" "}
               <strong className="text-slate-800">lá ổi, rơm rạ</strong> — không
               hàn the, không chất bảo quản. Công thức tâm huyết giữ trọn vị chua
@@ -172,19 +172,20 @@ export default function TrePage() {
                 href={CONTACT_INFO.ZALO}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="w-full sm:w-auto"
               >
                 <Button
                   size="lg"
-                  className="h-14 px-8 rounded-full bg-[#0068FF] hover:bg-[#0055d4] text-white text-base font-semibold shadow-lg shadow-[#0068FF]/25 hover:-translate-y-0.5 transition-all duration-200 gap-2"
+                  className="h-14 px-8 rounded-full bg-[#0068FF] hover:bg-[#0055d4] text-white text-base font-semibold shadow-lg shadow-[#0068FF]/25 hover:-translate-y-0.5 transition-all duration-200 gap-2 w-full sm:w-auto"
                 >
                   <ZaloIcon /> Đặt mua qua Zalo
                 </Button>
               </a>
-              <Link href="#story">
+              <Link href="#story" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="h-14 px-8 rounded-full border-slate-300 text-slate-700 hover:bg-white hover:border-[#3a7851] hover:text-[#3a7851] text-base font-semibold transition-all duration-200 bg-white/60 backdrop-blur-sm"
+                  className="h-14 px-8 rounded-full border-slate-300 text-slate-700 hover:bg-white hover:border-[#3a7851] hover:text-[#3a7851] text-base font-semibold transition-all duration-200 bg-white/60 backdrop-blur-sm w-full sm:w-auto"
                 >
                   Câu chuyện bếp nhà
                 </Button>
@@ -192,9 +193,9 @@ export default function TrePage() {
             </div>
 
             {/* Trust strip */}
-            <div className="flex items-center gap-6 pt-8 border-t border-slate-200/60 w-full">
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-slate-200/60 w-full">
               {[
-                { value: "3 đời", label: "Gia truyền" },
+                { value: "100%", label: "Làm thủ công" },
                 { value: "24–36h", label: "Lên men tự nhiên" },
                 { value: "0%", label: "Chất bảo quản" },
               ].map((s) => (
@@ -216,6 +217,7 @@ export default function TrePage() {
                 src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/tre-cay.jpg"
                 alt="Tré Rơm Truyền Thống"
                 fill
+                sizes="(max-width: 768px) 100vw, 360px"
                 className="absolute inset-0 w-full h-full object-cover"
               />
               <div className="text-center absolute bottom-16 left-1/3 z-10">
@@ -247,6 +249,8 @@ export default function TrePage() {
                 src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/tre-hu.jpg"
                 alt="Tré Hũ Hiện Đại"
                 fill
+                sizes="(max-width: 768px) 100vw, 220px"
+                loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover"
               />
               <div className="text-center absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
@@ -294,6 +298,8 @@ export default function TrePage() {
                     }
                     fill
                     alt="Tré Bà Liên"
+                    sizes="(max-width: 768px) 100vw, 512px"
+                    loading="lazy"
                     className="object-cover rounded-2xl"
                   />
                   <p className="text-amber-800 font-semibold text-sm mt-4 px-4">
@@ -355,7 +361,7 @@ export default function TrePage() {
                   "Lên men tự nhiên",
                   "Không hàn the",
                   "Không màu nhân tạo",
-                  "Gia truyền 3 đời",
+                  "Làm thủ công mỗi mẻ",
                 ].map((tag) => (
                   <span
                     key={tag}
@@ -391,6 +397,8 @@ export default function TrePage() {
                   src="https://oepinbezzuykjqxxdrzn.supabase.co/storage/v1/object/public/tre-ba-lien/chen-tre.jpg"
                   alt="Tré Rơm Cổ Điển"
                   fill
+                  sizes="(max-width: 768px) 100vw, 45vw"
+                  loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover rounded-3xl"
                 />
               </div>
@@ -444,10 +452,10 @@ export default function TrePage() {
                   .
                 </p>
                 <p>
-                  Đây là di sản ẩm thực mà ông bà để lại — và chúng tôi giữ gìn
-                  nó như một{" "}
+                  Đây là hương vị quê nhà được chúng tôi giữ gìn bằng cách làm
+                  thủ công mỗi ngày — như một{" "}
                   <strong className="text-white">
-                    lời hứa với thế hệ tiếp theo
+                    lời hứa về chất lượng ổn định cho từng mẻ
                   </strong>
                   .
                 </p>
@@ -459,7 +467,7 @@ export default function TrePage() {
                   "Mình ăn sao thì bán cho khách vậy"
                 </p>
                 <p className="text-emerald-500 text-sm mt-2">
-                  — Bà Đoàn Thị Bích Liên, người kế thừa
+                  — Bà Đoàn Thị Bích Liên, người làm bếp
                 </p>
               </div>
             </div>
@@ -634,7 +642,7 @@ export default function TrePage() {
             </h2>
             <p className="text-slate-500 text-lg max-w-2xl mx-auto">
               Dù gói rơm truyền thống hay hũ nhựa tiện lợi, tré đều được làm từ
-              cùng một công thức gia truyền.
+              cùng một cách làm thủ công.
             </p>
           </div>
 

@@ -4,8 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { CartDrawer } from "@/components/cart/CartDrawer";
-import { FloatingContact } from "@/components/layout/FloatingContact";
+import { ClientOverlays } from "@/components/layout/ClientOverlays";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
@@ -18,7 +17,7 @@ export const metadata: Metadata = {
     template: "%s | Tré Bà Liên",
   },
   description:
-    "Thưởng thức tinh hoa ẩm thực Xứ Nẫu với Tré rơm Bình Định gia truyền. Nguyên liệu tươi sạch, lên men tự nhiên bằng lá ổi, không hàn the, không chất bảo quản. Giao hàng toàn quốc.",
+    "Thưởng thức tinh hoa ẩm thực Xứ Nẫu với Tré rơm Bình Định làm thủ công. Nguyên liệu tươi sạch, lên men tự nhiên bằng lá ổi, không hàn the, không chất bảo quản. Giao hàng toàn quốc.",
   keywords: [
     "Tré Bình Định",
     "Tré rơm",
@@ -45,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Tré Bà Liên | Đặc sản Tré Rơm Bình Định Chính Gốc",
     description:
-      "Thưởng thức tinh hoa ẩm thực Xứ Nẫu với Tré rơm Bình Định gia truyền. Không hàn the, không chất bảo quản. Giao hàng toàn quốc.",
+      "Thưởng thức tinh hoa ẩm thực Xứ Nẫu với Tré rơm Bình Định làm thủ công. Không hàn the, không chất bảo quản. Giao hàng toàn quốc.",
     url: "/",
     siteName: "Tré Bà Liên",
     locale: "vi_VN",
@@ -63,7 +62,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Tré Bà Liên | Đặc sản Tré Rơm Bình Định Chính Gốc",
     description:
-      "Thưởng thức tinh hoa ẩm thực Xứ Nẫu với Tré rơm Bình Định gia truyền. Không hàn the, không chất bảo quản.",
+      "Thưởng thức tinh hoa ẩm thực Xứ Nẫu với Tré rơm Bình Định làm thủ công. Không hàn the, không chất bảo quản.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -93,8 +92,7 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
-          <CartDrawer />
-          <FloatingContact />
+          <ClientOverlays />
         </Providers>
       </body>
     </html>
