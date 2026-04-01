@@ -1,6 +1,15 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+const SAFFRON_PLACEHOLDER_TEXT = "High quality saffron for culinary use.";
+
+function sanitizeDescription(description?: string | null) {
+  if (!description) return null;
+  return description
+    .replace(new RegExp(SAFFRON_PLACEHOLDER_TEXT, "gi"), "")
+    .trim();
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -79,6 +88,7 @@ export async function POST(request: Request) {
       note,
       isMarketPrice,
     } = body;
+    const cleanedDescription = sanitizeDescription(description);
 
     if (
       !name ||
@@ -100,8 +110,8 @@ export async function POST(request: Request) {
       .insert({
         name,
         sku,
-        description: description || null,
-        pricePerUnit: Number(pricePerUnit),
+        description: cleanedDescription,
+        pricePerUnit: isMarketPrice ? 0 : Number(pricePerUnit),
         unitType,
         stockQuantity: Number(stockQuantity) || 0,
         origin: origin || "Việt Nam",
@@ -171,11 +181,16 @@ export async function PATCH(request: Request) {
         { status: 400 },
       );
 
+    const isMarketPrice =
+      updates.isMarketPrice !== undefined
+        ? Boolean(updates.isMarketPrice)
+        : undefined;
+
     const updateData: Record<string, unknown> = {};
     if (updates.name !== undefined) updateData.name = updates.name;
     if (updates.sku !== undefined) updateData.sku = updates.sku;
     if (updates.description !== undefined)
-      updateData.description = updates.description;
+      updateData.description = sanitizeDescription(updates.description);
     if (updates.pricePerUnit !== undefined)
       updateData.pricePerUnit = Number(updates.pricePerUnit);
     if (updates.unitType !== undefined) updateData.unitType = updates.unitType;
@@ -192,6 +207,9 @@ export async function PATCH(request: Request) {
     if (updates.note !== undefined) updateData.note = updates.note;
     if (updates.isMarketPrice !== undefined)
       updateData.isMarketPrice = updates.isMarketPrice;
+    if (isMarketPrice === true) {
+      updateData.pricePerUnit = 0;
+    }
 
     const { data: product, error } = await db
       .from("Product")

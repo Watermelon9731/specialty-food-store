@@ -22,6 +22,8 @@ export function ProductActions({ product }: ProductActionsProps) {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [justAdded, setJustAdded] = useState(false);
+  const isMarketPrice =
+    Boolean(product.isMarketPrice) || Number(product.pricePerUnit) < 1000;
 
   const handleDecrease = () => setQuantity((q) => Math.max(1, q - 1));
   const handleIncrease = () =>
@@ -46,7 +48,7 @@ export function ProductActions({ product }: ProductActionsProps) {
 
   const isOutOfStock = product.stockQuantity === 0;
 
-  if (product.isMarketPrice) {
+  if (isMarketPrice) {
     return (
       <div className="flex flex-col gap-4 mt-2">
         <a

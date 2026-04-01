@@ -162,7 +162,7 @@ export function Header() {
                   Đặc sản nổi bật
                 </p>
                 <p className="font-bold text-slate-900 text-base max-[375px]:text-sm mb-0.5">
-                  🥩 Tré Rơm Gia Truyền
+                  🥩 Tré Rơm Thủ Công
                 </p>
                 <p className="text-xs text-slate-500 mb-3">
                   Bình Định · Lên men tự nhiên · Thủ công

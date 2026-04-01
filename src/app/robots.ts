@@ -15,6 +15,7 @@ export default function robots(): MetadataRoute.Robots {
           "/tin-tuc",
           "/gioi-thieu",
           "/lien-he",
+          "/dieu-khoan",
           "/chinh-sach-bao-mat",
           "/tre-binh-dinh",
         ],

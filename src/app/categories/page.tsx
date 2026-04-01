@@ -8,13 +8,23 @@ import Image from "next/image";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Danh mục sản phẩm | Tré Bà Liên",
+  title: "Danh Mục Đặc Sản Bình Định Chính Gốc",
   description:
-    "Từ đặc sản Tré, Nem, Chả đến hải sản biển Quy Nhơn tìm thứ bạn cần theo từng danh mục đặc sản.",
+    "Xem danh mục đặc sản Bình Định theo nhóm sản phẩm rõ ràng: tré, nem chả, chả ram và mực khô. Chọn nhanh đúng món bạn cần.",
   alternates: {
     canonical: "/danh-muc",
   },
 };
+
+function slugifyCategory(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/đ/g, "d")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 // Map category names to icons and colours (extend as needed)
 const CATEGORY_META: Record<
@@ -78,8 +88,8 @@ export default async function CategoriesPage() {
             Danh mục sản phẩm
           </h1>
           <p className="text-emerald-200/80 text-lg max-w-xl">
-            Từ hải sản biển Quy Nhơn đến thịt gác bếp Tây Nguyên — tìm thứ bạn
-            cần theo từng danh mục đặc sản.
+            Từ tré rơm, nem chả, chả ram đến mực khô Bình Định — tìm đúng món
+            bạn cần theo từng danh mục.
           </p>
         </div>
       </div>
@@ -119,7 +129,7 @@ export default async function CategoriesPage() {
               return (
                 <Link
                   key={category.id}
-                  href={PATH.PRODUCTS.CATEGORY(category.name.toLowerCase())}
+                  href={PATH.PRODUCTS.CATEGORY(slugifyCategory(category.name))}
                   className="group relative flex flex-col overflow-hidden rounded-[2rem] bg-white border border-slate-100 hover:border-emerald-200 shadow-sm hover:shadow-xl hover:shadow-emerald-900/8 transition-all duration-300 hover:-translate-y-1"
                 >
                   {/* Card image / color block */}

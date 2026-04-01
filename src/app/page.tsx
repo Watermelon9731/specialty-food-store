@@ -26,6 +26,7 @@ import ZaloIcon from "@/components/icons/ZaloIcon";
 export const revalidate = 60;
 
 export default async function Home() {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://trebinhdinh.com";
   const featuredProducts = (await getFeaturedProductsService(8)).map((p) => ({
     id: p.id,
     slug: p.slug,
@@ -41,9 +42,33 @@ export default async function Home() {
     img: p.img,
     isMarketPrice: p.isMarketPrice,
   }));
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": `${baseUrl}/#local-business`,
+    name: "Tré Bà Liên",
+    url: baseUrl,
+    image: `${baseUrl}/og-image.jpg`,
+    telephone: `${CONTACT_INFO.PHONE_CODE}${CONTACT_INFO.PHONE}`,
+    email: CONTACT_INFO.EMAIL,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: CONTACT_INFO.ADDRESS,
+      addressLocality: "Quy Nhơn",
+      addressRegion: "Bình Định",
+      addressCountry: "VN",
+    },
+    areaServed: "VN",
+    priceRange: "$$",
+    sameAs: [CONTACT_INFO.FACEBOOK, CONTACT_INFO.ZALO],
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f8f7f4] text-slate-800 overflow-hidden selection:bg-emerald-200">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
       {/* ═══════════════════════════════════════
           1. HERO — Full-width, editorial style
           ═══════════════════════════════════════ */}
@@ -545,7 +570,7 @@ export default async function Home() {
               <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1] mb-6">
                 Tré Rơm
                 <br />
-                <span className="text-amber-400">Gia Truyền</span>
+                <span className="text-amber-400">Thủ Công</span>
                 <br />
                 Bình Định.
               </h2>

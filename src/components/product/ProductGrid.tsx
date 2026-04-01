@@ -42,6 +42,8 @@ function ProductCard({
     product.stockQuantity > 0;
   const isOutOfStock =
     product.stockQuantity !== undefined && product.stockQuantity === 0;
+  const isMarketPrice =
+    Boolean(product.isMarketPrice) || Number(product.pricePerUnit) < 1000;
 
   const handleAddToCart = useCallback(
     (e: React.MouseEvent) => {
@@ -106,7 +108,7 @@ function ProductCard({
         </div>
 
         {/* Quick-add button — slides up on hover */}
-        {!isOutOfStock && !product.isMarketPrice && (
+        {!isOutOfStock && !isMarketPrice && (
           <div className="absolute bottom-0 left-0 right-0 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out pointer-events-none group-hover:pointer-events-auto">
             <div className="p-3">
               <button
@@ -170,7 +172,7 @@ function ProductCard({
         {/* Price + unit */}
         <div className="mt-auto flex items-end justify-between gap-2">
           <div>
-            {product.isMarketPrice ? (
+            {isMarketPrice ? (
               <span className="text-sm font-bold text-amber-600">
                 Giá theo thời điểm
               </span>
@@ -185,7 +187,7 @@ function ProductCard({
               </>
             )}
           </div>
-          {!isOutOfStock && !product.isMarketPrice && (
+          {!isOutOfStock && !isMarketPrice && (
             <button
               onClick={handleAddToCart}
               aria-label={`Thêm ${product.name} vào giỏ`}

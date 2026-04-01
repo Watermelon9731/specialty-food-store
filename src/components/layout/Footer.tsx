@@ -19,14 +19,9 @@ import Link from "next/link";
 
 const SHOP_LINKS = [
   { href: PATH.TRE, label: "🥩 Tré Bình Định", highlight: true },
-  { href: PATH.PRODUCTS_SEAFOOD, label: "Hải Sản Khô", highlight: false },
-  { href: PATH.PRODUCTS_MEAT, label: "Bò khô/ Heo khô", highlight: false },
-  { href: PATH.PRODUCTS_NEM_CHA, label: "Nem Chả Đặc Sản", highlight: false },
-  {
-    href: PATH.PRODUCTS_SPICES,
-    label: "Gia Vị Truyền Thống",
-    highlight: false,
-  },
+  { href: PATH.PRODUCTS.ALL, label: "Tất cả sản phẩm", highlight: false },
+  { href: PATH.CATEGORIES, label: "Danh mục đặc sản", highlight: false },
+  { href: PATH.BLOG.ALL, label: "Tin tức bếp nhà", highlight: false },
 ];
 
 const INFO_LINKS = [
@@ -53,7 +48,7 @@ export function Footer() {
               🥩 Đặc sản bán chạy nhất
             </p>
             <h2 className="text-2xl max-[375px]:text-xl md:text-3xl font-bold text-white leading-snug mb-2">
-              Tré Gia Truyền Bình Định
+              Tré Thủ Công Bình Định
             </h2>
             <p className="text-emerald-200/70 text-sm max-[375px]:text-xs leading-relaxed">
               Lên men tự nhiên bằng lá ổi · Không hàn the · Làm bằng tâm huyết

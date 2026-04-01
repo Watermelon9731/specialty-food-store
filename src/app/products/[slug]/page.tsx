@@ -13,12 +13,18 @@ import { ProductGallery } from "./ProductGallery";
 import type { Metadata } from "next";
 
 export const revalidate = 60;
+const SAFFRON_PLACEHOLDER_TEXT = "High quality saffron for culinary use.";
 
 function formatVND(amount: number) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
   }).format(amount);
+}
+
+function sanitizeProductDescription(description?: string | null) {
+  if (!description) return "";
+  return description.replace(new RegExp(SAFFRON_PLACEHOLDER_TEXT, "gi"), "").trim();
 }
 
 export async function generateMetadata({
@@ -31,14 +37,17 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: "Sản phẩm không tìm thấy | Tré Bà Liên",
+      title: "Sản phẩm không tìm thấy",
     };
   }
 
+  const cleanedDescription = sanitizeProductDescription(product.description);
+
   return {
-    title: `${product.name} | Tré Bà Liên`,
+    title: `${product.name} Bình Định Chính Gốc`,
     description:
-      product.description || "Đặc sản mang đậm hương vị truyền thống Xứ Nẫu.",
+      cleanedDescription ||
+      `${product.name} đặc sản Bình Định làm thủ công, đóng gói lạnh và giao toàn quốc. Liên hệ Tré Bà Liên để đặt hàng nhanh.`,
     alternates: {
       canonical: `/san-pham/${resolvedParams.slug}`,
     },
@@ -52,6 +61,13 @@ export default async function ProductDetailPage({
 }) {
   const product = await getProductBySlugService((await params).slug);
   if (!product) notFound();
+  const isMarketPrice =
+    Boolean(product.isMarketPrice) || Number(product.pricePerUnit) < 1000;
+  const descriptionText =
+    sanitizeProductDescription(product.description) ||
+    "Đặc sản Bình Định làm thủ công, đóng gói lạnh cẩn thận và giao nhanh toàn quốc.";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://trebinhdinh.com";
+  const productUrl = `${baseUrl}${PATH.PRODUCTS.DETAIL(product.slug)}`;
 
   const firstCategoryId = product.ProductCategory?.[0]?.Category?.id;
   const relatedProducts = firstCategoryId
@@ -72,10 +88,87 @@ export default async function ProductDetailPage({
       category: p.ProductCategory?.[0]?.Category
         ? { name: p.ProductCategory[0].Category.name }
         : undefined,
+      isMarketPrice: Boolean(p.isMarketPrice) || Number(p.pricePerUnit) < 1000,
     }));
+
+  const breadcrumbsSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Trang chủ",
+        item: baseUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Sản phẩm",
+        item: `${baseUrl}${PATH.PRODUCTS.ALL}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: product.name,
+        item: productUrl,
+      },
+    ],
+  };
+
+  const productSchema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: descriptionText,
+    image: [product.img, ...(product.images ?? [])].filter(Boolean),
+    sku: product.sku,
+    category: product.ProductCategory?.[0]?.Category?.name ?? undefined,
+    brand: {
+      "@type": "Brand",
+      name: "Tré Bà Liên",
+    },
+    offers: isMarketPrice
+      ? {
+          "@type": "Offer",
+          priceCurrency: "VND",
+          availability:
+            product.stockQuantity > 0
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+          url: productUrl,
+          seller: {
+            "@type": "Organization",
+            name: "Tré Bà Liên",
+          },
+          description: "Liên hệ để có giá tốt nhất",
+        }
+      : {
+          "@type": "Offer",
+          priceCurrency: "VND",
+          price: Number(product.pricePerUnit).toString(),
+          availability:
+            product.stockQuantity > 0
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+          url: productUrl,
+          seller: {
+            "@type": "Organization",
+            name: "Tré Bà Liên",
+          },
+        },
+  };
 
   return (
     <div className="min-h-screen bg-[#f8f7f4] pt-8 max-[375px]:pt-6 md:pt-12 pb-20 max-[375px]:pb-16 md:pb-24 border-t border-slate-100">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
       <div className="container mx-auto max-w-6xl px-4 max-[375px]:px-3 md:px-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm max-[375px]:text-xs text-slate-500 mb-8 max-[375px]:mb-6 font-medium">
@@ -121,7 +214,7 @@ export default async function ProductDetailPage({
             </h1>
 
             <div className="flex flex-wrap items-end gap-2.5 md:gap-3 mb-4 max-[375px]:mb-3">
-              {product.isMarketPrice ? (
+              {isMarketPrice ? (
                 <span className="text-2xl max-[375px]:text-xl md:text-4xl font-extrabold text-amber-600">
                   Liên hệ để có giá tốt nhất
                 </span>
@@ -137,7 +230,7 @@ export default async function ProductDetailPage({
               )}
             </div>
 
-            {product.isMarketPrice && (
+            {isMarketPrice && (
               <div className="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 mb-8 flex items-start gap-3">
                 <span className="text-xl">💡</span>
                 <p className="text-sm text-amber-800 leading-relaxed font-medium">
@@ -150,7 +243,7 @@ export default async function ProductDetailPage({
             )}
 
             <p className="text-slate-600 text-base max-[375px]:text-sm md:text-lg leading-relaxed mb-8 max-[375px]:mb-6 md:mb-10 w-full md:w-[90%]">
-              {product.description ||
+              {sanitizeProductDescription(product.description) ||
                 "Đặc sản mang đậm hương vị truyền thống Xứ Nẫu, được chế tác từ công thức lâu năm của nghệ nhân với sự tỉ mỉ trong từng công đoạn."}
             </p>
 
@@ -195,6 +288,7 @@ export default async function ProductDetailPage({
                   unitType: product.unitType,
                   stockQuantity: product.stockQuantity,
                   img: product.img,
+                  isMarketPrice,
                 }}
               />
             </div>

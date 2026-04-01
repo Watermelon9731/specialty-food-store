@@ -21,9 +21,9 @@ import ZaloIcon from "@/components/icons/ZaloIcon";
 import Image from "next/image";
 
 export const metadata = {
-  title: "Tré Rơm Gia Truyền Bình Định | Đặc Sản Xứ Nẫu",
+  title: "Tré Bình Định Chính Gốc Làm Thủ Công",
   description:
-    "Tré rơm Bình Định chính gốc — lên men tự nhiên bằng lá ổi, không hàn the, không chất bảo quản. Giao hỏa tốc toàn quốc.",
+    "Tré rơm Bình Định làm thủ công, lên men tự nhiên bằng lá ổi, không hàn the và không chất bảo quản. Liên hệ để đặt hàng nhanh.",
   alternates: {
     canonical: "/tre-binh-dinh",
   },
@@ -140,7 +140,7 @@ export default function TrePage() {
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.06] mb-6">
               Tré Rơm{" "}
               <span className="relative inline-block">
-                <span className="relative z-10 text-[#3a7851]">Gia Truyền</span>
+                <span className="relative z-10 text-[#3a7851]">Thủ Công</span>
                 <svg
                   className="absolute -bottom-2 left-0 w-full"
                   viewBox="0 0 300 12"

@@ -10,13 +10,31 @@ import { PATH } from "@/constants/path";
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Tất cả sản phẩm | Tré Bà Liên",
+  title: "Đặc Sản Bình Định Chính Gốc",
   description:
-    "Khám phá đầy đủ bộ sưu tập đặc sản thủ công từ vùng đất Xứ Nẫu — tré rơm, mực khô, nem chả và gia vị truyền thống.",
+    "Khám phá tré, nem chả, chả ram và mực khô Bình Định làm thủ công, đóng gói lạnh cẩn thận. Xem sản phẩm và đặt hàng nhanh hôm nay.",
   alternates: {
     canonical: "/san-pham",
   },
 };
+
+function slugifyCategory(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/đ/g, "d")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function formatCategoryLabelFromSlug(slug: string) {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
 
 export default async function ProductsPage(props: {
   searchParams: Promise<{ category?: string; q?: string }>;
@@ -26,16 +44,27 @@ export default async function ProductsPage(props: {
     getProductsService(),
     getCategoriesService(),
   ]);
+  const categoryOptions = categories.map((cat) => ({
+    ...cat,
+    slug: slugifyCategory(cat.name),
+  }));
+  const categoryNameBySlug = new Map(
+    categoryOptions.map((cat) => [cat.slug, cat.name]),
+  );
 
   // ── Filter logic ──────────────────────────────────
-  const activeCategory = searchParams.category ?? "all";
+  const activeCategory =
+    searchParams.category && searchParams.category !== "all"
+      ? slugifyCategory(searchParams.category)
+      : "all";
   const searchQuery = searchParams.q?.toLowerCase() ?? "";
 
   const filteredProducts = allProducts.filter((p) => {
+    const productCategorySlug = slugifyCategory(
+      p.ProductCategory?.[0]?.Category?.name ?? "",
+    );
     const matchCat =
-      activeCategory === "all" ||
-      p.ProductCategory?.[0]?.Category?.name?.toLowerCase() ===
-        activeCategory.toLowerCase();
+      activeCategory === "all" || productCategorySlug === activeCategory;
     const matchQ = !searchQuery || p.name.toLowerCase().includes(searchQuery);
     return matchCat && matchQ;
   });
@@ -55,6 +84,11 @@ export default async function ProductsPage(props: {
     img: p.img,
     isMarketPrice: p.isMarketPrice,
   }));
+  const activeCategoryLabel =
+    activeCategory === "all"
+      ? "Tất cả sản phẩm"
+      : categoryNameBySlug.get(activeCategory) ??
+        formatCategoryLabelFromSlug(activeCategory);
 
   return (
     <div className="min-h-screen bg-[#f8f7f4]">
@@ -94,9 +128,9 @@ export default async function ProductsPage(props: {
           {categories.map((cat) => (
             <Link
               key={cat.id}
-              href={PATH.PRODUCTS.CATEGORY(cat.name.toLowerCase())}
+              href={PATH.PRODUCTS.CATEGORY(slugifyCategory(cat.name))}
               className={`shrink-0 px-4 max-[375px]:px-3 py-1.5 max-[375px]:py-1 rounded-full text-sm max-[375px]:text-xs font-semibold transition-all duration-150 ${
-                activeCategory === cat.name.toLowerCase()
+                activeCategory === slugifyCategory(cat.name)
                   ? "bg-[#1a3d2b] text-white shadow-sm"
                   : "bg-slate-100 text-slate-600 hover:bg-emerald-50 hover:text-[#1a3d2b]"
               }`}
@@ -112,7 +146,7 @@ export default async function ProductsPage(props: {
         <div className="flex items-center justify-between mb-8 max-[375px]:mb-6">
           <div className="flex items-center gap-3">
             <h2 className="text-lg max-[375px]:text-base font-bold text-slate-900">
-              {activeCategory === "all" ? "Tất cả sản phẩm" : activeCategory}
+              {activeCategoryLabel}
             </h2>
             <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 rounded-full font-semibold">
               {formatted.length} món

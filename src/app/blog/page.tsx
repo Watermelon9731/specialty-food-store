@@ -1,4 +1,4 @@
-import { client, urlFor } from "@/sanity/client";
+import { client } from "@/sanity/client";
 import { SanityPost } from "@/types/sanity";
 import { PATH } from "@/constants/path";
 import Link from "next/link";
@@ -9,9 +9,12 @@ import { Badge } from "@/components/ui/badge";
 export const revalidate = 60; // Revalidate at most every 60 seconds
 
 export const metadata = {
-  title: "Tin Tức & Mẹo Vặt | Tré Bà Liên",
+  title: "Tin Tức & Mẹo Hay Về Đặc Sản Bình Định",
   description:
-    "Cập nhật những thông tin mới nhất về ẩm thực Xứ Nẫu, mẹo vặt nấu ăn và câu chuyện bếp nhà từ Tré Bà Liên.",
+    "Đọc mẹo bếp thủ công, cách bảo quản và câu chuyện ẩm thực Bình Định. Cập nhật bài mới đều đặn từ Tré Bà Liên.",
+  alternates: {
+    canonical: "/tin-tuc",
+  },
 };
 
 async function getPosts(): Promise<SanityPost[]> {

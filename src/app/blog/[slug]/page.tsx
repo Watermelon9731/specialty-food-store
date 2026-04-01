@@ -47,97 +47,111 @@ export async function generateStaticParams() {
   }));
 }
 
-// Setup custom serializers for PortableText
-const ptComponents = {
-  types: {
-    image: ({ value }: any) => {
-      if (!value?.asset?._ref) {
-        return null;
-      }
-      return (
-        <figure className="my-8 mx-auto text-center rounded-2xl overflow-hidden shadow-sm relative w-full h-[300px] sm:h-[450px] bg-slate-100 ring-1 ring-slate-100">
-          {/* Blurred Background Layer for Non-fitting Images */}
-          <div className="absolute inset-0 opacity-40">
+function getPortableTextComponents(postTitle: string) {
+  return {
+    types: {
+      image: ({ value }: any) => {
+        if (!value?.asset?._ref) {
+          return null;
+        }
+        const rawAlt = value?.alt?.trim();
+        const isGenericAlt =
+          !rawAlt || /^(image|hình bài viết|hinh bai viet)$/i.test(rawAlt);
+        const imageAlt =
+          (!isGenericAlt && rawAlt) ||
+          value?.caption?.trim() ||
+          `Hình minh họa đặc sản Bình Định trong bài ${postTitle}`;
+
+        return (
+          <figure className="my-8 mx-auto text-center rounded-2xl overflow-hidden shadow-sm relative w-full h-[300px] sm:h-[450px] bg-slate-100 ring-1 ring-slate-100">
+            {/* Blurred Background Layer for Non-fitting Images */}
+            <div className="absolute inset-0 opacity-40">
+              <Image
+                src={urlFor(value).url()}
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw, 800px"
+                className="object-cover blur-2xl scale-110"
+              />
+            </div>
+
+            {/* Main Crisp Image on Top */}
             <Image
               src={urlFor(value).url()}
-              alt=""
+              alt={imageAlt}
               fill
               sizes="(max-width: 768px) 100vw, 800px"
-              className="object-cover blur-2xl scale-110"
+              className="object-contain relative z-10"
             />
-          </div>
-
-          {/* Main Crisp Image on Top */}
-          <Image
-            src={urlFor(value).url()}
-            alt={value.alt || "Hình bài viết"}
-            fill
-            sizes="(max-width: 768px) 100vw, 800px"
-            className="object-contain relative z-10"
-          />
-        </figure>
-      );
+          </figure>
+        );
+      },
     },
-  },
-  marks: {
-    link: ({ children, value }: any) => {
-      const rel = !value.href.startsWith("/")
-        ? "noreferrer noopener"
-        : undefined;
-      return (
-        <a
-          href={value.href}
-          rel={rel}
-          className="text-[#3a7851] hover:underline font-semibold transition-all"
-        >
+    marks: {
+      link: ({ children, value }: any) => {
+        const rel = !value.href.startsWith("/")
+          ? "noreferrer noopener"
+          : undefined;
+        return (
+          <a
+            href={value.href}
+            rel={rel}
+            className="text-[#3a7851] hover:underline font-semibold transition-all"
+          >
+            {children}
+          </a>
+        );
+      },
+    },
+    block: {
+      normal: ({ children }: any) => (
+        <p className="text-slate-700 leading-relaxed mb-6 text-lg">{children}</p>
+      ),
+      h2: ({ children }: any) => (
+        <h2 className="text-3xl font-bold text-slate-900 mt-12 mb-6">
           {children}
-        </a>
-      );
+        </h2>
+      ),
+      h3: ({ children }: any) => (
+        <h3 className="text-2xl font-bold text-slate-900 mt-10 mb-4">
+          {children}
+        </h3>
+      ),
+      blockquote: ({ children }: any) => (
+        <blockquote className="border-l-4 border-[#3a7851] bg-emerald-50/50 pl-6 py-4 pr-4 my-8 italic text-slate-700 rounded-r-2xl text-xl leading-relaxed">
+          {children}
+        </blockquote>
+      ),
     },
-  },
-  block: {
-    normal: ({ children }: any) => (
-      <p className="text-slate-700 leading-relaxed mb-6 text-lg">{children}</p>
-    ),
-    h2: ({ children }: any) => (
-      <h2 className="text-3xl font-bold text-slate-900 mt-12 mb-6">
-        {children}
-      </h2>
-    ),
-    h3: ({ children }: any) => (
-      <h3 className="text-2xl font-bold text-slate-900 mt-10 mb-4">
-        {children}
-      </h3>
-    ),
-    blockquote: ({ children }: any) => (
-      <blockquote className="border-l-4 border-[#3a7851] bg-emerald-50/50 pl-6 py-4 pr-4 my-8 italic text-slate-700 rounded-r-2xl text-xl leading-relaxed">
-        {children}
-      </blockquote>
-    ),
-  },
-  list: {
-    bullet: ({ children }: any) => (
-      <ul className="list-disc leading-relaxed text-slate-700 mb-6 pl-6 text-lg space-y-2">
-        {children}
-      </ul>
-    ),
-    number: ({ children }: any) => (
-      <ol className="list-decimal leading-relaxed text-slate-700 mb-6 pl-6 text-lg space-y-2">
-        {children}
-      </ol>
-    ),
-  },
-};
+    list: {
+      bullet: ({ children }: any) => (
+        <ul className="list-disc leading-relaxed text-slate-700 mb-6 pl-6 text-lg space-y-2">
+          {children}
+        </ul>
+      ),
+      number: ({ children }: any) => (
+        <ol className="list-decimal leading-relaxed text-slate-700 mb-6 pl-6 text-lg space-y-2">
+          {children}
+        </ol>
+      ),
+    },
+  };
+}
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) {
-    return { title: "Không tìm thấy bài viết | Tré Bà Liên" };
+    return { title: "Không tìm thấy bài viết" };
   }
   return {
-    title: `${post.title} | Tré Bà Liên`,
-    description: post.excerpt,
+    title: post.title,
+    description:
+      post.excerpt ||
+      `${post.title} - bài viết chia sẻ mẹo dùng đặc sản Bình Định và kinh nghiệm chọn mua thực phẩm thủ công an toàn.`,
+    alternates: {
+      canonical: `/tin-tuc/${slug}`,
+    },
   };
 }
 
@@ -198,7 +212,10 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Portable Text Content */}
         <article className="prose prose-lg prose-emerald max-w-none">
           {post.body ? (
-            <PortableText value={post.body} components={ptComponents} />
+            <PortableText
+              value={post.body}
+              components={getPortableTextComponents(post.title)}
+            />
           ) : (
             <div className="text-center text-slate-500 py-12">
               Nội dung bài viết đang được cập nhật...

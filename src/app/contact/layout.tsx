@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Liên Hệ | Tré Bà Liên",
+  title: "Liên Hệ Đặt Hàng Đặc Sản Bình Định",
   description:
-    "Chúng tôi luôn sẵn sàng tư vấn, giải đáp mọi thắc mắc về sản phẩm và đơn hàng của bạn.",
+    "Liên hệ Tré Bà Liên để đặt hàng đặc sản Bình Định, tư vấn số lượng, báo giá nhanh và hỗ trợ giao hàng toàn quốc.",
   alternates: {
     canonical: "/lien-he",
   },

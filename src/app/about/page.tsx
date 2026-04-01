@@ -7,7 +7,6 @@ import {
   ShieldCheck,
   HeartHandshake,
   MapPin,
-  ArrowRight,
   Quote,
   Facebook,
   Mail,
@@ -15,9 +14,9 @@ import {
 import ZaloIcon from "@/components/icons/ZaloIcon";
 
 export const metadata = {
-  title: "Về Chúng Tôi | Tré Bà Liên — Đặc Sản Bình Định",
+  title: "Về Bếp Tré Thủ Công Ở Bình Định",
   description:
-    "Câu chuyện bếp nhỏ giữ trọn nghề làm tré rơm thủ công tại Chợ Huyện, Phù Cát, Bình Định.",
+    "Khám phá câu chuyện bếp tré thủ công của Tré Bà Liên tại Bình Định, quy trình làm sạch và cam kết chất lượng trong từng mẻ sản phẩm.",
   alternates: {
     canonical: "/gioi-thieu",
   },
@@ -107,7 +106,7 @@ export default function AboutPage() {
             <div className="md:col-span-3">
               <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 rounded-full px-4 py-1.5 mb-6 inline-flex">
                 <MapPin className="w-3.5 h-3.5 mr-1.5" />
-                Quy Nhơn, Bình Định
+                {CONTACT_INFO.ADDRESS}
               </Badge>
 
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8 leading-tight">
