@@ -1,10 +1,33 @@
-# Tré Bình Định Ăn Với Gì? 7 Cách Ăn Ngon, Dễ Làm Tại Nhà
+# Bài #1 — Sample Post Chuẩn Sanity Schema
 
-**Slug:** `tre-binh-dinh-an-voi-gi`  
-**Keyword chính:** tré bình định ăn với gì  
-**Meta title:** Tré Bình Định Ăn Với Gì? 7 Cách Ăn Ngon Tại Nhà | Tré Bà Liên  
-**Meta description:** Tré rơm Bình Định ăn với bánh tráng, dưa cải, bia lạnh hay cơm trắng? 7 cách kết hợp ngon nhất từ truyền thống đến nhậu — dễ làm tại nhà.  
-**Internal links:** `/tre-binh-dinh`, `/san-pham`  
+> Đây là bài mẫu chuẩn tone. Mỗi mục dưới đây tương ứng với một **trường cụ thể trong Sanity Studio**.  
+> Copy từng phần vào đúng trường khi tạo document `post` mới.
+
+---
+
+## PHẦN 1 — CÁC TRƯỜNG SANITY (điền trực tiếp vào Studio)
+
+| Trường Sanity     | Nội dung điền                                                                                                                             |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`           | Tré Bình Định Ăn Với Gì? 7 Cách Ăn Ngon, Dễ Làm Tại Nhà                                                                                   |
+| `slug`            | `tre-binh-dinh-an-voi-gi` *(kiểm tra sau khi generate)*                                                                                   |
+| `author`          | *(chọn từ danh sách)*                                                                                                                     |
+| `categories`      | Tré Bình Định                                                                                                                             |
+| `publishedAt`     | 2026-04-05                                                                                                                                |
+| `excerpt`         | Tré rơm Bình Định ăn với gì thì ngon nhất? Tổng hợp 7 cách kết hợp phổ biến — từ truyền thống đến nhậu — dễ làm tại nhà.                  |
+| `metaTitle`       | Tré Bình Định Ăn Với Gì? 7 Cách Ăn Ngon Tại Nhà \| Tré Bà Liên                                                                            |
+| `metaDescription` | Tré rơm Bình Định ăn với bánh tráng, dưa cải, bia lạnh hay cơm trắng? 7 cách kết hợp ngon nhất từ truyền thống đến nhậu — dễ làm tại nhà. |
+| `metaKeywords`    | `tré bình định ăn với gì`, `tré rơm bình định`, `cách ăn tré rơm`, `đặc sản bình định`                                                    |
+| `canonicalUrl`    | `https://trebinhdinh.com/tin-tuc/tre-binh-dinh-an-voi-gi`                                                                                 |
+| `noIndex`         | `false`                                                                                                                                   |
+| `mainImage`       | *(upload ảnh đĩa tré rơm bày cùng bánh tráng mè và rau sống)*                                                                             |
+| `mainImage.alt`   | Đĩa tré rơm Bình Định bày cùng bánh tráng mè nướng và rau sống tươi trên bàn gỗ                                                           |
+
+---
+
+## PHẦN 2 — NỘI DUNG `body` (dán vào Portable Text editor)
+
+> Chỉ dán phần nội dung thuần. Không dán các dòng slug/keyword/meta ở trên vào `body`.
 
 ---
 
@@ -12,8 +35,7 @@ Tré rơm Bình Định vừa mở gói ra đã thơm mùi lá chuối, nhìn v�
 
 Không phải ai cũng biết cách kết hợp đúng để tré rơm phát huy hết hương vị. Bài viết này tổng hợp 7 cách ăn phổ biến nhất — từ truyền thống đến biến tấu hiện đại — để bữa ăn với [tré rơm Bình Định](/tre-binh-dinh) thêm tròn vị và đáng nhớ.
 
-[ẢNH 1: Đĩa tré rơm Bình Định bày cùng bánh tráng mè nướng và rau sống tươi trên bàn gỗ]
-**Alt text:** `Đĩa tré rơm Bình Định bày cùng bánh tráng mè nướng và rau sống tươi trên bàn gỗ`
+*(chèn ẢNH 1 tại đây — alt: `Đĩa tré rơm Bình Định bày cùng bánh tráng mè nướng và rau sống tươi trên bàn gỗ`)*
 
 ---
 
@@ -41,8 +63,7 @@ Người Bình Định hay ăn tré cùng dưa cải muối hoặc dưa kiệu n
 
 Khi nhậu, tré thường được bày ra đĩa cùng vài lát ớt xanh, vài nhánh rau thơm và một chén nước mắm ớt để chấm trực tiếp — không cần cuốn bánh tráng cho tiện và nhanh. Bia lager lạnh hoặc bia Sài Gòn đỏ đều hợp với tré rơm.
 
-[ẢNH 2: Đĩa tré rơm Bình Định bày trên bàn nhậu cùng ớt xanh và ly bia lạnh]
-**Alt text:** `Đĩa tré rơm Bình Định bày trên bàn nhậu cùng ớt xanh thái lát và ly bia lạnh`
+*(chèn ẢNH 2 tại đây — alt: `Đĩa tré rơm Bình Định bày trên bàn nhậu cùng ớt xanh thái lát và ly bia lạnh`)*
 
 ---
 
@@ -76,8 +97,7 @@ Cách kết hợp này không phổ biến ở Bình Định nhưng lại đư�
 
 Thử một lần sẽ thấy tré rơm linh hoạt hơn mình nghĩ.
 
-[ẢNH 3: Miếng tré rơm Bình Định thái lát mỏng đặt cạnh cuốn bánh ướt và rau sống]
-**Alt text:** `Miếng tré rơm Bình Định thái lát mỏng đặt cạnh cuốn bánh ướt và rau sống tươi`
+*(chèn ẢNH 3 tại đây — alt: `Miếng tré rơm Bình Định thái lát mỏng đặt cạnh cuốn bánh ướt và rau sống tươi`)*
 
 ---
 
