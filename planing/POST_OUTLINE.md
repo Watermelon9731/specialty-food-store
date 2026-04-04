@@ -1,6 +1,9 @@
-# Outline Chi Tiết 25 Bài Blog — Tré Bà Liên
+# Outline Chi Tiết 27 Bài Blog — Tré Bà Liên
 
 > Mỗi bài gồm: keyword mục tiêu, meta title, meta description, cấu trúc heading, gợi ý ảnh + alt text, internal links.
+> **CMS:** Sanity Studio v5. Schema `post` có sẵn các trường SEO riêng: `metaTitle`, `metaDescription`, `metaKeywords`, `canonicalUrl`, `noIndex`. Điền đầy đủ các trường này khi tạo bài — **không** nhúng meta vào `body`.  
+> **Slug:** được generate tự động từ `title` trong Sanity. Đối chiếu với bảng slug đã có để đảm bảo khớp.  
+> **Ảnh chính:** dùng trường `mainImage` (hỗ trợ hotspot). Alt text ghi vào trường `alt` của image asset.
 
 ---
 
