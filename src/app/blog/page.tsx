@@ -1,12 +1,12 @@
-import { client } from "@/sanity/client";
 import { SanityPost } from "@/types/sanity";
 import { PATH } from "@/constants/path";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, ChevronRight, PenTool } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { getBlogPostsService } from "@/server/blog/service";
 
-export const revalidate = 60; // Revalidate at most every 60 seconds
+export const revalidate = 300;
 
 export const metadata = {
   title: "Tin Tức & Mẹo Hay Về Đặc Sản Bình Định",
@@ -17,33 +17,8 @@ export const metadata = {
   },
 };
 
-async function getPosts(): Promise<SanityPost[]> {
-  try {
-    const query = `
-      *[_type == "post"] | order(publishedAt desc) {
-        _id,
-        title,
-        slug,
-        publishedAt,
-        excerpt,
-        mainImage {
-          asset->{
-            _id,
-            url
-          }
-        }
-      }
-    `;
-    const posts = await client.fetch(query);
-    return posts || [];
-  } catch (error) {
-    console.error("Failed to fetch posts from Sanity", error);
-    return [];
-  }
-}
-
 export default async function BlogIndexPage() {
-  const posts = await getPosts();
+  const posts: SanityPost[] = await getBlogPostsService();
 
   // Highlight the first post if any exists
   const featuredPost = posts[0];
@@ -131,7 +106,8 @@ export default async function BlogIndexPage() {
                   {featuredPost.title}
                 </h2>
                 <p className="text-slate-500 text-base md:text-lg mb-8 line-clamp-3 leading-relaxed">
-                  {featuredPost.excerpt}
+                  {featuredPost.excerpt ??
+                    "Khám phá câu chuyện ẩm thực Bình Định và mẹo dùng đặc sản theo cách mộc mạc, dễ áp dụng hằng ngày."}
                 </p>
                 <div className="inline-flex items-center text-[#3a7851] font-bold text-sm uppercase tracking-widest mt-auto">
                   Đọc tiếp
@@ -185,7 +161,8 @@ export default async function BlogIndexPage() {
                       {post.title}
                     </h3>
                     <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed mb-6 flex-1">
-                      {post.excerpt}
+                      {post.excerpt ??
+                        "Bài viết chia sẻ mẹo chọn đặc sản, cách ăn ngon và câu chuyện bếp nhà xứ Nẫu."}
                     </p>
                     <div className="inline-flex items-center text-[#3a7851] font-bold text-xs uppercase tracking-widest mt-auto">
                       Đọc tiếp

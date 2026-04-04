@@ -1,4 +1,4 @@
-import { client, urlFor } from "@/sanity/client";
+import { urlFor } from "@/sanity/client";
 import { SanityPost } from "@/types/sanity";
 import { PATH } from "@/constants/path";
 import Link from "next/link";
@@ -6,51 +6,57 @@ import Image from "next/image";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import { notFound } from "next/navigation";
+import {
+  getBlogPostBySlugService,
+  getBlogPostSlugsService,
+} from "@/server/blog/service";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
+type PortableImageValue = {
+  asset?: { _ref?: string };
+  alt?: string;
+  caption?: string;
+};
+type PortableLinkValue = {
+  href?: string;
+};
+type PortableChildrenProps = {
+  children?: ReactNode;
+};
+const BLOG_DETAIL_DESCRIPTION =
+  "Bài viết chia sẻ mẹo dùng đặc sản Bình Định và kinh nghiệm chọn mua thực phẩm thủ công an toàn.";
 
-async function getPost(slug: string): Promise<SanityPost | null> {
-  const query = `
-    *[_type == "post" && slug.current == $slug][0] {
-      _id,
-      title,
-      slug,
-      publishedAt,
-      excerpt,
-      body,
-      mainImage {
-        asset->{
-          _id,
-          url
-        }
-      }
-    }
-  `;
-  try {
-    return await client.fetch(query, { slug });
-  } catch (error) {
-    console.error("Failed to fetch sanity post detail", error);
-    return null;
+function resolveCanonicalUrl(slug: string, canonicalUrl?: string) {
+  if (!canonicalUrl?.trim()) {
+    return `/tin-tuc/${slug}`;
   }
+
+  const normalized = canonicalUrl.trim();
+  if (normalized.startsWith("http://") || normalized.startsWith("https://")) {
+    return normalized;
+  }
+
+  return normalized.startsWith("/") ? normalized : `/${normalized}`;
 }
 
 // Generate Static Params if we want ISR
 export async function generateStaticParams() {
-  const query = `*[_type == "post"] { slug }`;
-  const posts = await client.fetch(query);
-  return posts.map((post: any) => ({
-    slug: post.slug.current,
+  const slugs = await getBlogPostSlugsService();
+  return slugs.map((slug) => ({
+    slug,
   }));
 }
 
 function getPortableTextComponents(postTitle: string) {
   return {
     types: {
-      image: ({ value }: any) => {
+      image: ({ value }: { value?: PortableImageValue }) => {
         if (!value?.asset?._ref) {
           return null;
         }
@@ -88,13 +94,21 @@ function getPortableTextComponents(postTitle: string) {
       },
     },
     marks: {
-      link: ({ children, value }: any) => {
-        const rel = !value.href.startsWith("/")
+      link: ({
+        children,
+        value,
+      }: PortableChildrenProps & { value?: PortableLinkValue }) => {
+        const href = value?.href || "";
+        if (!href) {
+          return <>{children}</>;
+        }
+
+        const rel = !href.startsWith("/")
           ? "noreferrer noopener"
           : undefined;
         return (
           <a
-            href={value.href}
+            href={href}
             rel={rel}
             className="text-[#3a7851] hover:underline font-semibold transition-all"
           >
@@ -104,32 +118,32 @@ function getPortableTextComponents(postTitle: string) {
       },
     },
     block: {
-      normal: ({ children }: any) => (
+      normal: ({ children }: PortableChildrenProps) => (
         <p className="text-slate-700 leading-relaxed mb-6 text-lg">{children}</p>
       ),
-      h2: ({ children }: any) => (
+      h2: ({ children }: PortableChildrenProps) => (
         <h2 className="text-3xl font-bold text-slate-900 mt-12 mb-6">
           {children}
         </h2>
       ),
-      h3: ({ children }: any) => (
+      h3: ({ children }: PortableChildrenProps) => (
         <h3 className="text-2xl font-bold text-slate-900 mt-10 mb-4">
           {children}
         </h3>
       ),
-      blockquote: ({ children }: any) => (
+      blockquote: ({ children }: PortableChildrenProps) => (
         <blockquote className="border-l-4 border-[#3a7851] bg-emerald-50/50 pl-6 py-4 pr-4 my-8 italic text-slate-700 rounded-r-2xl text-xl leading-relaxed">
           {children}
         </blockquote>
       ),
     },
     list: {
-      bullet: ({ children }: any) => (
+      bullet: ({ children }: PortableChildrenProps) => (
         <ul className="list-disc leading-relaxed text-slate-700 mb-6 pl-6 text-lg space-y-2">
           {children}
         </ul>
       ),
-      number: ({ children }: any) => (
+      number: ({ children }: PortableChildrenProps) => (
         <ol className="list-decimal leading-relaxed text-slate-700 mb-6 pl-6 text-lg space-y-2">
           {children}
         </ol>
@@ -140,24 +154,61 @@ function getPortableTextComponents(postTitle: string) {
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const post = await getBlogPostBySlugService(slug);
   if (!post) {
-    return { title: "Không tìm thấy bài viết" };
+    return {
+      title: "Không tìm thấy bài viết",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
   }
+
+  const title = post.metaTitle || post.title;
+  const description = post.metaDescription || post.excerpt || BLOG_DETAIL_DESCRIPTION;
+  const canonical = resolveCanonicalUrl(slug, post.canonicalUrl);
+  const shouldNoIndex = Boolean(post.noIndex);
+  const imageUrl = post.mainImage?.asset?.url;
+
   return {
-    title: post.title,
-    description:
-      post.excerpt ||
-      `${post.title} - bài viết chia sẻ mẹo dùng đặc sản Bình Định và kinh nghiệm chọn mua thực phẩm thủ công an toàn.`,
+    title,
+    description,
+    keywords: post.metaKeywords?.length ? post.metaKeywords : undefined,
     alternates: {
-      canonical: `/tin-tuc/${slug}`,
+      canonical,
     },
-  };
+    robots: shouldNoIndex
+      ? {
+          index: false,
+          follow: false,
+          googleBot: {
+            index: false,
+            follow: false,
+          },
+        }
+      : undefined,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      url: canonical,
+      publishedTime: post.publishedAt,
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              alt: post.title,
+            },
+          ]
+        : undefined,
+    },
+  } satisfies Metadata;
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const post: SanityPost | null = await getBlogPostBySlugService(slug);
 
   if (!post) {
     notFound();

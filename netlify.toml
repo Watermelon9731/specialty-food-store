@@ -8,3 +8,29 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  from = "/tin-tuc/*"
+  to = "/tin-tuc/:splat"
+  status = 200
+  force = true
+
+  [redirects.rate_limit]
+    action = "rewrite"
+    to = "/truy-cap-qua-nhanh"
+    window_limit = 120
+    window_size = 60
+    aggregate_by = ["ip", "domain"]
+
+[[redirects]]
+  from = "/blog/*"
+  to = "/blog/:splat"
+  status = 200
+  force = true
+
+  [redirects.rate_limit]
+    action = "rewrite"
+    to = "/truy-cap-qua-nhanh"
+    window_limit = 120
+    window_size = 60
+    aggregate_by = ["ip", "domain"]
