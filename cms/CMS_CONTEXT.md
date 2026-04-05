@@ -1,9 +1,10 @@
 # Specialty Food Store CMS - Project Context
 
 ## Overview
-This project (`specialty-food-store-cms`) is a Sanity Studio built using React and TypeScript. It serves as the Content Management System (CMS) backend for a "Specialty Food Store." The CMS content interacts with an expected Next.js or React frontend (not completely present here but implied). 
+This repository (`specialty-food-store`) is the **Next.js frontend** for Tré Bà Liên.  
+Sanity is used as a **headless CMS source for blog content**, but this repo is not a standalone Sanity Studio project.
 
-The studio runs on Vite and Sanity v5.13+, which leverages full explicit ES Modules and modern TypeScript rules.
+The `cms/` folder is documentation/checklist context for CMS integration and operations.
 
 ## Security & Quota Note (Public Dataset)
 - If a dataset is `public`, any third party can send read requests to the project API endpoints.
@@ -20,6 +21,7 @@ The frontend blog stack now includes practical protections to reduce quota burn 
 - Netlify code-based rate limits are configured in `netlify.toml` for blog paths (`/tin-tuc/*`, `/blog/*`) and rewrite throttled requests to `/truy-cap-qua-nhanh`.
 - A dedicated rate-limit notice page (`src/app/truy-cap-qua-nhanh/page.tsx`) presents a clear Vietnamese message to users when they are throttled.
 - Blog metadata now reads SEO fields from CMS (`metaTitle`, `metaDescription`, `metaKeywords`, `canonicalUrl`, `noIndex`) to keep SEO behavior editable in Studio.
+- Global GA4 tracking snippet is integrated in `src/app/layout.tsx` with measurement ID `G-09RWKSY68P`.
 
 ### Remaining Infrastructure Recommendation
 - For distributed attacks across many IPs, combine app-level throttling with edge WAF/CDN firewall rules (provider-level bot management) to avoid relying only on per-instance memory rate limits.
@@ -71,10 +73,10 @@ rg -n "api|route|server|action|edge|middleware" src app pages
 
 ## Code Conventions
 - **Language**: TypeScript (`.ts`, `.tsx`), ensuring strong typing for schemas and configurations.
-- **Framework**: React 19 + Sanity Studio v5.
-- **Styling**: Uses `styled-components` for customized React components within Sanity.
-- **Code Quality**: Uses ESLint (`@sanity/eslint-config-studio`) and Prettier for code formatting.
-- **Module Resolution**: The project relies on `"esnext"` or `node16` / `nodenext` with module resolution enforced.
+- **Framework**: Next.js 16 (App Router) + React 19.
+- **Styling**: Tailwind CSS v4 + shadcn/ui.
+- **Code Quality**: ESLint + TypeScript strict mode.
+- **Module Resolution**: Uses modern `esnext` with Next.js bundler resolution.
 
 ## Existing Schema Modules
 The Sanity dataset schema lives within `schemaTypes/` and combines multiple document and object types.
@@ -108,11 +110,10 @@ Taxonomical structure for posts.
 Standard rich-text editor setup for portable text within Sanity, defining default typography styles, lists, blockquote decorators, and image injection inside the rich text areas.
 
 ## Development Scripts
-- `yarn dev`: Starts the Sanity studio in development mode on `localhost:3636` (as defined in our updated `package.json`).
-- `yarn build`: Bundles the output for deployment.
-- `yarn deploy`: Pushes the Sanity CMS builds directly to the hosted sanity platform.
+- `npm run dev`: Starts the Next.js frontend on `localhost:3939`.
+- `yarn build`: Builds production output for deployment.
 
-*Note: The project locally requires Node v22 for full compatibility with ES Modules inside Sanity build scripts.*
+*Note: The project locally requires Node v22 for full compatibility with current toolchain and dependencies.*
 
 ## Project Guidelines & Rules
 When contributing to or modifying this Sanity CMS implementation, refer to the following rules:
@@ -124,16 +125,16 @@ When contributing to or modifying this Sanity CMS implementation, refer to the f
 
 2. **Node & Dependency Management:**
    - Execute all build or development operations using **Node 22** (`nvm use 22`).
-   - Adding or upgrading packages must be handled via `yarn` (given the presence of a `yarn.lock` file).
-   - Resolve TypeScript module errors by respecting modern ES Module constraints (`"esnext"`, `"node16"`) in `tsconfig.json`.
+   - Keep package management consistent (`npm` or `yarn`) and avoid mixing lockfile updates in one commit.
+   - Resolve TypeScript module errors by respecting modern ES Module constraints configured in `tsconfig.json`.
 
 3. **Code Style:**
-   - All definitions should adhere strictly to typing conventions established by `@sanity/eslint-config-studio`.
-   - Never commit ad-hoc inline styles inside React fragments when the project configures `styled-components`. Extend or utilize proper styled-components.
+   - Follow existing TypeScript + ESLint conventions of this frontend project.
+   - Keep UI style consistent with Tailwind utility patterns and shared UI components.
 
 4. **Testing in Dev:**
-   - Run dev commands using port 3636: `yarn dev`. This triggers `sanity dev --port 3636`.
-   - Double-check runtime differences or package mismatch warnings using `yarn dev` terminal outputs directly before merging.
+   - Run frontend dev server via `npm run dev` (port `3939` from `package.json`).
+   - Before merge/deploy, validate key routes (`/`, `/san-pham`, `/tin-tuc`, `/admin`) and lint/type-check status.
 
 5. **Changelog & Documentation Maintenance (CRITICAL):**
-   - **Anytime** a code update, script change, new file generation, or a terminal execution happens, the `session-changelog.md` and `project-context.md` files **MUST** be updated to reflect the latest state of the project.
+   - **Anytime** a meaningful architecture/security/content-flow update happens, update `cms/CMS_CHANGELOG.md`, `cms/CMS_CONTEXT.md`, `AI_CONTEXT.md`, and `AI_WORKLOG.md` accordingly.

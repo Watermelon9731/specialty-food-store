@@ -68,3 +68,14 @@ This document provides a summary of all fixes and configurations established dur
 - **Action:** Added a dedicated page `src/app/truy-cap-qua-nhanh/page.tsx` with a Vietnamese message instructing users to slow down and retry later.
 - **Action:** Updated app-level middleware 429 text to Vietnamese: “Bạn đang truy cập quá nhanh, hãy chậm lại...”.
 - **Reason:** User requested explicit rate-limiting on Netlify and a clear end-user notice when traffic is limited.
+
+## 14. Integrated Google Analytics (GA4) Tracking Snippet
+- **Action:** Added global Google tag (`gtag.js`) loading and initialization for measurement ID `G-09RWKSY68P` in `src/app/layout.tsx` using Next.js `Script`.
+- **Reason:** User requested embedding GA4 tracking snippet site-wide so page views and events can be tracked across all routes.
+
+## 15. Documentation Realignment for Frontend-First Repository
+- **Action:** Updated `AI_CONTEXT.md` and `AI_WORKLOG.md` to clarify this repository is the Next.js frontend runtime, while `cms/` and `planing/` are documentation/planning folders.
+- **Action:** Updated `cms/CMS_CONTEXT.md` to remove outdated wording that implied this repo is a standalone Sanity Studio app.
+- **Action:** Replaced default `README.md` with project-specific setup and architecture notes (Node 22, dev port 3939, key folders, CMS integration notes).
+- **Action:** Updated `src/app/admin/layout.tsx` to replace hard-coded internal URLs with centralized constants from `PATH`.
+- **Reason:** User flagged context mismatch between CMS docs and actual FE codebase, requiring a consistent and accurate handover context.

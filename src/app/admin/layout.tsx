@@ -16,7 +16,7 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
 
-  if (pathname === "/admin/login") {
+  if (pathname === PATH.ADMIN.LOGIN) {
     return <div className="min-h-screen w-full">{children}</div>;
   }
 
@@ -34,9 +34,9 @@ export default function AdminLayout({
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
         <header className="flex h-16 items-center border-b px-4 md:px-6 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shrink-0 justify-between">
           <div className="flex items-center gap-3 md:hidden">
-            {pathname !== "/admin" && (
+            {pathname !== PATH.ADMIN.DASHBOARD && (
               <Link
-                href="/admin"
+                href={PATH.ADMIN.DASHBOARD}
                 className="flex items-center justify-center h-8 w-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
               >
                 <ChevronLeft className="h-5 w-5" />
@@ -47,7 +47,7 @@ export default function AdminLayout({
           <div className="hidden md:flex" />
           <div className="ml-auto flex items-center gap-4">
             <Link
-              href="/"
+              href={PATH.HOME}
               className="text-stone-500 hover:text-stone-900 p-2 transition-colors flex items-center gap-2 text-sm font-medium"
               title="Về trang chủ"
             >

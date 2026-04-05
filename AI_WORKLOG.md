@@ -1,59 +1,91 @@
-# THẬT KÍ QUÁ TRÌNH LÀM VIỆC & BÀN GIAO CHO AI AGENTS (AI WORKLOG)
+# AI_WORKLOG.md - Nhat Ky Ban Giao Nhanh
 
-File này đóng vai trò như một **Nhật ký thực thi (Execution History)** và **Bản giao việc (Handover Document)**. Mục đích là để các AI Agent đời sau (hoặc trong phiên làm việc mới) có thể đọc nhanh, hiểu ngay lập tức quá trình dự án đang diễn ra đến đâu, đã giải quyết các bug nào, và cần làm tiếp những gì mà không cần đọc lại toàn bộ lịch sử chat hay chạy dò dẫm từng file.
-
----
-
-## 📅 PHIÊN LÀM VIỆC GẦN NHẤT (Tháng 3/2026)
-
-### 🎯 Mục tiêu đã giải quyết
-1. **Sửa lỗi SEO & Nâng cấp Sitemap**:
-   - Google Search Console báo lỗi "Phát hiện URL cũ chưa được lập chỉ mục" (`/products/...`). Nguyên nhân là do các Internal Links cũ bằng tiếng Anh vẫn còn nằm rải rác bên trong Next.js Components.
-   - **Đã làm**:
-     - Quy hoạch toàn bộ link quản lý tập trung qua `src/constants/path.ts`.
-     - Thay nóng toàn bộ chuỗi `<Link href="/products">` thành `<Link href={PATH.PRODUCTS.ALL}>` (render ra `/san-pham`).
-     - Tương tự với trang danh mục: Chuyển url thành `/san-pham?category=...` thông qua hàm `PATH.PRODUCTS.CATEGORY(slug)`.
-     - Bổ sung `redirects` (301 Moved Permanently) trong file `next.config.ts` để chặn bots của Google mò vào URL cũ `/products` và ép chúng lập chỉ mục lại qua URL mới `/san-pham`.
-
-2. **Tối ưu Hiệu suất & Điểm Google PageSpeed (LCP)**:
-   - Thay thế toàn bộ thẻ HTML tiêu chuẩn `<img>` bằng thẻ `<Image>` của Next.js API để hỗ trợ nén WebP/AVIF.
-   - **Tối ưu Serverless Cost**: Cấu hình cực kỳ khắt khe thuộc tính `sizes` (Ví dụ: `sizes="72px"` ở Cart Drawer hoặc `sizes="(max-width: 768px) 50vw, 300px"` ở Grid). Việc này ngăn Next.js tự động sinh ra hàng chục ảnh resize vô nghĩa, giúp tiết kiệm chi phí Serverless / Image CDN.
-   - **Tối ưu LCP**: Fix lỗi lazy load ảnh Above-the-fold ở trang chủ (Hero section) bằng cách gán cờ `priority` cho 2 bức ảnh (Tré ruột & Chả ram tôm đất), giúp ảnh được tải ở dạng `eager`, kéo điểm PageSpeed lên mức xanh.
-
-3. **Chỉnh sửa UI / Hiển thị theo Yêu cầu**:
-   - Sửa dòng chữ "Liên hệ" trong `ProductCard` (khi sản phẩm có gắn cờ `isMarketPrice = true`) thành dòng "Giá theo thời điểm", hạ font size xuống `text-sm` để tinh tế hơn.
-   - User tự sửa đổi phương châm ở trang chủ thành "Ăn sao, bán vậy - Từ bếp của tôi, đến tay của bạn."
-
-4. **Kỷ luật Môi trường System (Enforcement)**:
-   - Sinh file `AI_CONTEXT.md` tóm tắt toàn bộ business logic và codebase convention.
-   - Bắt buộc dự án phải chạy ở **Node.js phiên bản 22**. Đã chèn `"engines": { "node": ">=22" }` vào `package.json` và tạo file `.nvmrc` để chuyển đổi mượt mà.
-
-5. **Giải quyết Yêu cầu: Tích hợp Hệ thống Blog (CMS Sanity)**:
-   - Hoàn thành thiết lập kết nối Sanity API thông qua thư viện `next-sanity`.
-   - Tạo file Client Config `src/sanity/client.ts` để móc nối các Endpoint.
-   - Định nghĩa Entity Type `SanityPost` tại `src/types/sanity.ts`.
-   - Cấu hình file `next.config.ts` thêm domain `cdn.sanity.io` vào `remotePatterns` để cho phép module Next/Image render hình ảnh trả về từ Sanity.
-   - Sửa lỗi hiển thị placeholder thành hiển thị ảnh thật trong nội dung văn bản gốc (Rich-text) bằng cách thiết lập hàm `urlFor` từ `@sanity/image-url`.
-   - Bổ sung trải nghiệm "Blurred Background" (Nền mờ) đằng sau ảnh gốc trong bài viết. Giúp giao diện không bị trống lộ màu trắng khi tỷ lệ hình ngang dọc không khớp với container (giống cách hiển thị video TikTok/Reels ngang).
-   - Chuẩn hoá cấu trúc URL cho Blog: Đổi tên folder từ `src/app/tin-tuc` thành `src/app/blog`, thiết lập `rewrites` và `redirects` trong `next.config.ts` (giống Sản phẩm và Danh mục) để có URL `/tin-tuc` thuần Việt mà folder vẫn là tiếng Anh.
-   - Trực tiếp cập nhật dữ liệu bài viết mới nhất từ Sanity vào Sitemap (`src/app/sitemap.ts`) và mở khoá Bot Crawl (`src/app/robots.ts`) cho tính năng Blog.
-   - Nâng cấp bộ quy tắc SEO Lõi: Bắt buộc cập nhật đồng thời sitemap, robots và next.config cho mọi trang mới.
+Muc tieu cua file nay: cho AI Agent/LTV den sau doc 2-3 phut la biet tinh hinh that cua repo va cac thay doi moi nhat.
 
 ---
 
-## 📌 TRẠNG THÁI HIỆN TẠI & LƯU Ý
-- **Git State**: Mã nguồn đã được cập nhật thành công các cấu hình quan trọng nhất về mặt kiến trúc tĩnh và SEO. Có thể tiến hành Commit & Deploy.
-- **Vercel/Netlify Deployment**: Dự án đã an toàn khi đẩy lên các nền tảng serverless. Cấu hình Image Optimization sẽ tiêu thụ ít tài nguyên theo mức dự tiến cực đoan nhất.
-- **Supabase**: Cơ sở dữ liệu vẫn đang dùng ổn định. Backend/Server Action kết nối chuẩn tới DB với quyền Bypass (Service Role key).
+## 2026-04-05 - Dong Bo Tai Lieu FE/CMS + Chuan Hoa Internal Paths
+
+### Van de
+- User xac nhan repo dang la FE landing/ecommerce runtime.
+- Mot so tai lieu trong `cms/*` va `README` van de ngu canh cu, de gay nham lan.
+
+### Da thuc hien
+1. Cap nhat `cms/CMS_CONTEXT.md`:
+   - Sua overview va conventions cho dung boi canh FE-first.
+   - Sua scripts dev/build theo repo hien tai.
+2. Cap nhat `README.md`:
+   - Thay noi dung mac dinh create-next-app bang huong dan project that.
+3. Cap nhat `src/app/admin/layout.tsx`:
+   - Bo hard-code path (`/admin`, `/admin/login`, `/`) -> dung `PATH`.
+4. Cap nhat `cms/CMS_CHANGELOG.md`:
+   - Them muc log cho dot realignment tai lieu.
+
+### Ket qua
+- Tai lieu huong dan va runtime context da thong nhat.
+- Giam kha nang AI/LTV sua nham theo ngữ cảnh CMS standalone.
 
 ---
 
-## 🚀 CÔNG VIỆC CẦN LÀM TIẾP THEO (Next Steps dành cho AI Agent)
+## 2026-04-05 - Chinh Lai Ngu Canh Va Tai Lieu AI
 
-1. **[Tùy chọn] Tích hợp Chatbot AI tư vấn**: Nếu khách hàng có nhu cầu, có thể gắn Floating Chatbot chuyên trả lời về hạn sử dụng, cách ủ tré ngon,...
-2. **Theo dõi Indexing của Google:** Cần theo dõi GSC sau 1 tuần quét lại (từ 10/03/2026) xem tập link `/products/...` đã biến mất và thay bằng link `/san-pham/...` hoàn toàn chưa.
-3. **Mở rộng Dashboard Admin**: Hiện tại chức năng Admin khá cơ bản (chặn middleware login OK). Có thể cần hỗ trợ chủ Shop xuất báo cáo chi tiết lợi nhuận, hoặc cấu hình nhanh đổi cờ `isMarketPrice`.
-4. **Phát triển trang Blogs**: ĐÃ HOÀN THÀNH - Tích hợp Sanity CMS thành công theo yêu cầu của User. Điểm chạm tiếp theo có thể là cấu hình Webhook cho Sanity -> Next.js On-demand Revalidation nếu Shop viết bài quá nhiều.
-5. **Đẩy mã nguồn và kiểm tra lại**: Kiểm tra biến môi trường NEXT_PUBLIC_SANITY_PROJECT_ID trên hosting Vercel/Netlify.
+### Van de
+- Co nham lan giua:
+  - Repo FE dang chay (`src/*`), va
+  - Tai lieu CMS (`cms/*`).
+- `AI_CONTEXT.md` va `AI_WORKLOG.md` cu da loi thoi 1 so diem (mo ta route/folder va pham vi du an chua ro rang).
 
-> 🤖 **Thông điệp cho AI kế nhiệm:** "Bạn hãy kiểm tra qua file `AI_CONTEXT.md` trước tiên nếu bạn có thắc mắc về thư mục. Sau đó, cứ thế dựa vào những thay đổi phía trên trong file Worklog này để code các task mới nhất mà hệ thống hoặc User chỉ định. Chúc bạn code không bug!"
+### Da thuc hien
+1. Viet lai `AI_CONTEXT.md` theo hien trang code:
+   - Xac nhan repo nay la FE landing/ecommerce.
+   - Lam ro `cms/*` + `planing/*` la tai lieu, khong runtime.
+   - Bo sung blog hardening, rate-limit (middleware + Netlify), GA4, routing SEO.
+2. Viet lai `AI_WORKLOG.md` de ngan gon, uu tien thong tin ban giao thuc dung.
+
+### Ket qua
+- Ngu canh cho AI/LTV moi da dong bo voi code hien tai.
+- Giam rui ro tiep tuc sua nham sang tai lieu CMS khi user dang yeu cau FE.
+
+---
+
+## 2026-04-05 - Tich Hop GA4 Site-Wide
+
+### Da thuc hien
+- Gan Google tag vao `src/app/layout.tsx` bang `next/script`.
+- Measurement ID: `G-09RWKSY68P`.
+
+### Trang thai
+- Da compile/type-check pass cho thay doi nay.
+
+---
+
+## 2026-04-04 - Bao Ve Blog Truoc Spam/Quota Burn
+
+### Da thuc hien
+1. Tao tang blog service/repo:
+   - `src/server/blog/repo.ts`
+   - `src/server/blog/service.ts`
+2. Refactor blog list/detail/sitemap sang dung tang service tap trung.
+3. Bat `useCdn` + `perspective: "published"` trong `src/sanity/client.ts`.
+4. Them app-level rate-limit trong `src/middleware.ts` cho `/tin-tuc/*` va `/blog/*`.
+5. Them Netlify code-based rate-limit trong `netlify.toml`.
+6. Them trang thong bao `src/app/truy-cap-qua-nhanh/page.tsx`.
+
+### Muc tieu
+- Giam request amplification vao Sanity khi bi spam.
+- Bao ve quota Free plan tot hon.
+
+---
+
+## Luu Y Cho Nguoi Lam Tiep
+
+1. Truoc khi code:
+   - Doc `AI_CONTEXT.md` de nho ro pham vi FE vs CMS docs.
+2. Neu sua route public:
+   - Cap nhat `PATH` + `next.config.ts` + `robots.ts` + `sitemap.ts` (neu can crawl).
+3. Neu sua hardening/rate-limit:
+   - Kiem tra ca 2 lop:
+     - App middleware (`src/middleware.ts`)
+     - Netlify config (`netlify.toml`)
+4. Neu user yeu cau "chi FE":
+   - Tranh sua `cms/*` tru khi user muon cap nhat tai lieu.

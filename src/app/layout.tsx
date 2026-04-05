@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ClientOverlays } from "@/components/layout/ClientOverlays";
+
+const GA_MEASUREMENT_ID = "G-09RWKSY68P";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
@@ -86,6 +89,18 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className={`${geist.variable} font-sans antialiased`}>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
         <Providers>
           <div className="flex min-h-screen flex-col">
             <Header />
