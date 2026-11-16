@@ -1,9 +1,12 @@
 # Cloudflare (proxy, SSL Full strict) -> Caddy :443 -> Next.js 127.0.0.1:3000
 # Cert là Cloudflare Origin Certificate (xem deploy/README.md bước 7).
 
-trebinhdinh.com {
+trebinhdinh.com, vm.trebinhdinh.com {
 	tls /etc/caddy/cf-origin.pem /etc/caddy/cf-origin.key
 	encode zstd gzip
+	# vm.* chỉ để test trước khi đổi DNS, không cho Google index
+	@staging host vm.trebinhdinh.com
+	header @staging X-Robots-Tag "noindex, nofollow"
 
 	reverse_proxy 127.0.0.1:3000 {
 		# IP thật của khách cho rate-limit trong src/middleware.ts (đọc x-forwarded-for)
