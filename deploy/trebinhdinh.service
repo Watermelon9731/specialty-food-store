@@ -1,0 +1,15 @@
+[Unit]
+Description=trebinhdinh.com (Next.js standalone)
+After=network.target
+
+[Service]
+User=deploy
+WorkingDirectory=/opt/trebinhdinh/app
+EnvironmentFile=/opt/trebinhdinh/.env
+Environment=NODE_ENV=production PORT=3000 HOSTNAME=127.0.0.1
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

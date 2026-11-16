@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Self-host trên Oracle VM: build ra .next/standalone (server.js + node_modules tối thiểu)
+  output: "standalone",
   async redirects() {
     return [
       { source: "/products", destination: "/san-pham", permanent: true },
